@@ -1,2 +1,4 @@
 a.out
-*.DYSM
+*.dYSM
+.vscode
+.DS_Store
