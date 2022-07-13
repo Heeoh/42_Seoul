@@ -6,11 +6,13 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 15:11:11 by heson             #+#    #+#             */
-/*   Updated: 2022/07/13 15:58:49 by heson            ###   ########.fr       */
+/*   Updated: 2022/07/13 16:41:11 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_toupper(int c)
+#include "libft.h"
+
+int	ft_tolower(int c)
 {
 	if ('A' <= c && c <= 'Z')
 		return (c + ('a' - 'A'));

@@ -6,9 +6,11 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 15:09:11 by heson             #+#    #+#             */
-/*   Updated: 2022/07/13 15:17:08 by heson            ###   ########.fr       */
+/*   Updated: 2022/07/13 16:38:18 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "libft.h"
 
 void	*ft_bzero(void *b, size_t len)
 {

@@ -6,11 +6,11 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 15:11:00 by heson             #+#    #+#             */
-/*   Updated: 2022/07/13 15:49:20 by heson            ###   ########.fr       */
+/*   Updated: 2022/07/13 16:39:56 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#include "libft.h"
 
 char	*ft_strdup(const char *s1)
 {

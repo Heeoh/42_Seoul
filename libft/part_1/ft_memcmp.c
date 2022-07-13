@@ -6,15 +6,17 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 15:10:05 by heson             #+#    #+#             */
-/*   Updated: 2022/07/13 15:28:04 by heson            ###   ########.fr       */
+/*   Updated: 2022/07/13 16:39:24 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
+
 int	ft_memcmp(const void *s1, const void *s2, unsigned int n)
 {
-	unsigned int	i;
-	const char		*p1;
-	const char		*p2;
+	unsigned int			i;
+	const unsigned char		*p1;
+	const unsigned char		*p2;
 
 	p1 = s1;
 	p2 = s2;

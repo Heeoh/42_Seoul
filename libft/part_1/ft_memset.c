@@ -6,9 +6,11 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 15:10:28 by heson             #+#    #+#             */
-/*   Updated: 2022/07/13 15:48:09 by heson            ###   ########.fr       */
+/*   Updated: 2022/07/13 16:39:42 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "libft.h"
 
 void	*ft_memset(void *b, int c, size_t len)
 {

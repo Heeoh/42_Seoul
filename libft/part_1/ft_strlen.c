@@ -6,9 +6,11 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/07 12:59:31 by heson             #+#    #+#             */
-/*   Updated: 2022/07/13 15:50:48 by heson            ###   ########.fr       */
+/*   Updated: 2022/07/13 16:40:14 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "libft.h"
 
 size_t	ft_strlen(const char *s)
 {

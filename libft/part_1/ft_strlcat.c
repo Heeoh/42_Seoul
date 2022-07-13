@@ -6,9 +6,11 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/07 13:21:17 by heson             #+#    #+#             */
-/*   Updated: 2022/07/13 15:42:19 by heson            ###   ########.fr       */
+/*   Updated: 2022/07/13 16:40:02 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "libft.h"
 
 size_t	ft_strlcat(char *dest, char *src, size_t size)
 {

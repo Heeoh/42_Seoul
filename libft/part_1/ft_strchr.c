@@ -6,9 +6,11 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 15:10:48 by heson             #+#    #+#             */
-/*   Updated: 2022/07/13 15:48:26 by heson            ###   ########.fr       */
+/*   Updated: 2022/07/13 16:39:49 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "libft.h"
 
 char	*ft_strchr(const char *s, int c)
 {
