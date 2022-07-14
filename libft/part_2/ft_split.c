@@ -10,67 +10,73 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#include "libft.h"
 
-char	is_charset(char c, char *charset)
+int	get_word_cnt(const char *str, char c)
 {
-	while (*charset)
-	{
-		if (c == *charset)
-			return (1);
-		charset++;
-	}
-	return (0);
-}
-
-int	get_word_cnt(char *str, char *charset)
-{
-	char	*p;
-	int		cnt;
+	const char		*p;
+	unsigned int	cnt;
 
 	cnt = 0;
 	p = str;
+	if (*p && !c)
+		return (1);
 	while (*p)
 	{
-		if (!*charset)
-			return (1);
-		if (!is_charset(*p, charset))
+		if (*p == c)
+			p++;
+		if (*p != c)
 		{
 			cnt++;
 			p++;
-			while (*str && !is_charset(*p, charset))
+			while (*p && *p != c)
 				p++;
 		}
-		p++;
 	}
 	return (cnt);
 }
 
-char	ft_strlcpy(char *dest, char *src, int n)
+// part 1
+size_t	ft_strlen(const char *s)
 {
-	int	i;
+	int	cnt;
 
-	if (n < 0)
-		return (0);
-	i = 0;
-	while (src[i] && i < n - 1)
-		*dest++ = src[i++];
-	*dest = '\0';
-	return (1);
+	cnt = 0;
+	while (*s++)
+		cnt++;
+	return (cnt);
 }
 
-char	solve(char *str, char *charset, char **res, int word_cnt)
+// part 1
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 {
-	int		i;
-	char	*word_sp;
+	unsigned int	i;
+	unsigned int	src_len;
+
+	src_len = ft_strlen(src);
+	i = 0;
+	while (i < src_len && i + 1 < dstsize)
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	if (i + 1 <= dstsize)
+		dst[i] = '\0';
+	return (src_len);
+}
+
+char	solve(const char *str, char c, char **res, unsigned int word_cnt)
+{
+	unsigned int	i;
+	const char		*word_sp;
 
 	i = 0;
 	while (*str && i < word_cnt)
 	{
-		if (!is_charset(*str, charset))
+		if (*str != c)
 		{
 			word_sp = str++;
-			while (*str && !is_charset(*str, charset))
+			while (*str && *str != c)
 				str++;
 			res[i] = (char *)malloc(str - word_sp + 1);
 			if (!res[i] || !ft_strlcpy(res[i], word_sp, str - word_sp + 1))
@@ -83,17 +89,17 @@ char	solve(char *str, char *charset, char **res, int word_cnt)
 	return (1);
 }
 
-char	**ft_split(char *str, char *charset)
+char	**ft_split(char const *s, char c)
 {
-	int		word_cnt;
-	char	**res;
+	unsigned int	word_cnt;
+	char			**res;
 
-	word_cnt = get_word_cnt(str, charset);
+	word_cnt = get_word_cnt(s, c);
 	res = (char **)malloc(sizeof(char *) * (word_cnt + 1));
 	if (!res)
-		return (0);
-	if (solve(str, charset, res, word_cnt))
+		return (NULL);
+	if (solve(s, c, res, word_cnt))
 		return (res);
 	else
-		return (0);
+		return (NULL);
 }

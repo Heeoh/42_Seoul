@@ -10,60 +10,35 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#include "libft.h"
 
-int	ft_strlen(char *str)
+// part_1
+size_t	ft_strlen(const char *s)
 {
 	int	cnt;
 
 	cnt = 0;
-	while (str[cnt])
+	while (*s++)
 		cnt++;
 	return (cnt);
 }
 
-int	get_res_len(int size, char **strs, char *sep)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	int	res_len;
-	int	i;
+	char		*res;
+	const char	*p;
+	char		*res_p;
 
-	res_len = 0;
-	i = 0;
-	while (i < size)
-		res_len += ft_strlen(strs[i++]);
-	if (size > 0)
-		res_len += ft_strlen(sep) * (size - 1);
-	return (res_len);
-}
-
-char	*ft_strcpy(char *dest, char *src)
-{
-	while (*src)
-		*dest++ = *src++;
-	return (dest);
-}
-
-char	*ft_strjoin(int size, char **strs, char *sep)
-{
-	char	*res;
-	int		res_len;
-	char	*p;
-	int		word_i;
-
-	res_len = get_res_len(size, strs, sep);
-	res = (char *)malloc(res_len + 1);
+	res = (char *)malloc(strlen(s1) + ft_strlen(s2) + 1);
 	if (!res)
-		return (0);
-	res[res_len] = '\0';
-	if (size <= 0)
-		return (res);
-	word_i = 0;
-	p = res;
-	while (word_i < size - 1)
-	{
-		p = ft_strcpy(p, strs[word_i++]);
-		p = ft_strcpy(p, sep);
-	}
-	p = ft_strcpy(p, strs[word_i++]);
+		return (NULL);
+	res_p = res;
+	p = s1;
+	while (*p)
+		*res_p++ = *p++;
+	p = s2;
+	while (*p)
+		*res_p++ = *p++;
+	*res_p = '\0';
 	return (res);
 }
