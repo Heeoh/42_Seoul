@@ -1,26 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memcpy.c                                        :+:      :+:    :+:   */
+/*   ft_isalpha.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/13 15:10:14 by heson             #+#    #+#             */
-/*   Updated: 2022/07/13 17:49:55 by heson            ###   ########.fr       */
+/*   Created: 2022/07/13 15:09:47 by heson             #+#    #+#             */
+/*   Updated: 2022/07/13 16:38:49 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memcpy(void *dst, const void *src, size_t n)
+int	ft_isalpha(int c)
 {
-	unsigned char	*p;
-
-	p = (unsigned char *)dst;
-	while (n--)
-	{
-		*p++ = *(unsigned char *)src;
-		src++;
-	}
-	return (dst);
+	if ('A' <= c && c <= 'Z')
+		return (1);
+	else if ('a' <= c && c <= 'z')
+		return (2);
+	else
+		return (0);
 }

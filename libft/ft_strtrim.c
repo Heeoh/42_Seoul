@@ -1,16 +1,5 @@
 #include "libft.h"
 
-// part 1
-size_t	ft_strlen(const char *s)
-{
-	int	cnt;
-
-	cnt = 0;
-	while (*s++)
-		cnt++;
-	return (cnt);
-}
-
 int is_set(char c, const char *set)
 {
     while (*set)

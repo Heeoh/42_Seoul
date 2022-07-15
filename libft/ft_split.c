@@ -36,35 +36,6 @@ int	get_word_cnt(const char *str, char c)
 	return (cnt);
 }
 
-// part 1
-size_t	ft_strlen(const char *s)
-{
-	int	cnt;
-
-	cnt = 0;
-	while (*s++)
-		cnt++;
-	return (cnt);
-}
-
-// part 1
-size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
-{
-	unsigned int	i;
-	unsigned int	src_len;
-
-	src_len = ft_strlen(src);
-	i = 0;
-	while (i < src_len && i + 1 < dstsize)
-	{
-		dst[i] = src[i];
-		i++;
-	}
-	if (i + 1 <= dstsize)
-		dst[i] = '\0';
-	return (src_len);
-}
-
 char	solve(const char *str, char c, char **res, unsigned int word_cnt)
 {
 	unsigned int	i;
@@ -80,7 +51,11 @@ char	solve(const char *str, char c, char **res, unsigned int word_cnt)
 				str++;
 			res[i] = (char *)malloc(str - word_sp + 1);
 			if (!res[i] || !ft_strlcpy(res[i], word_sp, str - word_sp + 1))
+			{
+				while (i >= 0)
+					free(res[i--]);
 				return (0);
+			}
 			i++;
 		}
 		str++;

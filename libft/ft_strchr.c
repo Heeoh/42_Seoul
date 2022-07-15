@@ -1,26 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libft.h                                            :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/13 16:20:22 by heson             #+#    #+#             */
-/*   Updated: 2022/07/13 16:41:29 by heson            ###   ########.fr       */
+/*   Created: 2022/07/13 15:10:48 by heson             #+#    #+#             */
+/*   Updated: 2022/07/13 16:39:49 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBFT_H
-# define LIBFT_H
+#include "libft.h"
 
-# include <stdlib.h>
+char	*ft_strchr(const char *s, int c)
+{
+	char	*p;
 
-char    *ft_substr(char const *s, unsigned int start, size_t len);
-char    *ft_strjoin(char const *s1, char const *s2);
-char    *ft_strtrim(char const *s1, char const *set);
-char	**ft_split(char const *s, char c);
-char    *ft_itoa(int n);
-char    *ft_strmapi(char const *s, char (*f)(unsigned int, char));
+	p = (char *)s;
+	while (1)
+	{
+		if (*p == (char)c)
+			return (p);
+		if (!*p)
+			return (0);
+		p++;
+	}
+}
 
+// #include <stdio.h>
 
-#endif
+// int main() {
+// 	char str[] = "teste";
+// 	printf("res: %p\t ft: %p\n", &str[1], ft_strchr(str, 'e' + 256));
+// }
+

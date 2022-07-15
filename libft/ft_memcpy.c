@@ -1,28 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/13 15:10:48 by heson             #+#    #+#             */
-/*   Updated: 2022/07/13 16:39:49 by heson            ###   ########.fr       */
+/*   Created: 2022/07/13 15:10:14 by heson             #+#    #+#             */
+/*   Updated: 2022/07/13 17:49:55 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strchr(const char *s, int c)
+void	*ft_memcpy(void *dst, const void *src, size_t n)
 {
-	char	*p;
+	unsigned char	*p;
 
-	p = (char *)s;
-	while (1)
+	p = (unsigned char *)dst;
+	if (!dst && !src)
+		return (NULL);
+	while (n--)
 	{
-		if (*p == c)
-			return (p);
-		if (!*p)
-			return (0);
-		p++;
+		*p++ = *(unsigned char *)src;
+		src++;
 	}
+	return (dst);
 }
