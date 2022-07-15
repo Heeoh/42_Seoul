@@ -15,7 +15,7 @@ t_list  *ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
         new_node = ft_lstnew("");
         if (!new_node)
             ft_lstclear(&new_list, del);
-        new_node = f(p);
+        new_node->content = f(p->content);
         if (!new_p)
             new_list = new_node;
         else

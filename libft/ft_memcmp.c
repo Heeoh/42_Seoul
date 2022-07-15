@@ -31,3 +31,14 @@ int	ft_memcmp(const void *s1, const void *s2, unsigned int n)
 	}
 	return (0);
 }
+
+// #include <stdio.h>
+// int main(void)
+// {
+// 	char s2[] = {0, 0, 127, 0};
+// 	char s3[] = {0, 0, 42, 0};
+
+// 	/* 5 */ printf("%d\n",ft_memcmp(s2, s3, 4));
+// 	write(1, "\n", 1);
+// 	return (0);
+// }

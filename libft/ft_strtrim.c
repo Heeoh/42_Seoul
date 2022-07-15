@@ -17,6 +17,8 @@ char    *ft_strtrim(char const *s1, char const *set)
     const char  *end_p;
     char        *res_p;
 
+    if (!s1)
+        return (NULL);
     p = s1 + ft_strlen(s1) - 1;
     while (p >= s1 && is_set(*p, set))
         p--;

@@ -25,7 +25,7 @@ int	get_word_cnt(const char *str, char c)
 	{
 		if (*p == c)
 			p++;
-		if (*p != c)
+		if (*p && *p != c)
 		{
 			cnt++;
 			p++;
@@ -69,6 +69,8 @@ char	**ft_split(char const *s, char c)
 	unsigned int	word_cnt;
 	char			**res;
 
+	if (!s)
+		return (NULL);
 	word_cnt = get_word_cnt(s, c);
 	res = (char **)malloc(sizeof(char *) * (word_cnt + 1));
 	if (!res)

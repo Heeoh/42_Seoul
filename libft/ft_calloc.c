@@ -14,19 +14,11 @@
 
 void	*ft_calloc(size_t count, size_t size)
 {
-	char			*res;
-	unsigned int	arr_size;
-	char			*p;
+	char				*res;
 
-	arr_size = count * size;
-	res = (char *)malloc(arr_size);
+	res = (char *)malloc(count * size);
 	if (!res)
-	{
-		free(res);
 		return (NULL);
-	}
-	p = res;
-	while (arr_size--)
-		*p++ = 0;
+	ft_bzero(res, count * size);
 	return (res);
 }
