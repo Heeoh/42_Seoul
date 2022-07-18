@@ -53,12 +53,19 @@ char	solve(const char *str, char c, char **res, unsigned int word_cnt)
 			if (!res[i] || !ft_strlcpy(res[i], word_sp, str - word_sp + 1))
 			{
 				while (i >= 0)
-					free(res[i--]);
+				{
+					if (res[i])
+						free(res[i]);
+					i--;
+				}
 				return (0);
 			}
 			i++;
 		}
+		if (!*str)
+			break;
 		str++;
+
 	}
 	res[i] = 0;
 	return (1);

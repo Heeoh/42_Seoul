@@ -27,10 +27,3 @@ char	*ft_strchr(const char *s, int c)
 	}
 }
 
-// #include <stdio.h>
-
-// int main() {
-// 	char str[] = "teste";
-// 	printf("res: %p\t ft: %p\n", &str[1], ft_strchr(str, 'e' + 256));
-// }
-

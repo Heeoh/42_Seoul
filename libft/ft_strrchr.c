@@ -16,6 +16,8 @@ char	*ft_strrchr(const char *s, int c)
 {
 	char	*p;
 
+	if (!s)
+		return (0);
 	p = (char *)s + ft_strlen(s);
 	while (1)
 	{

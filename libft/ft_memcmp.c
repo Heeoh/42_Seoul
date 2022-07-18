@@ -20,7 +20,7 @@ int	ft_memcmp(const void *s1, const void *s2, unsigned int n)
 
 	p1 = s1;
 	p2 = s2;
-	if (!p1[0] && !p2[0])
+	if (!s1 && !s2)
 		return (0);
 	i = 0;
 	while (i < n)
@@ -31,14 +31,3 @@ int	ft_memcmp(const void *s1, const void *s2, unsigned int n)
 	}
 	return (0);
 }
-
-// #include <stdio.h>
-// int main(void)
-// {
-// 	char s2[] = {0, 0, 127, 0};
-// 	char s3[] = {0, 0, 42, 0};
-
-// 	/* 5 */ printf("%d\n",ft_memcmp(s2, s3, 4));
-// 	write(1, "\n", 1);
-// 	return (0);
-// }

@@ -1,0 +1,85 @@
+For ft_split, in /Users/heson/francinette/tests/libft/fsoares/test_split.c:
+
+Error in test 1: ft_split("hello!", 32:' '):
+malloc protection check for 2th malloc:
+     in _add_malloc malloc_mock.c:29:8
+     in malloc malloc_mock.c:75:10
+  -> in solve ft_split.c:52:4
+     in ft_split ft_split.c:81:6
+     in test_single_split test_split.c:72:2
+     in test_split test_split.c:79:6
+     in main test_split.c:98:2
+: Bus error: Trying to set unwritable memory
+     in sigbus utils.c:63:1
+     in ft_split ft_split.c:81:6
+     in test_single_split test_split.c:72:2
+     in test_split test_split.c:79:6
+     in main test_split.c:98:2
+
+For ft_lstdelone, in /Users/heson/francinette/tests/libft/fsoares/test_lstdelone.c:
+
+Error in test 2: ft_lstdelone({node: content->ptr->"test"}, [(x) => free(*x)]): Do not use del on the lst. Use free instead: Memory problems!
+     in sigabort utils.c:58:1
+     in free malloc_mock.c:83:1
+  -> in ft_lstdelone ft_lstdelone.c:8:9
+     in test_lstdelone test_lstdelone.c:41:2
+     in main test_lstdelone.c:62:2
+
+=================================================================
+==66569==ERROR: AddressSanitizer: attempting free on address which was not malloc()-ed: 0x7ffeeeca5960 in thread T0
+    #0 0x103da42c6 in wrap_free+0xa6 (libclang_rt.asan_osx_dynamic.dylib:x86_64h+0x492c6)
+    #1 0x100f5e8f5 in free malloc_mock.c:82
+    #2 0x100f63f26 in ft_lstdelone ft_lstdelone.c:7
+    #3 0x100f5de6e in test_lstdelone test_lstdelone.c:41
+    #4 0x100f5e19d in main test_lstdelone.c:62
+    #5 0x7fff6f287cc8 in start+0x0 (libdyld.dylib:x86_64+0x1acc8)
+
+Address 0x7ffeeeca5960 is located in stack of thread T0 at offset 32 in frame
+    #0 0x100f5db3f in test_lstdelone test_lstdelone.c:16
+
+  This frame has 1 object(s):
+    [32, 40) 's' (line 22) <== Memory access at offset 32 is inside this variable
+HINT: this may be a false positive if your program uses some custom stack unwind mechanism, swapcontext or vfork
+      (longjmp and C++ exceptions *are* supported)
+SUMMARY: AddressSanitizer: bad-free (libclang_rt.asan_osx_dynamic.dylib:x86_64h+0x492c6) in wrap_free+0xa6
+
+For ft_lstclear, in /Users/heson/francinette/tests/libft/fsoares/test_lstclear.c:
+
+Error in test 2: ft_lstclear(<list: {node: ptr-> "hello!"}->(null)>, [(x) => free(*x)]): Memory problems!
+     in sigabort utils.c:58:1
+     in free malloc_mock.c:83:1
+  -> in ft_lstdelone ft_lstdelone.c:8:9
+     in ft_lstclear ft_lstclear.c:13:13
+     in test_single_lstclear test_lstclear.c:38:2
+     in test_lstclear test_lstclear.c:48:8
+     in main test_lstclear.c:58:2
+
+=================================================================
+==66583==ERROR: AddressSanitizer: attempting free on address which was not malloc()-ed: 0x7ffeecf88900 in thread T0
+    #0 0x105ac02c6 in wrap_free+0xa6 (libclang_rt.asan_osx_dynamic.dylib:x86_64h+0x492c6)
+    #1 0x102c7b8a5 in free malloc_mock.c:82
+    #2 0x102c80fe6 in ft_lstdelone ft_lstdelone.c:7
+    #3 0x102c80f23 in ft_lstclear ft_lstclear.c:12
+    #4 0x102c7aea6 in test_single_lstclear test_lstclear.c:38
+    #5 0x102c7b020 in test_lstclear test_lstclear.c:48
+    #6 0x102c7b14d in main test_lstclear.c:58
+    #7 0x7fff6f287cc8 in start+0x0 (libdyld.dylib:x86_64+0x1acc8)
+
+Address 0x7ffeecf88900 is located in stack of thread T0 at offset 64 in frame
+    #0 0x102c7ab0f in test_single_lstclear test_lstclear.c:22
+
+  This frame has 2 object(s):
+    [32, 40) 'to_func' (line 23)
+    [64, 144) 'args' (line 24) <== Memory access at offset 64 is inside this variable
+HINT: this may be a false positive if your program uses some custom stack unwind mechanism, swapcontext or vfork
+      (longjmp and C++ exceptions *are* supported)
+SUMMARY: AddressSanitizer: bad-free (libclang_rt.asan_osx_dynamic.dylib:x86_64h+0x492c6) in wrap_free+0xa6
+
+For ft_lstmap, in /Users/heson/francinette/tests/libft/fsoares/test_lstmap.c:
+
+Error in test 2: ft_lstmap(<list: {node: "hello!"}->(null)>, [s => __strlen(s)], [x => free(x)]) NULL check for 0th malloc: Segmentation fault!
+     in sigsegv utils.c:53:1
+     in test_single_lstmap test_lstmap.c:41:17
+     in test_lstmap test_lstmap.c:60:6
+     in main test_lstmap.c:70:2
+
