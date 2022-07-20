@@ -1,40 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_lstmap.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: heson <heson@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/20 18:30:22 by heson             #+#    #+#             */
+/*   Updated: 2022/07/20 18:32:39 by heson            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
-
-// #include <stdio.h>
-
-// t_list  *ft_lstnew(void *content)
-// {
-//     t_list  *new;
-
-//     new = (t_list*)malloc(sizeof(t_list));
-//     if (!new)
-//         return (NULL);
-//     new->content = content;
-//     new->next = NULL;
-//     return (new);
-// }
-// void    ft_lstdelone(t_list *lst, void (*del)(void*))
-// {
-//     if (lst)
-//     {
-//         del(lst->content);
-//         free(lst);
-//     }
-// }
-// void    ft_lstclear(t_list **lst, void (*del)(void*))
-// {
-//     t_list  *next;
-//     t_list  *p;
-
-//     p = *lst;
-//     while (p)
-//     {
-//         next = p->next;
-//         ft_lstdelone(p, del);
-//         p = next;
-//     }
-//     *lst = NULL;
-// }
 
 t_list  *ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
@@ -43,30 +19,23 @@ t_list  *ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
     t_list  *p;
     t_list  *new_p;
 
-    
     new_list = NULL;
     if (!lst)
         return (new_list);
     p = lst;
     while (p)
     {
-        new_node = ft_lstnew("");
+        new_node = ft_lstnew(f(p->content));
         if (!new_node) 
         {
             ft_lstclear(&new_list, del);
             return (NULL);
         }
-        new_node->content = f(p->content);
         if (!new_list)
-        {
             new_list = new_node;
-            new_p = new_list;
-        }
         else
-        {
             new_p->next = new_node;
-            new_p = new_node;
-        }
+        new_p = new_node;
         p = p->next; 
     }
     return (new_list);

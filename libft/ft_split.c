@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: heson <heson@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/07 13:11:47 by heson             #+#    #+#             */
-/*   Updated: 2022/07/07 13:11:51 by heson            ###   ########.fr       */
+/*   Updated: 2022/07/20 18:45:13 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,27 +38,21 @@ int	get_word_cnt(const char *str, char c)
 
 char	solve(const char *str, char c, char **res, unsigned int word_cnt)
 {
-	unsigned int	i;
 	const char		*word_sp;
 
-	i = 0;
-	while (*str && i < word_cnt)
+	word_sp = str++;
+	while (*str && *str != c)
+		str++;
+	res[i] = (char *)malloc(str - word_sp + 1);
+	if (!res[i] || !ft_strlcpy(res[i], word_sp, str - word_sp + 1))
 	{
-		if (*str != c)
+		while (i >= 0)
 		{
-			word_sp = str++;
-			while (*str && *str != c)
-				str++;
-			res[i] = (char *)malloc(str - word_sp + 1);
-			if (!res[i] || !ft_strlcpy(res[i], word_sp, str - word_sp + 1))
-			{
-				while (i >= 0)
-				{
-					if (res[i])
-						free(res[i]);
-					i--;
-				}
-				return (0);
+			if (res[i])
+				free(res[i]);
+			i--;
+		}
+		return (0);
 			}
 			i++;
 		}
@@ -74,6 +68,7 @@ char	solve(const char *str, char c, char **res, unsigned int word_cnt)
 char	**ft_split(char const *s, char c)
 {
 	unsigned int	word_cnt;
+	unsigned int	i;
 	char			**res;
 
 	if (!s)
@@ -82,6 +77,19 @@ char	**ft_split(char const *s, char c)
 	res = (char **)malloc(sizeof(char *) * (word_cnt + 1));
 	if (!res)
 		return (NULL);
+	i = 0;
+	while (*s && i < word_cnt)
+	{
+		if (*s != c)
+		{
+			create_word();
+			i++;
+		}
+		if (!*str)
+			break;
+		str++;
+
+	}
 	if (solve(s, c, res, word_cnt))
 		return (res);
 	else
