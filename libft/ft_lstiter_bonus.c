@@ -1,13 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_lstiter_bonus.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/22 17:38:04 by heson             #+#    #+#             */
+/*   Updated: 2022/07/22 17:40:21 by heson            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
-void    ft_lstiter(t_list *lst, void (*f)(void *))
+void	ft_lstiter(t_list *lst, void (*f)(void *))
 {
-    t_list  *p;
+	t_list	*p;
 
-    p = lst;
-    while (p)
-    {
-        f(p->content);
-        p = p->next;
-    }
+	p = lst;
+	while (p && f)
+	{
+		f(p->content);
+		p = p->next;
+	}
 }

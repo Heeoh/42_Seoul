@@ -1,38 +1,48 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoin.c                                       :+:      :+:    :+:   */
+/*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/07 13:10:27 by heson             #+#    #+#             */
-/*   Updated: 2022/07/15 12:30:34 by heson            ###   ########.fr       */
+/*   Created: 2022/07/22 17:05:33 by heson             #+#    #+#             */
+/*   Updated: 2022/07/22 17:07:40 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strjoin(char const *s1, char const *s2)
+int	is_set(char c, const char *set)
+{
+	while (set && *set)
+	{
+		if (*set++ == c)
+			return (1);
+	}
+	return (0);
+}
+
+char	*ft_strtrim(char const *s1, char const *set)
 {
 	char		*res;
 	const char	*p;
+	const char	*end_p;
 	char		*res_p;
-	size_t		res_len;
 
-	res_len = 0;
-	if (s1)
-		res_len += ft_strlen(s1);
-	if (s2)
-		res_len += ft_strlen(s2);
-	res = (char *)malloc(res_len + 1);
+	if (!s1)
+		return (NULL);
+	p = s1 + ft_strlen(s1) - 1;
+	while (p >= s1 && is_set(*p, set))
+		p--;
+	end_p = p + 1;
+	p = s1;
+	while (p < end_p && is_set(*p, set))
+		p++;
+	res = (char *)malloc(end_p - p + 1);
 	if (!res)
 		return (NULL);
 	res_p = res;
-	p = s1;
-	while (s1 && *p)
-		*res_p++ = *p++;
-	p = s2;
-	while (s2 && *p)
+	while (p < end_p)
 		*res_p++ = *p++;
 	*res_p = '\0';
 	return (res);

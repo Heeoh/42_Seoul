@@ -1,28 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstclear_bonus.c                                :+:      :+:    :+:   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/22 17:41:23 by heson             #+#    #+#             */
-/*   Updated: 2022/07/22 17:42:02 by heson            ###   ########.fr       */
+/*   Created: 2022/07/07 13:10:27 by heson             #+#    #+#             */
+/*   Updated: 2022/07/22 17:10:46 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_lstclear(t_list **lst, void (*del)(void*))
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	t_list	*next;
-	t_list	*p;
+	char		*res;
+	const char	*p;
+	char		*res_p;
+	size_t		res_len;
 
-	p = *lst;
-	while (p)
-	{
-		next = p->next;
-		ft_lstdelone(p, del);
-		p = next;
-	}
-	*lst = NULL;
+	res_len = 0;
+	if (s1)
+		res_len += ft_strlen(s1);
+	if (s2)
+		res_len += ft_strlen(s2);
+	res = (char *)malloc(res_len + 1);
+	if (!res)
+		return (NULL);
+	res_p = res;
+	p = s1;
+	while (s1 && *p)
+		*res_p++ = *p++;
+	p = s2;
+	while (s2 && *p)
+		*res_p++ = *p++;
+	*res_p = '\0';
+	return (res);
 }

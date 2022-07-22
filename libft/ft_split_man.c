@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/07 13:11:47 by heson             #+#    #+#             */
-/*   Updated: 2022/07/22 16:34:26 by heson            ###   ########.fr       */
+/*   Updated: 2022/07/22 17:15:45 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ char	*create_word(const char *str, char c, char **res)
 
 void	free_all(char **res, unsigned int i)
 {
-	char **p;
+	char	**p;
 
 	p = res;
 	while (p < res + i)
@@ -82,10 +82,8 @@ char	**ft_split(char const *s, char c)
 			free_all(res, i);
 			return (NULL);
 		}
-		if (!*s)
-			break;
-		s++;
-
+		if (*s)
+			s++;
 	}
 	res[i] = 0;
 	return (res);

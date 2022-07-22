@@ -1,29 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/13 15:10:48 by heson             #+#    #+#             */
-/*   Updated: 2022/07/13 16:39:49 by heson            ###   ########.fr       */
+/*   Created: 2022/07/22 17:08:51 by heson             #+#    #+#             */
+/*   Updated: 2022/07/22 17:10:09 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strchr(const char *s, int c)
+char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
-	char	*p;
+	char			*res;
+	unsigned int	i;
+	unsigned int	len;
 
-	p = (char *)s;
-	while (1)
+	len = 0;
+	if (s)
+		len = ft_strlen(s);
+	res = (char *)malloc(len + 1);
+	if (!res)
+		return (NULL);
+	i = 0;
+	while (i < len)
 	{
-		if (*p == (char)c)
-			return (p);
-		if (!*p)
-			return (0);
-		p++;
+		res[i] = f(i, s[i]);
+		i++;
 	}
+	res[i] = '\0';
+	return (res);
 }
-

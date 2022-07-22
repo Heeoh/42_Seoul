@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: heson <heson@student.42.fr>                +#+  +:+       +#+        */
+/*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/20 18:26:32 by heson             #+#    #+#             */
-/*   Updated: 2022/07/20 18:26:35 by heson            ###   ########.fr       */
+/*   Created: 2022/07/22 17:45:28 by heson             #+#    #+#             */
+/*   Updated: 2022/07/22 17:47:20 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	get_num_len(int num)
 
 	cnt = 0;
 	if (num <= 0)
-        cnt++;
+		cnt++;
 	while (num != 0)
 	{
 		num /= 10;
@@ -27,19 +27,19 @@ int	get_num_len(int num)
 	return (cnt);
 }
 
-unsigned int ft_abs(int n)
+unsigned int	ft_abs(int n)
 {
-    if (n < 0)
-        return (-n);
-    else
-        return (n);
+	if (n < 0)
+		return (-n);
+	else
+		return (n);
 }
 
-char    *ft_itoa(int n)
+char	*ft_itoa(int n)
 {
 	unsigned int	res_len;
-	char	        *res;
-	char	        *p;
+	char			*res;
+	char			*p;
 
 	res_len = get_num_len(n);
 	res = (char *)malloc(res_len + 1);
@@ -49,8 +49,8 @@ char    *ft_itoa(int n)
 	*p-- = '\0';
 	if (n == 0)
 		*p = '0';
-    else if (n < 0)
-        *res = '-';
+	else if (n < 0)
+		*res = '-';
 	while (n != 0)
 	{
 		*p-- = ft_abs(n % 10) + '0';

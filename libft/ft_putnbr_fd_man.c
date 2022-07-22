@@ -1,29 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memchr.c                                        :+:      :+:    :+:   */
+/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/13 15:10:01 by heson             #+#    #+#             */
-/*   Updated: 2022/07/13 16:39:18 by heson            ###   ########.fr       */
+/*   Created: 2022/07/22 17:21:18 by heson             #+#    #+#             */
+/*   Updated: 2022/07/22 17:25:36 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memchr(const void *s, int c, size_t n)
+void	ft_putnbr_fd(int n, int fd)
 {
-	unsigned char	*str;
-	size_t			i;
+	char			res[10];
+	unsigned int	i;
+	int				write_n;
 
-	str = (unsigned char *)s;
+	if (fd < 0)
+		return ;
+	if (n == 0)
+		write(fd, "0", 1);
+	if (n < 0)
+		write(fd, "-", 1);
 	i = 0;
-	while (i < n)
+	while (n != 0)
 	{
-		if (str[i] == (unsigned char)c)
-			return (&str[i]);
-		i++;
+		write_n = n % 10;
+		if (write_n < 0)
+			write_n = -write_n;
+		res[i++] = write_n + '0';
+		n /= 10;
 	}
-	return (0);
+	while (i--)
+		write(fd, &res[i], 1);
 }

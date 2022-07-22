@@ -1,25 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstiter.c                                       :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: heson <heson@student.42.fr>                +#+  +:+       +#+        */
+/*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/20 18:28:40 by heson             #+#    #+#             */
-/*   Updated: 2022/07/20 18:28:41 by heson            ###   ########.fr       */
+/*   Created: 2022/07/13 15:10:48 by heson             #+#    #+#             */
+/*   Updated: 2022/07/22 17:11:50 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void    ft_lstiter(t_list *lst, void (*f)(void *))
+char	*ft_strchr(const char *s, int c)
 {
-    t_list  *p;
+	char	*p;
 
-    p = lst;
-    while (p)
-    {
-        f(p->content);
-        p = p->next;
-    }
+	p = (char *)s;
+	while (1)
+	{
+		if (*p == (char)c)
+			return (p);
+		if (!*p)
+			return (0);
+		p++;
+	}
 }
