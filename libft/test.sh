@@ -15,6 +15,8 @@ read $a
 git clone https://github.com/ska42/libft-war-machine
 cd libft-war-machine/
 bash grademe.sh
+sed -i "" 's/~\/libft/..\//' my_config.sh
+bash grademe.sh
 cd ..
 echo -e "\033[32;1m"unit-test"\033[m"
 read $a

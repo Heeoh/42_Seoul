@@ -2,7 +2,7 @@
 
 int is_set(char c, const char *set)
 {
-    while (*set)
+    while (set && *set)
     {
         if (*set++ == c)
             return (1);

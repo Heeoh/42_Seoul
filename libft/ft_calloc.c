@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: heson <heson@student.42.fr>                +#+  +:+       +#+        */
+/*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 15:09:23 by heson             #+#    #+#             */
-/*   Updated: 2022/07/20 18:24:28 by heson            ###   ########.fr       */
+/*   Updated: 2022/07/22 16:24:51 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,6 @@ void	*ft_calloc(size_t count, size_t size)
 {
 	char	*res;
 
-	if (!count)
-		count = 1;
-	if (!size)
-		size = 1;
 	res = (char *)malloc(count * size);
 	if (!res)
 		return (NULL);
