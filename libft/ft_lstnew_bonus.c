@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 17:28:34 by heson             #+#    #+#             */
-/*   Updated: 2022/07/22 17:33:11 by heson            ###   ########.fr       */
+/*   Updated: 2022/07/27 16:19:21 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 t_list	*ft_lstnew(void *content)
 {
-	t_list	*new;
+	t_list	*new_node;
 
-	new = (t_list *)malloc(sizeof(t_list));
-	if (!new)
+	new_node = (t_list *)malloc(sizeof(t_list));
+	if (!new_node)
 		return (NULL);
-	new->content = content;
-	new->next = NULL;
-	return (new);
+	new_node->content = content;
+	new_node->next = NULL;
+	return (new_node);
 }

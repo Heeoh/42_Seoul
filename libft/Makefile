@@ -18,7 +18,7 @@ endif
 		$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME) : $(OBJECTS)
-		ar rcs $(NAME) $(OBJECTS)
+		ar -crs $@ $(OBJECTS)
 
 bonus :
 		make ADD_BONUS=1 

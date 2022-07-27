@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strnstr.c                                       :+:      :+:    :+:   */
+/*   ft_strnstr_man.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 15:59:41 by heson             #+#    #+#             */
-/*   Updated: 2022/07/13 16:40:29 by heson            ###   ########.fr       */
+/*   Updated: 2022/07/27 16:20:53 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strnstr(const char *haystack, const char *needle, unsigned int len)
+char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
 {
 	unsigned int	i;
 	unsigned int	tmp_i;
