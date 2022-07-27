@@ -6,17 +6,18 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 16:15:08 by heson             #+#    #+#             */
-/*   Updated: 2022/07/27 16:18:37 by heson            ###   ########.fr       */
+/*   Updated: 2022/07/27 19:04:50 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <limits.h>
 
 int	ft_atoi(const char *str)
 {
-	char			*p;
-	int				sign;
-	unsigned int	absolute_num;
+	char				*p;
+	int					sign;
+	unsigned long long	absolute_num;
 
 	p = (char *)str;
 	sign = 1;
@@ -32,6 +33,10 @@ int	ft_atoi(const char *str)
 	while (*p && '0' <= *p && *p <= '9')
 	{
 		absolute_num = absolute_num * 10 + (*p - '0');
+		if (sign == 1 && absolute_num >= LLONG_MAX)
+			return (-1);
+		if (sign == -1 && absolute_num > LLONG_MAX)
+			return (0);
 		p++;
 	}
 	return (absolute_num * sign);
