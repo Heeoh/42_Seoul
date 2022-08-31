@@ -1,7 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 NAME = libft.a
-HEADER = libft.h
 
 SRCS_MAN = $(wildcard *_man.c)
 SRCS_BONUS = $(wildcard *_bonus.c)
@@ -21,6 +20,7 @@ $(NAME) : $(OBJECTS)
 		ar -crs $@ $(OBJECTS)
 
 bonus :
+		sleep 1
 		make ADD_BONUS=1 
 		make all
 
