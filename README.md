@@ -8,8 +8,8 @@
 </details>  
 
 <details><summary>libft</summary>
-- atoi, itoa
-- bzero
++ atoi, itoa
++ bzero
 - calloc
 - isalnum, isalpha, isascii, isdigit, isprint
 - lstnew, lstadd_front, lstadd_back, lstlast, lstsize, lstdelone, lstclear, lstiter, lstmap
