@@ -30,6 +30,7 @@ char	*my_strcat(char *dst, char const *src, size_t n)
 		*dst++ = src[i];
 		if (src[i] == '\n' || src[i] == '\0')
 			break ;
+		i++;
 	}
 	return (dst);
 }
