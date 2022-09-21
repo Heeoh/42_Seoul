@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 21:35:12 by heson             #+#    #+#             */
-/*   Updated: 2022/09/21 22:48:42 by heson            ###   ########.fr       */
+/*   Updated: 2022/09/21 23:00:03 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,26 +123,23 @@ char	*integrate_to_line(size_t line_len, size_t buf_size, Buf *bufLst)
 	return line;
 }
 
-void	backup(char **backup_buf, char *newt_line_p, int len)
+size_t	backup(char **backup_buf, char *next_line_p, int len)
 {
 	char	*p;
 
-	*backup_buf = (char *)malloc(len + 1);
+	*backup_buf = (char *)malloc(len);
 	if (!backup_buf) {
 		printf("do_backup, malloc error\n");
 		exit (0);
 	}
 	p = *backup_buf;
-	while (p < *backup_buf + len) {
-		*p++ = *newt_line_p++;
+	while (*next_line_p) {
+		*p++ = *next_line_p++;
 	}
-	p = 0;
+	return (len);
 }
 
-void	restore(char **backup_buf, Buf *bufLst_last) {
-	int len;
-
-	len = ft_strlen(*backup_buf);
+void	restore(char **backup_buf, Buf *bufLst_last, size_t len) {
 	if (*backup_buf)
 		bufLst_last = add_buf(bufLst_last, *backup_buf, len);
 	free(*backup_buf);
@@ -161,7 +158,7 @@ void do_free(Buf *bufLst) {
 	}
 }
 
-char	*get_line(int fd, size_t buf_size, char **backup_buf)
+char	*get_line(int fd, size_t buf_size, char **backup_buf, size_t *backup_buf_size)
 {
 	size_t	line_len;
 	char	*line;
@@ -173,7 +170,7 @@ char	*get_line(int fd, size_t buf_size, char **backup_buf)
 	bufLst = NULL;
 	bufLst_last = bufLst;
 
-	restore(backup_buf, bufLst_last);
+	restore(backup_buf, bufLst_last, *backup_buf_size);
 	bufLst = bufLst_last;
 	line_len = 0;
 	while (1) {
@@ -188,9 +185,9 @@ char	*get_line(int fd, size_t buf_size, char **backup_buf)
 		}
 		else if (buf_ep != read_size) // 읽어온 buf에 "\n"이 있으면 
 		{
-			line_len += buf_ep;
+			line_len += buf_ep++;
 			line = integrate_to_line(line_len, buf_size, bufLst);
-			backup(backup_buf, bufLst_last->data + buf_ep + 1, read_size - (buf_ep + 1));
+			*backup_buf_size = backup(backup_buf, bufLst_last->data + buf_ep, read_size - buf_ep);
 			do_free(bufLst);
 			return (line);
 		}
@@ -205,10 +202,11 @@ char	*get_line(int fd, size_t buf_size, char **backup_buf)
 char	*get_next_line(int fd, size_t buf_size)
 {
 	static char	*backup_buf;
+	size_t		backup_buf_size;
 	char		*line;
 
 	// buf size 처리
-	line = get_line(fd, buf_size, &backup_buf);
+	line = get_line(fd, buf_size, &backup_buf, &backup_buf_size);
 	// printf("backup: %s\n", backup_buf);
 	if (*line)
 		return (line);
