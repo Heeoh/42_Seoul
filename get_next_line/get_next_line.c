@@ -1,5 +1,5 @@
 #include <unistd.h> // read
-#include <stdlib.h> // malloc, free, realloc
+#include <stdlib.h> // malloc, free, realloc(test)
 
 #include <stdio.h> // test
 
@@ -78,23 +78,12 @@ char	*integrate_to_line(size_t line_len, size_t buf_size, char **buf_arr, size_t
 	i = 0;  
 	while (i < buf_cnt - 1)
 		line_p = my_strcat(line_p, buf_arr[i++], buf_size);
-	line_p = my_strcat(line_p, buf_arr[i++], line_len - (line_p - line));
+	line_p = my_strcat(line_p, buf_arr[i++], line_len - (line_p - line) + 1);
 
 	return line;
 }
 
-// 읽어온 buf_len이 0이면 (EOF)
-//      - line_len에 "\0"까지의 바이트 크기 값을 더한 후 malloc, buf_arr[0]부터 buf_arr[cur]의 "/0"까지 복사
 
-
-// 읽어온 buf에 "\n"이 있으면 
-//      - line_len에 "\n"까지의 바이트 크기 값을 더한 후 malloc, buf_arr[0]부터 buf_arr[cur]의 "/n"까지 복사
-//      - buf_arr를 모두 free한 후, "\n" 이후의 남은 값을 buf_arr[0]을 새로 malloc하여 저장
-
-// 읽어온 buf에 "\n"이 없으면 
-//      - buf_arr를 realloc해서 읽어온 buf의 주소를 저장, 그 길이만큼을 line_len에 더함
-
-// line을 리턴
 char	*get_line(int fd, size_t buf_size, char **buf_arr, size_t buf_cnt)
 {
 	size_t	line_len;
@@ -116,12 +105,16 @@ char	*get_line(int fd, size_t buf_size, char **buf_arr, size_t buf_cnt)
 		if (buf_ep == 0) // EOF
 		{
 			line_len++;
-			return integrate_to_line(line_len, buf_size, buf_arr, buf_cnt);
+			line = integrate_to_line(line_len, buf_size, buf_arr, buf_cnt);
+			// buf_arr 관리
+			return line;
 		}
 		else if (buf_ep != read_size) // 읽어온 buf에 "\n"이 있으면 
 		{
 			line_len += buf_ep;
-			return integrate_to_line(line_len, buf_size, buf_arr, buf_cnt);
+			line = integrate_to_line(line_len, buf_size, buf_arr, buf_cnt);
+			// buf_arr 관리
+			return line;
 		}
 		else // 읽어온 buf에 "\n"이 없으면 
 		{
@@ -137,6 +130,7 @@ char    *get_next_line(int fd, size_t buf_size)
 {
 	char	**buf_arr;
 	size_t	buf_cnt;
+	char	*line;
 
 	// buf size 처리
 	buf_arr = (char**)malloc(0);
@@ -144,7 +138,9 @@ char    *get_next_line(int fd, size_t buf_size)
 		printf("get_next_line, buf_arr malloc error\n");
 		exit(0);
 	}
-	return (get_line(fd, buf_size, buf_arr, buf_cnt));
+	line = get_line(fd, buf_size, buf_arr, buf_cnt);
+	if (*line) return (line);
+	else return 0;
 }
 
 
@@ -155,9 +151,13 @@ char    *get_next_line(int fd, size_t buf_size)
 int main() {
 	size_t buf_size = 10;
 	int fd = open("test.txt", O_RDONLY);
-	char *res = get_next_line(fd, buf_size);
-	while (*res != '\n' || *res != '\0')
-		write(1, res++, 1);
-	write(1, res, 1);
+	while (1) {
+		char *res = get_next_line(fd, buf_size);
+		if (!res) break;
+		while (*res != '\n' && *res != '\0')
+			write(1, res++, 1);
+		write(1, res, 1);
+	}
+	
 
 }
