@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 21:35:12 by heson             #+#    #+#             */
-/*   Updated: 2022/09/21 23:00:03 by heson            ###   ########.fr       */
+/*   Updated: 2022/09/22 15:57:17 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ size_t	ft_strlen(char *str)
 	return (cnt);
 }
 
-Buf	*add_buf(Buf *last, char *data, size_t data_len)
+Buf	*add_buf(Buf **last, char *data, size_t data_len)
 {
 	Buf	*new_buf;
 	
@@ -66,8 +66,8 @@ Buf	*add_buf(Buf *last, char *data, size_t data_len)
 	new_buf->data[data_len] = '\0';
 	new_buf->next = NULL;
 
-	if (!last) last = new_buf;
-	else last->next = new_buf;
+	if (!*last) *last = new_buf;
+	else (*last)->next = new_buf;
 
 	return (new_buf);
 }
@@ -86,7 +86,7 @@ size_t	read_bufSize(int fd, size_t buf_size, size_t *read_size, Buf **bufLst_las
 	*read_size = read(fd, data, buf_size);
 
 	// buf_list에 추가
-	*bufLst_last = add_buf(*bufLst_last, data, *read_size);
+	*bufLst_last = add_buf(bufLst_last, data, *read_size);
 	
 	newline_p = ft_strchr(data, '\n', *read_size);
 	if (*read_size == 0){
@@ -104,7 +104,7 @@ char	*integrate_to_line(size_t line_len, size_t buf_size, Buf *bufLst)
 {
 	char	*line;
 	char	*line_p;
-	// Buf		*bufLst_p;
+	Buf		*bufLst_p;
 
 	line = (char *)malloc(line_len * sizeof(char));
 	if (!line) {
@@ -112,13 +112,13 @@ char	*integrate_to_line(size_t line_len, size_t buf_size, Buf *bufLst)
 		exit(0);
 	}
 	line_p = line;
-	// bufLst_p = bufLst;
-	while (bufLst->next)
+	bufLst_p = bufLst;
+	while (bufLst_p->next)
 	{
-		line_p = my_strcat(line_p, bufLst->data, buf_size);
-		bufLst = bufLst->next;
+		line_p = my_strcat(line_p, bufLst_p->data, buf_size);
+		bufLst_p = bufLst_p->next;
 	}
-	line_p = my_strcat(line_p, bufLst->data, line_len - (line_p - line) + 1);
+	line_p = my_strcat(line_p, bufLst_p->data, line_len - (line_p - line) + 1);
 
 	return line;
 }
@@ -127,6 +127,7 @@ size_t	backup(char **backup_buf, char *next_line_p, int len)
 {
 	char	*p;
 
+	free(*backup_buf);
 	*backup_buf = (char *)malloc(len);
 	if (!backup_buf) {
 		printf("do_backup, malloc error\n");
@@ -139,17 +140,17 @@ size_t	backup(char **backup_buf, char *next_line_p, int len)
 	return (len);
 }
 
-void	restore(char **backup_buf, Buf *bufLst_last, size_t len) {
+void	restore(char **backup_buf, Buf **bufLst_last, size_t len) {
 	if (*backup_buf)
-		bufLst_last = add_buf(bufLst_last, *backup_buf, len);
-	free(*backup_buf);
+		*bufLst_last = add_buf(bufLst_last, *backup_buf, len);
+	// free(*backup_buf);
 }
 
-void do_free(Buf *bufLst) {
+void do_free(Buf **bufLst) {
 	Buf	*p;
 	Buf	*next_p;
 
-	p = bufLst;
+	p = *bufLst;
 	while (p)
 	{
 		next_p = p->next;
@@ -170,9 +171,9 @@ char	*get_line(int fd, size_t buf_size, char **backup_buf, size_t *backup_buf_si
 	bufLst = NULL;
 	bufLst_last = bufLst;
 
-	restore(backup_buf, bufLst_last, *backup_buf_size);
+	restore(backup_buf, &bufLst_last, *backup_buf_size);
 	bufLst = bufLst_last;
-	line_len = 0;
+	line_len = *backup_buf_size;
 	while (1) {
 		buf_ep = read_bufSize(fd, buf_size, &read_size, &bufLst_last);
 		if (!bufLst) bufLst = bufLst_last;
@@ -181,6 +182,8 @@ char	*get_line(int fd, size_t buf_size, char **backup_buf, size_t *backup_buf_si
 		{
 			line_len++;
 			line = integrate_to_line(line_len, buf_size, bufLst);
+			do_free(&bufLst);
+			free(*backup_buf);
 			return (line);
 		}
 		else if (buf_ep != read_size) // 읽어온 buf에 "\n"이 있으면 
@@ -188,7 +191,7 @@ char	*get_line(int fd, size_t buf_size, char **backup_buf, size_t *backup_buf_si
 			line_len += buf_ep++;
 			line = integrate_to_line(line_len, buf_size, bufLst);
 			*backup_buf_size = backup(backup_buf, bufLst_last->data + buf_ep, read_size - buf_ep);
-			do_free(bufLst);
+			do_free(&bufLst);
 			return (line);
 		}
 		else // 읽어온 buf에 "\n"이 없으면 
@@ -201,9 +204,9 @@ char	*get_line(int fd, size_t buf_size, char **backup_buf, size_t *backup_buf_si
 
 char	*get_next_line(int fd, size_t buf_size)
 {
-	static char	*backup_buf;
-	size_t		backup_buf_size;
-	char		*line;
+	static char		*backup_buf;
+	static size_t	backup_buf_size;
+	char			*line;
 
 	// buf size 처리
 	line = get_line(fd, buf_size, &backup_buf, &backup_buf_size);

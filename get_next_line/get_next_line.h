@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 21:36:37 by heson             #+#    #+#             */
-/*   Updated: 2022/09/21 23:00:22 by heson            ###   ########.fr       */
+/*   Updated: 2022/09/22 15:32:12 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	*ft_strchr(const char *s, int c, int n);
 char	*my_strcat(char *dst, char const *src, size_t n);
 size_t	ft_strlen(char *str);
 
-Buf	    *add_buf(Buf *last, char *data, size_t data_len);
+Buf		*add_buf(Buf **last, char *data, size_t data_len);
 size_t	read_bufSize(int fd, size_t buf_size, size_t *read_size, Buf **bufLst_last);
 char	*integrate_to_line(size_t line_len, size_t buf_size, Buf *bufLst);
 char	*get_line(int fd, size_t buf_size, char **backup_buf, size_t *backup_buf_size);
