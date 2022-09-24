@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 21:38:58 by heson             #+#    #+#             */
-/*   Updated: 2022/09/24 23:13:59 by heson            ###   ########.fr       */
+/*   Updated: 2022/09/24 23:29:43 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ Buf	*add_buf(Buf **last, char *data, size_t data_len)
 
 	new_buf = (Buf *)malloc(sizeof(Buf));
 	if (!new_buf)
-		return (0);
+		return (NULL);
 	new_buf->data = data;
 	new_buf->next = NULL;
 	if (!*last)
@@ -61,12 +61,12 @@ Buf	*add_buf(Buf **last, char *data, size_t data_len)
 	return (new_buf);
 }
 
-void	free_buflst(Buf **bufLst)
+void	free_buflst(Buf **buflst)
 {
 	Buf	*p;
 	Buf	*next_p;
 
-	p = *bufLst;
+	p = *buflst;
 	while (p)
 	{
 		next_p = p->next;
@@ -74,6 +74,7 @@ void	free_buflst(Buf **bufLst)
 		free(p);
 		p = next_p;
 	}
+	*buflst = NULL;
 }
 
 size_t	do_backup(Buf **buflst, size_t next_line_loc)

@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 21:35:12 by heson             #+#    #+#             */
-/*   Updated: 2022/09/24 23:14:11 by heson            ###   ########.fr       */
+/*   Updated: 2022/09/24 23:42:03 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,24 +16,117 @@
 
 #include <stdio.h> // test
 
-size_t	read_bufsize(int fd, size_t buf_size, size_t *read_size, Buf **bufLst)
+char	*ft_strchr(const char *s, int c, int n)
+{
+	char	*p;
+
+	p = (char *)s;
+	while (p < s + n)
+	{
+		if (*p == (char)c)
+			return (p);
+		if (!*p)
+			return (0);
+		p++;
+	}
+	return (0);
+}
+
+char	*my_strcat(char *dst, char const *src, size_t n)
+{
+	unsigned int	i;
+
+	i = 0;
+	while (i < n && src[i])
+	{
+		*dst++ = src[i];
+		if (src[i] == '\n' || src[i] == '\0')
+			break ;
+		i++;
+	}
+	return (dst);
+}
+
+Buf	*add_buf(Buf **last, char *data, size_t data_len)
+{
+	Buf	*new_buf;
+
+	new_buf = (Buf *)malloc(sizeof(Buf));
+	if (!new_buf)
+		return (NULL);
+	new_buf->data = data;
+	new_buf->next = NULL;
+	if (!*last)
+		*last = new_buf;
+	else
+		(*last)->next = new_buf;
+	return (new_buf);
+}
+
+void	free_buflst(Buf **buflst)
+{
+	Buf	*p;
+	Buf	*next_p;
+
+	p = *buflst;
+	while (p)
+	{
+		next_p = p->next;
+		free(p->data);
+		free(p);
+		p = next_p;
+	}
+	*buflst = NULL;
+}
+
+size_t	do_backup(Buf **buflst, size_t next_line_loc)
+{
+	Buf		*buf_p;
+	char	*target;
+	char	*data_p;
+	char	*data;
+	int		len;
+
+	buf_p = *buflst;
+	while (buf_p->next)
+		buf_p = buf_p->next;
+	target = buf_p->data + next_line_loc;
+	len = 0;
+	while (*target++)  // !!! 여기서 target을 증가시키면 뒤에서 데이터 복사불가!!
+		len++;
+	data = (char *)malloc(len);
+	if (!data)
+	{
+		printf("do_backup, malloc error\n");
+		exit (0);
+	}
+	data_p = data;
+	while (*target)
+		*data_p++ = *target++;
+	free_buflst(buflst);
+	*buflst = NULL;
+	add_buf(buflst, data, len);
+	return (len);
+}
+
+
+int	read_bufsize(int fd, size_t buf_size, size_t *read_size, Buf **buflst)
 {
 	char	*data;
 	char	*newline_p;
 
 	data = (char *)malloc(buf_size * sizeof(char) + 1);
 	if (!data)
-	{
-		printf("read_bufSize, line malloc error\n");
-		exit(0);
-	}
+		return (-1);
 	*read_size = read(fd, data, buf_size);
 	data[*read_size] = '\0';
-	*bufLst = add_buf(bufLst, data, *read_size);
+	*buflst = add_buf(buflst, data, *read_size);
+	if (!*buflst)
+		return (-1);
 	newline_p = ft_strchr(data, '\n', *read_size);
 	if (*read_size == 0)
 	{
-		(*bufLst)->data[0] = '\0';
+		(*buflst)->data[0] = '\0';
 		return (*read_size);
 	}
 	else if (newline_p != NULL)
@@ -45,13 +138,19 @@ size_t	read_bufsize(int fd, size_t buf_size, size_t *read_size, Buf **bufLst)
 size_t	read_line(int fd, size_t buf_size, Buf **buflst, size_t *line_len)
 {
 	Buf		*buflst_last;
-	size_t	buf_ep;
+	int		buf_ep;
 	size_t	read_size;
 
 	buflst_last = *buflst;
 	while (1)
 	{
 		buf_ep = read_bufsize(fd, buf_size, &read_size, &buflst_last);
+		if (buf_ep < 0)
+		{
+			free_buflst(buflst);
+			buflst = NULL;
+			return (0);
+		}
 		if (!*buflst)
 			*buflst = buflst_last;
 		if (buf_ep == 0)
@@ -66,7 +165,7 @@ size_t	read_line(int fd, size_t buf_size, Buf **buflst, size_t *line_len)
 	}
 }
 
-char	*integrate_to_line(size_t line_len, size_t buf_size, Buf *bufLst)
+char	*integrate_to_line(size_t line_len, size_t buf_size, Buf *buflst)
 {
 	char	*line;
 	char	*line_p;
@@ -77,11 +176,11 @@ char	*integrate_to_line(size_t line_len, size_t buf_size, Buf *bufLst)
 	line = (char *)malloc(line_len * sizeof(char));
 	if (!line)
 	{
-		printf("integrate_to_line, line malloc error\n");
-		exit(0);
+		free_buflst(&buflst);
+		return (NULL);
 	}
 	line_p = line;
-	buflst_p = bufLst;
+	buflst_p = buflst;
 	while (buflst_p->next)
 	{
 		line_p = my_strcat(line_p, buflst_p->data, buf_size);
@@ -101,6 +200,8 @@ char	*get_line(int fd, size_t buf_size, Buf **buflst, size_t *backup_len)
 	while (1)
 	{
 		buf_ep = read_line(fd, buf_size, buflst, &line_len);
+		if (!buflst) 
+			return (NULL);
 		if (buf_ep == 0)
 		{
 			line = integrate_to_line(line_len, buf_size, *buflst);
