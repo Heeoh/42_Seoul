@@ -6,32 +6,38 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 21:36:37 by heson             #+#    #+#             */
-/*   Updated: 2022/09/24 23:33:56 by heson            ###   ########.fr       */
+/*   Updated: 2022/09/26 20:03:48 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
-#include <unistd.h> // read
-#include <stdlib.h> // malloc, free
+# include <unistd.h>
+# include <stdlib.h>
+
+# define ERROR_I -1
+# define ERROR_P NULL
 
 typedef struct _Buf {
-	char *data;
-	struct _Buf *next;
-} Buf;
+	char		*data;
+	struct _Buf	*next;
+}	t_Buf;
 
-char	*ft_strchr(const char *s, int c, int n);
+typedef struct _Info {
+	int		fd;
+	size_t	buf_size;
+}	t_Info;
+
 char	*my_strcat(char *dst, char const *src, size_t n);
-Buf		*add_buf(Buf **last, char *data, size_t data_len);
-void	free_buflst(Buf **bufLst);
-size_t	do_backup(Buf **buflst, size_t next_line_loc);
+t_Buf	*add_buf(t_Buf **last, char *data, size_t data_len);
+void	free_buflst(t_Buf **bufLst);
+size_t	do_backup(t_Buf **buflst, t_Buf *buflst_last, size_t next_line_loc);
 
-int		read_bufsize(int fd, size_t buf_size, size_t *read_size, Buf **buflst);
-size_t	read_line(int fd, size_t buf_size, Buf **buflst, size_t *line_len);
-char	*integrate_to_line(size_t line_len, size_t buf_size, Buf *bufLst);
-char	*get_line(int fd, size_t buf_size, Buf **buflst, size_t *backup_len);
+char	read_bufsize(t_Info i, size_t *read_size, t_Buf **buflst, size_t *ep);
+int		read_line(t_Info i, t_Buf **buflst, t_Buf **lst_last, size_t *line_len);
+char	*integrate_to_line(size_t line_len, size_t buf_size, t_Buf *bufLst);
+char	*get_line(t_Info info, t_Buf **buflst, size_t *backup_len);
 char	*get_next_line(int fd, size_t buf_size);
-
 
 #endif
