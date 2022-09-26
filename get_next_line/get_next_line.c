@@ -6,13 +6,83 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 21:35:12 by heson             #+#    #+#             */
-/*   Updated: 2022/09/26 20:03:36 by heson            ###   ########.fr       */
+/*   Updated: 2022/09/26 20:26:45 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	read_bufsize(t_Info i, size_t *read_size, t_Buf **buflst, size_t *ep)
+char	*my_strcat(char *dst, char const *src, size_t n)
+{
+	unsigned int	i;
+
+	i = 0;
+	while (i < n && src[i])
+	{
+		*dst++ = src[i];
+		if (src[i] == '\n' || src[i] == '\0')
+			break ;
+		i++;
+	}
+	return (dst);
+}
+
+t_Buf	*add_buf(t_Buf **last, char *data, size_t data_len)
+{
+	t_Buf	*new_buf;
+
+	new_buf = (t_Buf *)malloc(sizeof(t_Buf));
+	// null huard
+	new_buf->data = data;
+	new_buf->next = NULL;
+	if (!*last)
+		*last = new_buf;
+	else
+		(*last)->next = new_buf;
+	return (new_buf);
+}
+
+void	free_buflst(t_Buf **buflst)
+{
+	t_Buf	*p;
+	t_Buf	*next_p;
+
+	p = *buflst;
+	while (p)
+	{
+		next_p = p->next;
+		free(p->data);
+		free(p);
+		p = next_p;
+	}
+	*buflst = NULL;
+}
+
+size_t	do_backup(t_Buf **buflst, t_Buf *buflst_last, char *next_line_loc)
+{
+	char	*target;
+	char	*p;
+	char	*data;
+	int		len;
+
+	target = next_line_loc;
+	len = 0;
+	p = target;
+	while (*p++)
+		len++;
+	data = (char *)malloc(len + 1);
+	// null huard
+	p = data;
+	while (*target)
+		*p++ = *target++;
+	*p = '\0';
+	free_buflst(buflst);
+	*buflst = NULL;
+	add_buf(buflst, data, len);
+	return (len);
+}
+
+char	read_bufsize(t_Info i, size_t *read_size, t_Buf **buflst, char **ep)
 {
 	char	*data;
 	char	*newline_p;
@@ -23,13 +93,13 @@ char	read_bufsize(t_Info i, size_t *read_size, t_Buf **buflst, size_t *ep)
 	*read_size = read(i.fd, data, i.buf_size);
 	data[*read_size] = '\0';
 	*buflst = add_buf(buflst, data, *read_size);
-	*ep = *read_size;
+	*ep = (*buflst)->data + *read_size;
 	newline_p = data;
 	while (newline_p && *newline_p)
 	{
 		if (*newline_p++ == '\n')
 		{
-			*ep = newline_p - data;
+			*ep = newline_p;
 			newline_p = NULL;
 			break ;
 		}
@@ -39,24 +109,24 @@ char	read_bufsize(t_Info i, size_t *read_size, t_Buf **buflst, size_t *ep)
 	return (0);
 }
 
-int	read_line(t_Info i, t_Buf **buflst, t_Buf **lst_last, size_t *line_len)
+char	*read_line(t_Info i, t_Buf **buflst, t_Buf **lst_last, size_t *line_len)
 {
 	char	is_line_end;
-	size_t	buf_ep;
+	char	*buf_ep;
 	size_t	read_size;
 
 	*lst_last = *buflst;
 	while (1)
 	{
 		is_line_end = read_bufsize(i, &read_size, lst_last, &buf_ep);
-		if (is_line_end < 0)
-			return (ERROR_I);
+		if (is_line_end == ERROR_I)
+			return (ERROR_P);
 		if (!*buflst)
 			*buflst = *lst_last;
 		if (is_line_end)
 		{
-			if (buf_ep > 0)
-				*line_len += buf_ep;
+			if (buf_ep != (*lst_last)->data)
+				*line_len += buf_ep - (*lst_last)->data;
 			return (buf_ep);
 		}
 		else
@@ -73,12 +143,8 @@ char	*integrate_to_line(size_t line_len, size_t buf_size, t_Buf *buflst)
 	if (!line_len)
 		return (NULL);
 	line = (char *)malloc(line_len * sizeof(char) + 1);
-	// null guard
-	if (!line)
-	{
-		free_buflst(&buflst);
-		return (NULL);
-	}
+	if (!line) // null guard
+		return (ERROR_P);
 	line_p = line;
 	buflst_p = buflst;
 	while (buflst_p->next)
@@ -96,7 +162,7 @@ char	*get_line(t_Info info, t_Buf **buflst, size_t *backup_len)
 	size_t	line_len;
 	char	*line;
 	t_Buf		*buflst_last;
-	int		buf_ep;
+	char		*buf_ep;
 
 	line_len = *backup_len;
 	while (1)
@@ -104,7 +170,7 @@ char	*get_line(t_Info info, t_Buf **buflst, size_t *backup_len)
 		buf_ep = read_line(info, buflst, &buflst_last, &line_len);
 		if (!line_len)
 			return (NULL);
-		if (buf_ep == 0)
+		if (!*buf_ep)
 		{
 			line = integrate_to_line(line_len, info.buf_size, *buflst);
 			*backup_len = 0;

@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 21:38:58 by heson             #+#    #+#             */
-/*   Updated: 2022/09/26 19:44:33 by heson            ###   ########.fr       */
+/*   Updated: 2022/09/26 20:08:32 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,14 +58,14 @@ void	free_buflst(t_Buf **buflst)
 	*buflst = NULL;
 }
 
-size_t	do_backup(t_Buf **buflst, t_Buf *buflst_last, size_t next_line_loc)
+size_t	do_backup(t_Buf **buflst, t_Buf *buflst_last, char *next_line_loc)
 {
 	char	*target;
 	char	*p;
 	char	*data;
 	int		len;
 
-	target = buflst_last->data + next_line_loc;
+	target = next_line_loc;
 	len = 0;
 	p = target;
 	while (*p++)
