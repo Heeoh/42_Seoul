@@ -6,81 +6,83 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 21:35:12 by heson             #+#    #+#             */
-/*   Updated: 2022/09/26 20:26:45 by heson            ###   ########.fr       */
+/*   Updated: 2022/09/27 12:04:48 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*my_strcat(char *dst, char const *src, size_t n)
-{
-	unsigned int	i;
+// char	*my_strcat(char *dst, char const *src, size_t n)
+// {
+// 	unsigned int	i;
 
-	i = 0;
-	while (i < n && src[i])
-	{
-		*dst++ = src[i];
-		if (src[i] == '\n' || src[i] == '\0')
-			break ;
-		i++;
-	}
-	return (dst);
-}
+// 	i = 0;
+// 	while (i < n && src[i])
+// 	{
+// 		*dst++ = src[i];
+// 		if (src[i] == '\n' || src[i] == '\0')
+// 			break ;
+// 		i++;
+// 	}
+// 	return (dst);
+// }
 
-t_Buf	*add_buf(t_Buf **last, char *data, size_t data_len)
-{
-	t_Buf	*new_buf;
+// t_Buf	*add_buf(t_Buf **last, char *data, size_t data_len)
+// {
+// 	t_Buf	*new_buf;
 
-	new_buf = (t_Buf *)malloc(sizeof(t_Buf));
-	// null huard
-	new_buf->data = data;
-	new_buf->next = NULL;
-	if (!*last)
-		*last = new_buf;
-	else
-		(*last)->next = new_buf;
-	return (new_buf);
-}
+// 	new_buf = (t_Buf *)malloc(sizeof(t_Buf));
+// 	if (!new_buf)
+// 		return (ERROR_P);
+// 	new_buf->data = data;
+// 	new_buf->next = NULL;
+// 	if (!*last)
+// 		*last = new_buf;
+// 	else
+// 		(*last)->next = new_buf;
+// 	return (new_buf);
+// }
 
-void	free_buflst(t_Buf **buflst)
-{
-	t_Buf	*p;
-	t_Buf	*next_p;
+// void	free_buflst(t_Buf **buflst)
+// {
+// 	t_Buf	*p;
+// 	t_Buf	*next_p;
 
-	p = *buflst;
-	while (p)
-	{
-		next_p = p->next;
-		free(p->data);
-		free(p);
-		p = next_p;
-	}
-	*buflst = NULL;
-}
+// 	p = *buflst;
+// 	while (p)
+// 	{
+// 		next_p = p->next;
+// 		free(p->data);
+// 		free(p);
+// 		p = next_p;
+// 	}
+// 	*buflst = NULL;
+// }
 
-size_t	do_backup(t_Buf **buflst, t_Buf *buflst_last, char *next_line_loc)
-{
-	char	*target;
-	char	*p;
-	char	*data;
-	int		len;
+// int	do_backup(t_Buf **buflst, size_t *backup_len, char *next_line_p)
+// {
+// 	char	*target;
+// 	char	*p;
+// 	char	*data;
 
-	target = next_line_loc;
-	len = 0;
-	p = target;
-	while (*p++)
-		len++;
-	data = (char *)malloc(len + 1);
-	// null huard
-	p = data;
-	while (*target)
-		*p++ = *target++;
-	*p = '\0';
-	free_buflst(buflst);
-	*buflst = NULL;
-	add_buf(buflst, data, len);
-	return (len);
-}
+// 	target = next_line_p;
+// 	*backup_len = 0;
+// 	p = target;
+// 	while (*p++)
+// 		(*backup_len)++;
+// 	data = (char *)malloc(*backup_len + 1);
+// 	if (!data)
+// 		return (ERROR_I);
+// 	p = data;
+// 	while (*target)
+// 		*p++ = *target++;
+// 	*p = '\0';
+// 	free_buflst(buflst);
+// 	*buflst = NULL;
+// 	if (add_buf(buflst, data, *backup_len) == ERROR_P)
+// 		return (ERROR_I);
+// 	return (*backup_len);
+// }
 
 char	read_bufsize(t_Info i, size_t *read_size, t_Buf **buflst, char **ep)
 {
@@ -88,11 +90,13 @@ char	read_bufsize(t_Info i, size_t *read_size, t_Buf **buflst, char **ep)
 	char	*newline_p;
 
 	data = (char *)malloc(i.buf_size * sizeof(char) + 1);
-	if (!data) // null guard
+	if (!data)
 		return (ERROR_I);
 	*read_size = read(i.fd, data, i.buf_size);
 	data[*read_size] = '\0';
 	*buflst = add_buf(buflst, data, *read_size);
+	if (*buflst == ERROR_P)
+		return (ERROR_I);
 	*ep = (*buflst)->data + *read_size;
 	newline_p = data;
 	while (newline_p && *newline_p)
@@ -109,24 +113,24 @@ char	read_bufsize(t_Info i, size_t *read_size, t_Buf **buflst, char **ep)
 	return (0);
 }
 
-char	*read_line(t_Info i, t_Buf **buflst, t_Buf **lst_last, size_t *line_len)
+char	*read_line(t_Info i, t_Buf **buflst, t_Buf **last, size_t *line_len)
 {
 	char	is_line_end;
 	char	*buf_ep;
 	size_t	read_size;
 
-	*lst_last = *buflst;
+	*last = *buflst;
 	while (1)
 	{
-		is_line_end = read_bufsize(i, &read_size, lst_last, &buf_ep);
+		is_line_end = read_bufsize(i, &read_size, last, &buf_ep);
 		if (is_line_end == ERROR_I)
 			return (ERROR_P);
 		if (!*buflst)
-			*buflst = *lst_last;
+			*buflst = *last;
 		if (is_line_end)
 		{
-			if (buf_ep != (*lst_last)->data)
-				*line_len += buf_ep - (*lst_last)->data;
+			if (buf_ep != (*last)->data)
+				*line_len += buf_ep - (*last)->data;
 			return (buf_ep);
 		}
 		else
@@ -143,7 +147,7 @@ char	*integrate_to_line(size_t line_len, size_t buf_size, t_Buf *buflst)
 	if (!line_len)
 		return (NULL);
 	line = (char *)malloc(line_len * sizeof(char) + 1);
-	if (!line) // null guard
+	if (!line)
 		return (ERROR_P);
 	line_p = line;
 	buflst_p = buflst;
@@ -161,8 +165,8 @@ char	*get_line(t_Info info, t_Buf **buflst, size_t *backup_len)
 {
 	size_t	line_len;
 	char	*line;
-	t_Buf		*buflst_last;
-	char		*buf_ep;
+	t_Buf	*buflst_last;
+	char	*buf_ep;
 
 	line_len = *backup_len;
 	while (1)
@@ -170,16 +174,16 @@ char	*get_line(t_Info info, t_Buf **buflst, size_t *backup_len)
 		buf_ep = read_line(info, buflst, &buflst_last, &line_len);
 		if (!line_len)
 			return (NULL);
+		line = integrate_to_line(line_len, info.buf_size, *buflst);
 		if (!*buf_ep)
 		{
-			line = integrate_to_line(line_len, info.buf_size, *buflst);
 			*backup_len = 0;
 			break ;
 		}
 		else
 		{
-			line = integrate_to_line(line_len, info.buf_size, *buflst);
-			*backup_len = do_backup(buflst, buflst_last, buf_ep);
+			if (do_backup(buflst, backup_len, buf_ep) == ERROR_I)
+				return (ERROR_P);
 			break ;
 		}
 	}
@@ -189,7 +193,7 @@ char	*get_line(t_Info info, t_Buf **buflst, size_t *backup_len)
 char	*get_next_line(int fd, size_t buf_size)
 {
 	t_Info			info;
-	static t_Buf		*buflst;
+	static t_Buf	*buflst;
 	static size_t	backup_len;
 	char			*line;
 
@@ -202,19 +206,19 @@ char	*get_next_line(int fd, size_t buf_size)
 	return (line);
 }
 
-#include <fcntl.h>
-#include <stdlib.h>
-#include <stdio.h> 
+// #include <fcntl.h>
+// #include <stdlib.h>
+// #include <stdio.h> 
 
-int main() {
-	size_t buf_size = 10;
-	int fd = open("test.txt", O_RDONLY);
-	while (1) {
-		char *res = get_next_line(fd, buf_size);
-		if (!res) break;
-		printf("%s", res);
-		free (res);
-	}
+// int main() {
+// 	size_t buf_size = 10;
+// 	int fd = open("test.txt", O_RDONLY);
+// 	while (1) {
+// 		char *res = get_next_line(fd, buf_size);
+// 		if (!res) break;
+// 		printf("%s", res);
+// 		free (res);
+// 	}
 
-	// while (1);
-}
+// 	// while (1);
+// }
