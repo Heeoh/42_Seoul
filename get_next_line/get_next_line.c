@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 21:35:12 by heson             #+#    #+#             */
-/*   Updated: 2022/09/27 16:59:14 by heson            ###   ########.fr       */
+/*   Updated: 2022/09/28 17:01:24 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	free_buflst(t_Buf **buflst, t_Buf *new_head)
 	t_Buf	*next_p;
 
 	p = *buflst;
-	while (p != new_head)
+	while (p && p != new_head)
 	{
 		next_p = p->next;
 		free(p->data);
@@ -87,16 +87,19 @@ void	free_buflst(t_Buf **buflst, t_Buf *new_head)
 	*buflst = new_head;
 }
 
-char	find_next_line_buf(t_Buf *buflst, t_Buf **ep)
+char	find_next_line_buf(t_Buf *buflst, t_Buf **ep, size_t *line_len)
 {
 	t_Buf	*buf_p;
 	char	*data_p;
 	char	is_nextline_found;
+	size_t	len;
 
 	buf_p = buflst;
 	is_nextline_found = FALSE;
+	len = 0;
 	while (buf_p)
 	{
+		len += buf_p->data_len;
 		if (buf_p->data[buf_p->data_len - 1] == '\n')
 		{
 			is_nextline_found = TRUE;
@@ -105,10 +108,14 @@ char	find_next_line_buf(t_Buf *buflst, t_Buf **ep)
 		buf_p = buf_p->next;
 	}
 	if (is_nextline_found)
+	{
 		*ep = buf_p;
+		*line_len = len;
+	}
 	return (is_nextline_found);
 }
 
+// too many lines
 char	read_bufsize(t_Info i, t_Buf **buflst, t_Buf **lst_last, t_Buf **ep)
 {
 	char	*data;
@@ -124,6 +131,7 @@ char	read_bufsize(t_Info i, t_Buf **buflst, t_Buf **lst_last, t_Buf **ep)
 	data[read_size] = '\0';
 	if (!read_size)
 	{
+		*ep = *lst_last;
 		*lst_last = add_buf(lst_last, data, 1);
 		return (TRUE);
 	}
@@ -150,24 +158,23 @@ char	read_bufsize(t_Info i, t_Buf **buflst, t_Buf **lst_last, t_Buf **ep)
 		newline_p++;
 	}
 	if (read_size - (tmp - data) > 0)
-		add_buf(lst_last, tmp, read_size - (tmp - data));
+		*lst_last = add_buf(lst_last, tmp, read_size - (tmp - data));
 	free(data);
-	if (!read_size || is_nextline_found)
-		return (TRUE);
+	// if (!read_size || is_nextline_found)
+	// 	return (TRUE);
 	return (FALSE);
 }
 
-t_Buf	*read_line(t_Info i, t_Buf **buflst, t_Buf **last)
+t_Buf	*read_line(t_Info i, t_Buf **buflst, t_Buf **last, size_t *line_len)
 {
 	char	is_line_end;
 	t_Buf	*buf_ep;
 
-	*last = *buflst;
 	is_line_end = FALSE;
-	while (1)
+	while (!is_line_end)
 	{
 		if (*buflst)
-			is_line_end = find_next_line_buf(*buflst, &buf_ep);
+			is_line_end = find_next_line_buf(*buflst, &buf_ep, line_len);
 		if (is_line_end == TRUE)
 			return (buf_ep);
 		is_line_end = read_bufsize(i, buflst, last, &buf_ep);
@@ -179,28 +186,29 @@ t_Buf	*read_line(t_Info i, t_Buf **buflst, t_Buf **last)
 	return (buf_ep);
 }
 
-char	*integrate_to_line(t_Buf *buflst, t_Buf *ep, char *isEOF)
+// too many lines
+char	*integrate_to_line(t_Buf *buflst, t_Buf *ep, size_t line_len)
 {
 	char	*line;
 	char	*line_p;
-	size_t	line_len;
+	// size_t	line_len;
 	t_Buf	*buflst_p;
 
-	if (!ep->next && !*(ep->data))
-		*isEOF = TRUE;
-	line_len = 0;
-	buflst_p = buflst;
-	while (buflst_p != ep->next)
-	{
-		line_len += buflst_p->data_len;
-		buflst_p = buflst_p->next;
-	}
+	if (!ep || !*(ep->data))
+		return (NULL);
+	// line_len = 0;
+	// buflst_p = buflst;
+	// while (buflst_p && buflst_p != ep->next)
+	// {
+	// 	line_len += buflst_p->data_len;
+	// 	buflst_p = buflst_p->next;
+	// }
 	line = (char *)malloc(line_len * sizeof(char) + 1);
 	if (!line)
 		return (ERROR_P);
 	line_p = line;
 	buflst_p = buflst;
-	while (buflst_p != ep->next)
+	while (buflst_p && buflst_p != ep->next)
 	{
 		line_p = my_strcat(line_p, buflst_p->data, buflst_p->data_len);
 		buflst_p = buflst_p->next;
@@ -209,15 +217,21 @@ char	*integrate_to_line(t_Buf *buflst, t_Buf *ep, char *isEOF)
 	return (line);
 }
 
-char	*get_line(t_Info info, t_Buf **buflst, size_t *backup_len, char *isEOF)
+char	*get_line(t_Info info, t_Buf **buflst, size_t *backup_len)
 {
 	char	*line;
-	t_Buf	*buflst_last;
+	size_t	line_len;
+	static t_Buf	*buflst_last;
 	t_Buf	*buf_ep;
 
-	isEOF = FALSE;
-	buf_ep = read_line(info, buflst, &buflst_last);
-	line = integrate_to_line(*buflst, buf_ep, isEOF);
+	line_len = 0;
+	buf_ep = read_line(info, buflst, &buflst_last, &line_len);
+	if (!buf_ep) // EOF
+	{
+		free_buflst(buflst, NULL);
+		return (NULL);
+	}
+	line = integrate_to_line(*buflst, buf_ep, line_len);
 	free_buflst(buflst, buf_ep->next);
 	return (line);
 }
@@ -228,14 +242,11 @@ char	*get_next_line(int fd, size_t buf_size)
 	static t_Buf	*buflst;
 	static size_t	backup_len;
 	char			*line;
-	static	char	isEOF;
 
 	// buf size 처리
-	if (!isEOF)
-		return (NULL);
 	info.fd = fd;
 	info.buf_size = buf_size;
-	line = get_line(info, &buflst, &backup_len, &isEOF);
+	line = get_line(info, &buflst, &backup_len);
 	if (!line)
 		free_buflst(&buflst, NULL);
 	return (line);
