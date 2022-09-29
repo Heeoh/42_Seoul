@@ -6,14 +6,14 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 21:35:12 by heson             #+#    #+#             */
-/*   Updated: 2022/09/29 14:25:26 by heson            ###   ########.fr       */
+/*   Updated: 2022/09/29 14:32:32 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // #include "get_next_line.h"
 
 # include <unistd.h>
-# include <stdlib.h>
+# include <stdlib.h>git
 
 # define ERROR_I -1
 # define ERROR_P NULL
