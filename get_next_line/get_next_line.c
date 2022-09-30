@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 21:35:12 by heson             #+#    #+#             */
-/*   Updated: 2022/09/30 13:29:03 by heson            ###   ########.fr       */
+/*   Updated: 2022/09/30 13:35:14 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,9 @@ t_Buf	*add_buf(t_Buf **buflst, t_Buf **last, char *data, size_t data_len)
 	*bufdata_p = '\0';
 	new_buf->data_len = data_len;
 	new_buf->next = NULL;
-	if (!*last)
-		*last = new_buf;
-	else
+	if (!last)
 		(*last)->next = new_buf;
+	*last = new_buf;
 	if (!*buflst)
 		*buflst = *last;
 	return (new_buf);

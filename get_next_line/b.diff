@@ -1,0 +1,33 @@
+diff --git a/get_next_line/get_next_line b/get_next_line/get_next_line
+index 5f99e8b..864adaf 100755
+Binary files a/get_next_line/get_next_line and b/get_next_line/get_next_line differ
+diff --git a/get_next_line/get_next_line.c b/get_next_line/get_next_line.c
+index 1f427f7..9663035 100644
+--- a/get_next_line/get_next_line.c
++++ b/get_next_line/get_next_line.c
+@@ -6,10 +6,12 @@
+ /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
+ /*                                                +#+#+#+#+#+   +#+           */
+ /*   Created: 2022/09/21 21:35:12 by heson             #+#    #+#             */
+-/*   Updated: 2022/09/28 20:48:31 by heson            ###   ########.fr       */
++/*   Updated: 2022/09/30 13:29:03 by heson            ###   ########.fr       */
+ /*                                                                            */
+ /* ************************************************************************** */
+ 
++
++
+ // #include "get_next_line.h"
+ 
+ # include <unistd.h>
+@@ -78,6 +80,8 @@ void	free_buflst(t_Buf **buflst, t_Buf *new_head)
+ 	t_Buf	*p;
+ 	t_Buf	*next_p;
+ 
++	if (!buflst)
++		return;
+ 	p = *buflst;
+ 	while (p && p != new_head)
+ 	{
+diff --git a/get_next_line/get_next_line.dSYM/Contents/Resources/DWARF/get_next_line b/get_next_line/get_next_line.dSYM/Contents/Resources/DWARF/get_next_line
+index 75375d0..07dca40 100644
+Binary files a/get_next_line/get_next_line.dSYM/Contents/Resources/DWARF/get_next_line and b/get_next_line/get_next_line.dSYM/Contents/Resources/DWARF/get_next_line differ

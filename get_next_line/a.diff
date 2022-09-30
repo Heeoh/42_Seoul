@@ -1,0 +1,105 @@
+diff --git a/get_next_line/get_next_line b/get_next_line/get_next_line
+index 864adaf..0b68a5e 100755
+Binary files a/get_next_line/get_next_line and b/get_next_line/get_next_line differ
+diff --git a/get_next_line/get_next_line.c b/get_next_line/get_next_line.c
+index 9663035..1dfaaf0 100644
+--- a/get_next_line/get_next_line.c
++++ b/get_next_line/get_next_line.c
+@@ -6,12 +6,10 @@
+ /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
+ /*                                                +#+#+#+#+#+   +#+           */
+ /*   Created: 2022/09/21 21:35:12 by heson             #+#    #+#             */
+-/*   Updated: 2022/09/30 13:29:03 by heson            ###   ########.fr       */
++/*   Updated: 2022/09/29 14:25:26 by heson            ###   ########.fr       */
+ /*                                                                            */
+ /* ************************************************************************** */
+ 
+-
+-
+ // #include "get_next_line.h"
+ 
+ # include <unistd.h>
+@@ -66,10 +64,9 @@ t_Buf	*add_buf(t_Buf **buflst, t_Buf **last, char *data, size_t data_len)
+ 	*bufdata_p = '\0';
+ 	new_buf->data_len = data_len;
+ 	new_buf->next = NULL;
+-	if (!*last)
+-		*last = new_buf;
+-	else
++	if (*last)
+ 		(*last)->next = new_buf;
++	*last = new_buf;
+ 	if (!*buflst)
+ 		*buflst = *last;
+ 	return (new_buf);
+@@ -80,8 +77,6 @@ void	free_buflst(t_Buf **buflst, t_Buf *new_head)
+ 	t_Buf	*p;
+ 	t_Buf	*next_p;
+ 
+-	if (!buflst)
+-		return;
+ 	p = *buflst;
+ 	while (p && p != new_head)
+ 	{
+@@ -106,7 +101,7 @@ t_Buf	*find_next_line_buf(t_Buf *buflst, size_t *line_len)
+ 	while (buf_p)
+ 	{
+ 		len += buf_p->data_len;
+-		if (buf_p->data[buf_p->data_len - 1] == '\n')
++		if (buf_p->data[buf_p->data_len - 1] == '\n' || buf_p->data[0] == '\0')
+ 		{
+ 			is_nextline_found = TRUE;
+ 			break ;
+@@ -175,6 +170,7 @@ t_Buf	*read_line(t_Info i, t_Buf **buflst, t_Buf **last, size_t *line_len)
+ 	size_t	read_size;
+ 
+ 	is_line_end = FALSE;
++	buf_ep = NULL;
+ 	while (!is_line_end)
+ 	{
+ 		is_line_end = read_bufsize(i, &data, &read_size);
+@@ -182,8 +178,8 @@ t_Buf	*read_line(t_Info i, t_Buf **buflst, t_Buf **last, size_t *line_len)
+ 			return (ERROR_P);
+ 		if (is_line_end) // EOF
+ 		{
+-			buf_ep = *last;
+ 			*last = add_buf(buflst, last, data, 1);
++			return (NULL);
+ 		}
+ 		else
+ 		{
+@@ -228,7 +224,11 @@ char	*get_line(t_Info info, t_Buf **buflst, size_t *backup_len)
+ 	line_len = 0;
+ 	buf_ep = NULL;
+ 	if (*buflst)
++	{
++		if ((*buflst)->data[0] == '\0')
++			return  (NULL);
+ 		buf_ep = find_next_line_buf(*buflst, &line_len);
++	}
+ 	if (!buf_ep)
+ 	{
+ 		buf_ep = read_line(info, buflst, &buflst_last, &line_len);
+@@ -268,7 +268,8 @@ int main() {
+ 	int fd = open("test.txt", O_RDONLY);
+ 	while (1) {
+ 		char *res = get_next_line(fd, buf_size);
+-		if (!res) break;
++		if (!res) 
++			break;
+ 		printf("%s", res);
+ 		free (res);
+ 	}
+diff --git a/get_next_line/get_next_line.dSYM/Contents/Resources/DWARF/get_next_line b/get_next_line/get_next_line.dSYM/Contents/Resources/DWARF/get_next_line
+index 07dca40..29c9635 100644
+Binary files a/get_next_line/get_next_line.dSYM/Contents/Resources/DWARF/get_next_line and b/get_next_line/get_next_line.dSYM/Contents/Resources/DWARF/get_next_line differ
+diff --git a/get_next_line/test.txt b/get_next_line/test.txt
+index ce01362..c916955 100644
+--- a/get_next_line/test.txt
++++ b/get_next_line/test.txt
+@@ -1 +1,4 @@
+-hello
++hellohello
++wowwowowowowowowowow
++kkkkkkk
++12345678904242
