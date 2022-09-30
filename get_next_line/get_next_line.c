@@ -6,7 +6,11 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 21:35:12 by heson             #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2022/09/30 13:35:14 by heson            ###   ########.fr       */
+=======
+/*   Updated: 2022/09/29 14:32:32 by heson            ###   ########.fr       */
+>>>>>>> 70d021998d256aef9c3af71fb07b9b585cd4998e
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +19,7 @@
 // #include "get_next_line.h"
 
 # include <unistd.h>
-# include <stdlib.h>
+# include <stdlib.h>git
 
 # define ERROR_I -1
 # define ERROR_P NULL
