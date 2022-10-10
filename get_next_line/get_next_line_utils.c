@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 21:38:58 by heson             #+#    #+#             */
-/*   Updated: 2022/10/10 16:08:35 by heson            ###   ########.fr       */
+/*   Updated: 2022/10/10 17:17:21 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	*my_strcat(char *dst, char const *src, size_t n)
 	unsigned int	i;
 
 	i = 0;
-	while (i < n && src[i])
+	while (i < n)
 	{
 		*dst++ = src[i];
 		if (src[i] == '\n' || src[i] == '\0')
@@ -30,7 +30,6 @@ char	*my_strcat(char *dst, char const *src, size_t n)
 t_Buf	*add_buf(t_Buf **buflst, t_Buf **last, char *data, size_t data_len)
 {
 	t_Buf	*new_buf;
-	char	*bufdata_p;
 
 	new_buf = (t_Buf *)malloc(sizeof(t_Buf));
 	if (!new_buf)
@@ -84,7 +83,6 @@ char	data_2_buflst(char	*data, t_Buf **buflst, t_Buf **last, t_Buf **ep)
 t_Buf	*find_next_line_buf(t_Buf *buflst, size_t *line_len)
 {
 	t_Buf	*buf_p;
-	char	*data_p;
 	char	is_nextline_found;
 	size_t	len;
 
