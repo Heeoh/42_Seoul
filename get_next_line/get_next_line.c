@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 21:35:12 by heson             #+#    #+#             */
-/*   Updated: 2022/10/10 17:17:23 by heson            ###   ########.fr       */
+/*   Updated: 2022/10/10 18:07:11 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,7 @@ t_Buf	*read_line(t_Info info, t_Buf **buflst, t_Buf **last)
 		is_line_end = read_bufsize(info, &data, &read_size);
 		if (is_line_end)
 		{
-			// if (*buflst)
-			// 	buf_ep = *last;
 			*last = add_buf(buflst, last, data, 1);
-			// if (!buf_ep)
 			buf_ep = *last;
 		}
 		else if (is_line_end == ERROR_I)
@@ -111,15 +108,16 @@ char	*get_line(t_Info info, t_Buf **buflst, t_Buf **buflst_last)
 	return (line);
 }
 
-char	*get_next_line(int fd, size_t buf_size)
+char	*get_next_line(int fd)
 {
 	t_Info			info;
 	char			*line;
 	static t_Buf	*buflst;
 	static t_Buf	*buflst_last;
 
+	if (fd < 0 || fd > OPEN_MAX)
+		return (NULL);
 	info.fd = fd;
-	info.buf_size = buf_size;
 	info.buf_size = BUFFER_SIZE;
 	line = get_line(info, &buflst, &buflst_last);
 	if (line && *line)
@@ -135,12 +133,12 @@ char	*get_next_line(int fd, size_t buf_size)
 // 	size_t buf_size = 42;
 // 	int fd = open("test.txt", O_RDONLY);
 // 	while (1) {
-// 		char *res = get_next_line(fd, buf_size);
+// 		char *res = get_next_line(fd);
 // 		if (!res) break;
 // 		printf("%s", res);
 // 		free (res);
 // 		res = NULL;
 // 	}
 
-// 	while (1);
+// 	// while (1);
 // }

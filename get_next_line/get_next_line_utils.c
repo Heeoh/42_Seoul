@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 21:38:58 by heson             #+#    #+#             */
-/*   Updated: 2022/10/10 17:17:21 by heson            ###   ########.fr       */
+/*   Updated: 2022/10/10 17:18:10 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,18 +126,3 @@ void	free_buflst(t_Buf **buflst, t_Buf *new_head)
 	}
 	*buflst = new_head;
 }
-
-// size_t	get_line_len(t_Buf *buflst, t_Buf *ep)
-// {
-// 	size_t	len;
-// 	t_Buf	*p;
-
-// 	len = 0;
-// 	p = buflst;
-// 	while (p && p != ep->next)
-// 	{
-// 		len += p->data_len;
-// 		p = p->next;
-// 	}
-// 	return (len);
-// }

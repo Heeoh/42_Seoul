@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 21:36:37 by heson             #+#    #+#             */
-/*   Updated: 2022/10/10 16:46:15 by heson            ###   ########.fr       */
+/*   Updated: 2022/10/10 18:07:35 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <unistd.h>
 # include <stdlib.h>
+# include <limits.h>
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
@@ -50,6 +51,6 @@ char	read_bufsize(t_Info info, char **data, size_t *read_size);
 t_Buf	*read_line(t_Info info, t_Buf **buflst, t_Buf **last);
 char	*integrate_to_line(t_Buf *buflst, t_Buf *ep, size_t line_len);
 char	*get_line(t_Info info, t_Buf **buflst, t_Buf **buflst_last);
-char	*get_next_line(int fd, size_t buf_size);
+char	*get_next_line(int fd);
 
 #endif
