@@ -6,17 +6,14 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 21:35:12 by heson             #+#    #+#             */
-/*   Updated: 2022/10/07 15:09:37 by heson            ###   ########.fr       */
+/*   Updated: 2022/10/07 23:53:20 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 // #include "get_next_line.h"
 
 # include <unistd.h>
 # include <stdlib.h>
-#include <stdio.h>
-
 
 # define ERROR_I -1
 # define ERROR_P NULL
@@ -152,7 +149,6 @@ char	data_2_buflst(char	*data, t_Buf **buflst, t_Buf **last, t_Buf **buf_ep)
 	{
 		if (*newline_p == '\n' || *(newline_p + 1) == '\0')
 		{
-			// printf("add_buf) data: %s, data_len: %ld\n", data_p, newline_p - data_p + 1);
 			*last = add_buf(buflst, last, data_p, newline_p - data_p + 1);
 			if (*last == ERROR_P)
 			{
@@ -246,7 +242,6 @@ char	*get_line(t_Info info, t_Buf **buflst)
 	{
 		if ((*buflst)->data[0] == '\0')
 		{
-			printf("EOF\n");
 			free_buflst(buflst, NULL);
 			buflst = NULL;
 			return (NULL);
@@ -258,7 +253,6 @@ char	*get_line(t_Info info, t_Buf **buflst)
 		buf_ep = read_line(info, buflst, &buflst_last, &line_len);
 	}
 	line = integrate_to_line(*buflst, buf_ep, line_len);
-	printf("line: %s\n", line);
 	free_buflst(buflst, buf_ep->next);
 	return (line);
 
