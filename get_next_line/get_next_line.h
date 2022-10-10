@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 21:36:37 by heson             #+#    #+#             */
-/*   Updated: 2022/10/10 18:07:35 by heson            ###   ########.fr       */
+/*   Updated: 2022/10/11 00:49:45 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	data_2_buflst(char	*data, t_Buf **buflst, t_Buf **last, t_Buf **ep);
 t_Buf	*find_next_line_buf(t_Buf *buflst, size_t *line_len);
 void	free_buflst(t_Buf **buflst, t_Buf *new_head);
 
-char	read_bufsize(t_Info info, char **data, size_t *read_size);
+char	read_bufsize(t_Info info, char **data, int *read_size);
 t_Buf	*read_line(t_Info info, t_Buf **buflst, t_Buf **last);
 char	*integrate_to_line(t_Buf *buflst, t_Buf *ep, size_t line_len);
 char	*get_line(t_Info info, t_Buf **buflst, t_Buf **buflst_last);
