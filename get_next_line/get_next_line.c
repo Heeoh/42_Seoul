@@ -6,135 +6,15 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 21:35:12 by heson             #+#    #+#             */
-/*   Updated: 2022/10/12 01:16:04 by heson            ###   ########.fr       */
+/*   Updated: 2022/10/12 02:30:58 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-/*
-char	*my_strcat(char *dst, char const *src, size_t n)
-{
-	unsigned int	i;
-
-	i = 0;
-	while (i < n)
-	{
-		*dst++ = src[i];
-		if (src[i] == '\n' || src[i] == '\0')
-			break ;
-		i++;
-	}
-	return (dst);
-}
-
-t_Buf	*add_buf(t_Buf **buflst, t_Buf **last, char *data, size_t data_len)
-{
-	t_Buf	*new_buf;
-
-	new_buf = (t_Buf *)malloc(sizeof(t_Buf));
-	if (!new_buf)
-		return (ERROR_P);
-	new_buf->data = (char *)malloc(data_len + 1);
-	if (!new_buf->data)
-	{
-		free(new_buf);
-		new_buf = NULL;
-		return (ERROR_P);
-	}
-	my_strcat(new_buf->data, data, data_len);
-	new_buf->data[data_len] = '\0';
-	new_buf->data_len = data_len;
-	new_buf->next = NULL;
-	if (!*buflst)
-		*buflst = new_buf;
-	else
-		(*last)->next = new_buf;
-	return (new_buf);
-}
-
-char	data_2_buflst(char	*data, t_Buf **buflst, t_Buf **last, t_Buf **ep, size_t *line_len)
-{
-	char	*newline_p;
-	char	*data_p;
-	char	is_nextline_found;
-
-	newline_p = data;
-	data_p = data;
-	*ep = NULL;
-	is_nextline_found = FALSE;
-	while (*newline_p)
-	{
-		if (*newline_p == '\n' || *(newline_p + 1) == '\0')
-		{
-			*last = add_buf(buflst, last, data_p, newline_p - data_p + 1);
-			if (*last == ERROR_P)
-				return (ERROR_I);
-			if (!is_nextline_found)
-			{
-				*ep = *last;
-				*line_len += (*last)->data_len;
-			}
-			if (*newline_p == '\n')
-				is_nextline_found = TRUE;
-			data_p = newline_p + 1;
-		}
-		newline_p++;
-	}
-	return (is_nextline_found);
-}
-
-t_Buf	*find_next_line_buf(t_Buf *buflst, size_t *line_len)
-{
-	t_Buf	*buf_p;
-	char	is_nextline_found;
-	// size_t	len;
-
-	buf_p = buflst;
-	is_nextline_found = FALSE;
-	// len = 0;
-	while (buf_p)
-	{
-		*line_len += buf_p->data_len;
-		if (buf_p->data[buf_p->data_len - 1] == '\n')
-		{
-			is_nextline_found = TRUE;
-			break ;
-		}
-		buf_p = buf_p->next;
-	}
-	if (is_nextline_found)
-	{
-		// *line_len = len;
-		return (buf_p);
-	}
-	return (NULL);
-}
-
-void	free_buflst(t_Buf **buflst, t_Buf *new_head)
-{
-	t_Buf	*p;
-	t_Buf	*next_p;
-
-	if (!buflst)
-		return ;
-	p = *buflst;
-	while (p && p != new_head)
-	{
-		next_p = p->next;
-		if (p->data)
-			free(p->data);
-		p->data = NULL;
-		free(p);
-		p = next_p;
-	}
-	*buflst = new_head;
-}
-
-//----------------------------//----------------------------*/
-
 char	read_bufsize(t_Info info, char **data, int *read_size)
 {
+	// printf("read_bufsize\n");
 	*data = (char *)malloc(info.buf_size * sizeof(char) + 1);
 	if (!*data)
 		return (ERROR_I);
@@ -157,6 +37,7 @@ t_Buf	*read_line(t_Info info, t_Buf **buflst, t_Buf **last, size_t *line_len)
 	int		read_size;
 	t_Buf	*buf_ep;
 
+	// printf("read_line\n");
 	is_line_end = FALSE;
 	buf_ep = NULL;
 	while (!is_line_end)
@@ -186,14 +67,9 @@ char	*integrate_to_line(t_Buf *buflst, t_Buf *ep, size_t line_len)
 	char	*line_p;
 	t_Buf	*buflst_p;
 
+	// printf("integrate_to_line\n");
 	if (!buflst || buflst->data[0] == '\0')
 		return (NULL);
-	// buflst_p = buflst;
-	// while (buflst_p && buflst_p != ep->next)
-	// {
-	// 	line_len += buflst_p->data_len;
-	// 	buflst_p = buflst_p->next;
-	// }
 	line = (char *)malloc(line_len * sizeof(char) + 1);
 	if (!line)
 		return (ERROR_P);
@@ -214,6 +90,7 @@ char	*get_line(t_Info info, t_Buf **buflst, t_Buf **buflst_last)
 	size_t			line_len;
 	t_Buf			*buf_ep;
 
+	// printf("get_line\n");	
 	line_len = 0;
 	buf_ep = NULL;
 	if (*buflst)
@@ -243,6 +120,7 @@ char	*get_next_line(int fd)
 	static t_Buf	*buflst;
 	static t_Buf	*buflst_last;
 
+	// printf("get_next_line\n");	
 	if (fd < 0 || fd > OPEN_MAX)
 		return (NULL);
 	info.fd = fd;

@@ -6,23 +6,27 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 21:38:58 by heson             #+#    #+#             */
-/*   Updated: 2022/10/12 00:55:23 by heson            ###   ########.fr       */
+/*   Updated: 2022/10/12 02:19:02 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
+
 char	*my_strcat(char *dst, char const *src, size_t n)
 {
-	unsigned int	i;
+	// unsigned int	i;
+	char	*p;
 
-	i = 0;
-	while (i < n)
+	// printf("my_strcat\n");
+	// i = 0;
+	p = (char *)src;
+	while (p < src + n)
 	{
-		*dst++ = src[i];
-		if (src[i] == '\n' || src[i] == '\0')
+		*dst++ = *p;
+		if (*p == '\n' || *p == '\0')
 			break ;
-		i++;
+		p++;
 	}
 	return (dst);
 }
@@ -31,6 +35,7 @@ t_Buf	*add_buf(t_Buf **buflst, t_Buf **last, char *data, size_t data_len)
 {
 	t_Buf	*new_buf;
 
+	// printf("add_buf\n");
 	new_buf = (t_Buf *)malloc(sizeof(t_Buf));
 	if (!new_buf)
 		return (ERROR_P);
@@ -58,6 +63,7 @@ char	data_2_buflst(char	*data, t_Buf **buflst, t_Buf **last, t_Buf **ep, size_t 
 	char	*data_p;
 	char	is_nextline_found;
 
+	// printf("data_2_buflst\n");
 	newline_p = data;
 	data_p = data;
 	*ep = NULL;
@@ -87,11 +93,10 @@ t_Buf	*find_next_line_buf(t_Buf *buflst, size_t *line_len)
 {
 	t_Buf	*buf_p;
 	char	is_nextline_found;
-	// size_t	len;
 
+	// printf("find_next_line_buf\n");
 	buf_p = buflst;
 	is_nextline_found = FALSE;
-	// len = 0;
 	while (buf_p)
 	{
 		*line_len += buf_p->data_len;
@@ -103,10 +108,7 @@ t_Buf	*find_next_line_buf(t_Buf *buflst, size_t *line_len)
 		buf_p = buf_p->next;
 	}
 	if (is_nextline_found)
-	{
-		// *line_len = len;
 		return (buf_p);
-	}
 	return (NULL);
 }
 
@@ -115,6 +117,7 @@ void	free_buflst(t_Buf **buflst, t_Buf *new_head)
 	t_Buf	*p;
 	t_Buf	*next_p;
 
+	// printf("free_buflst\n");
 	if (!buflst)
 		return ;
 	p = *buflst;
