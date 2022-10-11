@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 21:35:12 by heson             #+#    #+#             */
-/*   Updated: 2022/10/11 00:47:47 by heson            ###   ########.fr       */
+/*   Updated: 2022/10/12 01:16:04 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ t_Buf	*add_buf(t_Buf **buflst, t_Buf **last, char *data, size_t data_len)
 	return (new_buf);
 }
 
-char	data_2_buflst(char	*data, t_Buf **buflst, t_Buf **last, t_Buf **ep)
+char	data_2_buflst(char	*data, t_Buf **buflst, t_Buf **last, t_Buf **ep, size_t *line_len)
 {
 	char	*newline_p;
 	char	*data_p;
@@ -70,8 +70,11 @@ char	data_2_buflst(char	*data, t_Buf **buflst, t_Buf **last, t_Buf **ep)
 			*last = add_buf(buflst, last, data_p, newline_p - data_p + 1);
 			if (*last == ERROR_P)
 				return (ERROR_I);
-			if (!*ep)
+			if (!is_nextline_found)
+			{
 				*ep = *last;
+				*line_len += (*last)->data_len;
+			}
 			if (*newline_p == '\n')
 				is_nextline_found = TRUE;
 			data_p = newline_p + 1;
@@ -85,14 +88,14 @@ t_Buf	*find_next_line_buf(t_Buf *buflst, size_t *line_len)
 {
 	t_Buf	*buf_p;
 	char	is_nextline_found;
-	size_t	len;
+	// size_t	len;
 
 	buf_p = buflst;
 	is_nextline_found = FALSE;
-	len = 0;
+	// len = 0;
 	while (buf_p)
 	{
-		len += buf_p->data_len;
+		*line_len += buf_p->data_len;
 		if (buf_p->data[buf_p->data_len - 1] == '\n')
 		{
 			is_nextline_found = TRUE;
@@ -102,7 +105,7 @@ t_Buf	*find_next_line_buf(t_Buf *buflst, size_t *line_len)
 	}
 	if (is_nextline_found)
 	{
-		*line_len = len;
+		// *line_len = len;
 		return (buf_p);
 	}
 	return (NULL);
@@ -128,7 +131,7 @@ void	free_buflst(t_Buf **buflst, t_Buf *new_head)
 	*buflst = new_head;
 }
 
-//-----------------------------//-----------------------------*/
+//----------------------------//----------------------------*/
 
 char	read_bufsize(t_Info info, char **data, int *read_size)
 {
@@ -147,7 +150,7 @@ char	read_bufsize(t_Info info, char **data, int *read_size)
 	return (FALSE);
 }
 
-t_Buf	*read_line(t_Info info, t_Buf **buflst, t_Buf **last)
+t_Buf	*read_line(t_Info info, t_Buf **buflst, t_Buf **last, size_t *line_len)
 {
 	char	is_line_end;
 	char	*data;
@@ -163,11 +166,14 @@ t_Buf	*read_line(t_Info info, t_Buf **buflst, t_Buf **last)
 			return (ERROR_P);
 		else if (is_line_end)
 		{
+			if (*buflst)
+				buf_ep = *last;
 			*last = add_buf(buflst, last, data, 1);
-			buf_ep = *last;
+			if (!buf_ep)
+				buf_ep = *last;
 		}
 		else
-			is_line_end = data_2_buflst(data, buflst, last, &buf_ep);
+			is_line_end = data_2_buflst(data, buflst, last, &buf_ep, line_len);
 		free(data);
 		data = NULL;
 	}
@@ -182,12 +188,12 @@ char	*integrate_to_line(t_Buf *buflst, t_Buf *ep, size_t line_len)
 
 	if (!buflst || buflst->data[0] == '\0')
 		return (NULL);
-	buflst_p = buflst;
-	while (buflst_p && buflst_p != ep->next)
-	{
-		line_len += buflst_p->data_len;
-		buflst_p = buflst_p->next;
-	}
+	// buflst_p = buflst;
+	// while (buflst_p && buflst_p != ep->next)
+	// {
+	// 	line_len += buflst_p->data_len;
+	// 	buflst_p = buflst_p->next;
+	// }
 	line = (char *)malloc(line_len * sizeof(char) + 1);
 	if (!line)
 		return (ERROR_P);
@@ -221,9 +227,7 @@ char	*get_line(t_Info info, t_Buf **buflst, t_Buf **buflst_last)
 		buf_ep = find_next_line_buf(*buflst, &line_len);
 	}
 	if (!buf_ep)
-	{
-		buf_ep = read_line(info, buflst, buflst_last);
-	}
+		buf_ep = read_line(info, buflst, buflst_last, &line_len);
 	line = integrate_to_line(*buflst, buf_ep, line_len);
 	if (buf_ep)
 		free_buflst(buflst, buf_ep->next);
@@ -249,22 +253,24 @@ char	*get_next_line(int fd)
 	return (NULL);
 }
 
-// #include <fcntl.h>
-// #include <stdlib.h>
-// #include <stdio.h> 
+/*
+#include <fcntl.h>
+#include <stdlib.h>
+#include <stdio.h> 
 
-// int main() {
-// 	// size_t buf_size = 42;
-// 	int fd = open("test.txt", O_RDONLY);
-// 	// close(fd);
-// 	// fd = 100;
-// 	while (1) {
-// 		char *res = get_next_line(fd);
-// 		if (!res) break;
-// 		printf("%s", res);
-// 		free (res);
-// 		res = NULL;
-// 	}
+int main() {
+	// size_t buf_size = 42;
+	int fd = open("test.txt", O_RDONLY);
+	// close(fd);
+	// fd = 100;
+	while (1) {
+		char *res = get_next_line(fd);
+		if (!res) break;
+		printf("%s", res);
+		free (res);
+		res = NULL;
+	}
 
-// 	// while (1);
-// }
+	// while (1);
+}
+//*/

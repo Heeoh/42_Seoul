@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 21:38:58 by heson             #+#    #+#             */
-/*   Updated: 2022/10/11 00:48:14 by heson            ###   ########.fr       */
+/*   Updated: 2022/10/12 00:55:23 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ t_Buf	*add_buf(t_Buf **buflst, t_Buf **last, char *data, size_t data_len)
 	return (new_buf);
 }
 
-char	data_2_buflst(char	*data, t_Buf **buflst, t_Buf **last, t_Buf **ep)
+char	data_2_buflst(char	*data, t_Buf **buflst, t_Buf **last, t_Buf **ep, size_t *line_len)
 {
 	char	*newline_p;
 	char	*data_p;
@@ -69,8 +69,11 @@ char	data_2_buflst(char	*data, t_Buf **buflst, t_Buf **last, t_Buf **ep)
 			*last = add_buf(buflst, last, data_p, newline_p - data_p + 1);
 			if (*last == ERROR_P)
 				return (ERROR_I);
-			if (!*ep)
+			if (!is_nextline_found)
+			{
 				*ep = *last;
+				*line_len += (*last)->data_len;
+			}
 			if (*newline_p == '\n')
 				is_nextline_found = TRUE;
 			data_p = newline_p + 1;
@@ -84,14 +87,14 @@ t_Buf	*find_next_line_buf(t_Buf *buflst, size_t *line_len)
 {
 	t_Buf	*buf_p;
 	char	is_nextline_found;
-	size_t	len;
+	// size_t	len;
 
 	buf_p = buflst;
 	is_nextline_found = FALSE;
-	len = 0;
+	// len = 0;
 	while (buf_p)
 	{
-		len += buf_p->data_len;
+		*line_len += buf_p->data_len;
 		if (buf_p->data[buf_p->data_len - 1] == '\n')
 		{
 			is_nextline_found = TRUE;
@@ -101,7 +104,7 @@ t_Buf	*find_next_line_buf(t_Buf *buflst, size_t *line_len)
 	}
 	if (is_nextline_found)
 	{
-		*line_len = len;
+		// *line_len = len;
 		return (buf_p);
 	}
 	return (NULL);
