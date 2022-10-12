@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 21:35:12 by heson             #+#    #+#             */
-/*   Updated: 2022/10/12 02:30:58 by heson            ###   ########.fr       */
+/*   Updated: 2022/10/12 15:55:54 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,12 @@
 
 char	read_bufsize(t_Info info, char **data, int *read_size)
 {
-	// printf("read_bufsize\n");
 	*data = (char *)malloc(info.buf_size * sizeof(char) + 1);
 	if (!*data)
 		return (ERROR_I);
 	*read_size = read(info.fd, *data, info.buf_size);
 	if (*read_size < 0)
-	{
-		free (*data);
 		return (ERROR_I);
-	}
 	(*data)[*read_size] = '\0';
 	if (!*read_size)
 		return (TRUE);
@@ -37,15 +33,12 @@ t_Buf	*read_line(t_Info info, t_Buf **buflst, t_Buf **last, size_t *line_len)
 	int		read_size;
 	t_Buf	*buf_ep;
 
-	// printf("read_line\n");
 	is_line_end = FALSE;
 	buf_ep = NULL;
-	while (!is_line_end)
+	while (is_line_end == FALSE)
 	{
 		is_line_end = read_bufsize(info, &data, &read_size);
-		if (is_line_end == ERROR_I)
-			return (ERROR_P);
-		else if (is_line_end)
+		if (is_line_end == TRUE)
 		{
 			if (*buflst)
 				buf_ep = *last;
@@ -53,11 +46,14 @@ t_Buf	*read_line(t_Info info, t_Buf **buflst, t_Buf **last, size_t *line_len)
 			if (!buf_ep)
 				buf_ep = *last;
 		}
-		else
+		else if (is_line_end == FALSE)
 			is_line_end = data_2_buflst(data, buflst, last, &buf_ep, line_len);
-		free(data);
+		if (data)
+			free(data);
 		data = NULL;
 	}
+	if (is_line_end == ERROR_I)
+		return (ERROR_P);
 	return (buf_ep);
 }
 
@@ -67,8 +63,7 @@ char	*integrate_to_line(t_Buf *buflst, t_Buf *ep, size_t line_len)
 	char	*line_p;
 	t_Buf	*buflst_p;
 
-	// printf("integrate_to_line\n");
-	if (!buflst || buflst->data[0] == '\0')
+	if (!buflst || buflst->data[0] == '\0' || ep == ERROR_P)
 		return (NULL);
 	line = (char *)malloc(line_len * sizeof(char) + 1);
 	if (!line)
@@ -90,7 +85,7 @@ char	*get_line(t_Info info, t_Buf **buflst, t_Buf **buflst_last)
 	size_t			line_len;
 	t_Buf			*buf_ep;
 
-	// printf("get_line\n");	
+	line = NULL;
 	line_len = 0;
 	buf_ep = NULL;
 	if (*buflst)
@@ -98,7 +93,6 @@ char	*get_line(t_Info info, t_Buf **buflst, t_Buf **buflst_last)
 		if ((*buflst)->data[0] == '\0')
 		{
 			free_buflst(buflst, NULL);
-			buflst = NULL;
 			return (NULL);
 		}
 		buf_ep = find_next_line_buf(*buflst, &line_len);
@@ -106,7 +100,7 @@ char	*get_line(t_Info info, t_Buf **buflst, t_Buf **buflst_last)
 	if (!buf_ep)
 		buf_ep = read_line(info, buflst, buflst_last, &line_len);
 	line = integrate_to_line(*buflst, buf_ep, line_len);
-	if (buf_ep)
+	if (buf_ep && line)
 		free_buflst(buflst, buf_ep->next);
 	else
 		free_buflst(buflst, NULL);
@@ -120,7 +114,6 @@ char	*get_next_line(int fd)
 	static t_Buf	*buflst;
 	static t_Buf	*buflst_last;
 
-	// printf("get_next_line\n");	
 	if (fd < 0 || fd > OPEN_MAX)
 		return (NULL);
 	info.fd = fd;

@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 21:38:58 by heson             #+#    #+#             */
-/*   Updated: 2022/10/12 02:19:02 by heson            ###   ########.fr       */
+/*   Updated: 2022/10/12 15:40:27 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ char	*my_strcat(char *dst, char const *src, size_t n)
 	// unsigned int	i;
 	char	*p;
 
-	// printf("my_strcat\n");
 	// i = 0;
 	p = (char *)src;
 	while (p < src + n)
@@ -35,7 +34,8 @@ t_Buf	*add_buf(t_Buf **buflst, t_Buf **last, char *data, size_t data_len)
 {
 	t_Buf	*new_buf;
 
-	// printf("add_buf\n");
+	if (data_len > BUFFER_SIZE)
+		return (ERROR_P);
 	new_buf = (t_Buf *)malloc(sizeof(t_Buf));
 	if (!new_buf)
 		return (ERROR_P);
@@ -63,7 +63,6 @@ char	data_2_buflst(char	*data, t_Buf **buflst, t_Buf **last, t_Buf **ep, size_t 
 	char	*data_p;
 	char	is_nextline_found;
 
-	// printf("data_2_buflst\n");
 	newline_p = data;
 	data_p = data;
 	*ep = NULL;
@@ -94,7 +93,6 @@ t_Buf	*find_next_line_buf(t_Buf *buflst, size_t *line_len)
 	t_Buf	*buf_p;
 	char	is_nextline_found;
 
-	// printf("find_next_line_buf\n");
 	buf_p = buflst;
 	is_nextline_found = FALSE;
 	while (buf_p)
@@ -117,7 +115,6 @@ void	free_buflst(t_Buf **buflst, t_Buf *new_head)
 	t_Buf	*p;
 	t_Buf	*next_p;
 
-	// printf("free_buflst\n");
 	if (!buflst)
 		return ;
 	p = *buflst;
