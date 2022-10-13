@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 21:36:37 by heson             #+#    #+#             */
-/*   Updated: 2022/10/13 16:17:28 by heson            ###   ########.fr       */
+/*   Updated: 2022/10/13 16:27:44 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <limits.h>
-// # include <stdio.h>
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 4096
