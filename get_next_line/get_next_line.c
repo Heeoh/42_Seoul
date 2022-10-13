@@ -6,22 +6,24 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 21:35:12 by heson             #+#    #+#             */
-/*   Updated: 2022/10/13 16:15:18 by heson            ###   ########.fr       */
+/*   Updated: 2022/10/13 17:20:07 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	read_bufsize(t_Info info, char **data, int *read_size)
+char	read_bufsize(t_Info info, char **data)
 {
+	int read_size;
+	
 	*data = (char *)malloc(info.buf_size * sizeof(char) + 1);
 	if (!*data)
 		return (ERROR_I);
-	*read_size = read(info.fd, *data, info.buf_size);
-	if (*read_size < 0)
+	read_size = read(info.fd, *data, info.buf_size);
+	if (read_size < 0)
 		return (ERROR_I);
-	(*data)[*read_size] = '\0';
-	if (!*read_size)
+	(*data)[read_size] = '\0';
+	if (!read_size)
 		return (TRUE);
 	return (FALSE);
 }
@@ -30,14 +32,13 @@ t_Buf	*read_line(t_Info info, t_Buf **buflst, t_Buf **last, size_t *line_len)
 {
 	char	is_line_end;
 	char	*data;
-	int		read_size;
 	t_Buf	*buf_ep;
 
 	is_line_end = FALSE;
 	buf_ep = NULL;
 	while (is_line_end == FALSE)
 	{
-		is_line_end = read_bufsize(info, &data, &read_size);
+		is_line_end = read_bufsize(info, &data);
 		if (is_line_end == TRUE)
 		{
 			if (*buflst)
