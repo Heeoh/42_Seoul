@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 21:36:37 by heson             #+#    #+#             */
-/*   Updated: 2022/10/12 15:44:12 by heson            ###   ########.fr       */
+/*   Updated: 2022/10/13 16:17:28 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,10 @@
 # define TRUE 1
 # define FALSE 0
 
-typedef struct _Buf {
-	char		*data;
-	int			data_len;
-	struct _Buf	*next;
+typedef struct s_Buf {
+	char			*data;
+	int				data_len;
+	struct s_Buf	*next;
 }	t_Buf;
 
 typedef struct _Info {

@@ -6,19 +6,16 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 21:38:58 by heson             #+#    #+#             */
-/*   Updated: 2022/10/12 15:40:27 by heson            ###   ########.fr       */
+/*   Updated: 2022/10/13 16:15:41 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-
 char	*my_strcat(char *dst, char const *src, size_t n)
 {
-	// unsigned int	i;
 	char	*p;
 
-	// i = 0;
 	p = (char *)src;
 	while (p < src + n)
 	{
@@ -60,18 +57,16 @@ t_Buf	*add_buf(t_Buf **buflst, t_Buf **last, char *data, size_t data_len)
 char	data_2_buflst(char	*data, t_Buf **buflst, t_Buf **last, t_Buf **ep, size_t *line_len)
 {
 	char	*newline_p;
-	char	*data_p;
 	char	is_nextline_found;
 
 	newline_p = data;
-	data_p = data;
 	*ep = NULL;
 	is_nextline_found = FALSE;
 	while (*newline_p)
 	{
 		if (*newline_p == '\n' || *(newline_p + 1) == '\0')
 		{
-			*last = add_buf(buflst, last, data_p, newline_p - data_p + 1);
+			*last = add_buf(buflst, last, data, newline_p - data + 1);
 			if (*last == ERROR_P)
 				return (ERROR_I);
 			if (!is_nextline_found)
@@ -81,7 +76,7 @@ char	data_2_buflst(char	*data, t_Buf **buflst, t_Buf **last, t_Buf **ep, size_t 
 			}
 			if (*newline_p == '\n')
 				is_nextline_found = TRUE;
-			data_p = newline_p + 1;
+			data = newline_p + 1;
 		}
 		newline_p++;
 	}

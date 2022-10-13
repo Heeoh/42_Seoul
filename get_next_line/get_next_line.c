@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 21:35:12 by heson             #+#    #+#             */
-/*   Updated: 2022/10/12 15:55:54 by heson            ###   ########.fr       */
+/*   Updated: 2022/10/13 16:15:18 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,15 +42,13 @@ t_Buf	*read_line(t_Info info, t_Buf **buflst, t_Buf **last, size_t *line_len)
 		{
 			if (*buflst)
 				buf_ep = *last;
-			*last = add_buf(buflst, last, data, 1);
-			if (!buf_ep)
-				buf_ep = *last;
+			else
+				buf_ep = add_buf(buflst, last, data, 1);
 		}
 		else if (is_line_end == FALSE)
 			is_line_end = data_2_buflst(data, buflst, last, &buf_ep, line_len);
 		if (data)
 			free(data);
-		data = NULL;
 	}
 	if (is_line_end == ERROR_I)
 		return (ERROR_P);
