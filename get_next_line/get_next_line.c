@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 21:35:12 by heson             #+#    #+#             */
-/*   Updated: 2022/10/13 17:20:07 by heson            ###   ########.fr       */
+/*   Updated: 2022/10/17 11:56:21 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 char	read_bufsize(t_Info info, char **data)
 {
-	int read_size;
-	
+	int	read_size;
+
 	*data = (char *)malloc(info.buf_size * sizeof(char) + 1);
 	if (!*data)
 		return (ERROR_I);
@@ -28,7 +28,7 @@ char	read_bufsize(t_Info info, char **data)
 	return (FALSE);
 }
 
-t_Buf	*read_line(t_Info info, t_Buf **buflst, t_Buf **last, size_t *line_len)
+t_Buf	*read_line(t_Info info, t_Lst *buflst, size_t *line_len)
 {
 	char	is_line_end;
 	char	*data;
@@ -41,13 +41,13 @@ t_Buf	*read_line(t_Info info, t_Buf **buflst, t_Buf **last, size_t *line_len)
 		is_line_end = read_bufsize(info, &data);
 		if (is_line_end == TRUE)
 		{
-			if (*buflst)
-				buf_ep = *last;
+			if (buflst->lst)
+				buf_ep = buflst->last;
 			else
-				buf_ep = add_buf(buflst, last, data, 1);
+				buf_ep = add_buf(buflst, data, 1);
 		}
 		else if (is_line_end == FALSE)
-			is_line_end = data_2_buflst(data, buflst, last, &buf_ep, line_len);
+			is_line_end = data_2_buflst(data, buflst, &buf_ep, line_len);
 		if (data)
 			free(data);
 	}
@@ -78,7 +78,7 @@ char	*integrate_to_line(t_Buf *buflst, t_Buf *ep, size_t line_len)
 	return (line);
 }
 
-char	*get_line(t_Info info, t_Buf **buflst, t_Buf **buflst_last)
+char	*get_line(t_Info info, t_Lst *buflst)
 {
 	char			*line;
 	size_t			line_len;
@@ -87,37 +87,36 @@ char	*get_line(t_Info info, t_Buf **buflst, t_Buf **buflst_last)
 	line = NULL;
 	line_len = 0;
 	buf_ep = NULL;
-	if (*buflst)
+	if (buflst->lst)
 	{
-		if ((*buflst)->data[0] == '\0')
+		if (buflst->lst->data[0] == '\0')
 		{
-			free_buflst(buflst, NULL);
+			free_buflst(&(buflst->lst), NULL);
 			return (NULL);
 		}
-		buf_ep = find_next_line_buf(*buflst, &line_len);
+		buf_ep = find_next_line_buf(buflst->lst, &line_len);
 	}
 	if (!buf_ep)
-		buf_ep = read_line(info, buflst, buflst_last, &line_len);
-	line = integrate_to_line(*buflst, buf_ep, line_len);
+		buf_ep = read_line(info, buflst, &line_len);
+	line = integrate_to_line(buflst->lst, buf_ep, line_len);
 	if (buf_ep && line)
-		free_buflst(buflst, buf_ep->next);
+		free_buflst(&(buflst->lst), buf_ep->next);
 	else
-		free_buflst(buflst, NULL);
+		free_buflst(&(buflst->lst), NULL);
 	return (line);
 }
 
 char	*get_next_line(int fd)
 {
 	t_Info			info;
+	static t_Lst	buflst;
 	char			*line;
-	static t_Buf	*buflst;
-	static t_Buf	*buflst_last;
 
 	if (fd < 0 || fd > OPEN_MAX)
 		return (NULL);
 	info.fd = fd;
 	info.buf_size = BUFFER_SIZE;
-	line = get_line(info, &buflst, &buflst_last);
+	line = get_line(info, &buflst);
 	if (line && *line)
 		return (line);
 	return (NULL);

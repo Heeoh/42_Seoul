@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 21:38:58 by heson             #+#    #+#             */
-/*   Updated: 2022/10/13 17:13:38 by heson            ###   ########.fr       */
+/*   Updated: 2022/10/15 14:56:44 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,34 @@ char	*my_strcat(char *dst, char const *src, size_t n)
 	return (dst);
 }
 
-char	data_2_buflst(char	*data, t_Buf **buflst, t_Buf **last, t_Buf **ep, size_t *line_len)
+t_Buf	*add_buf(t_Lst *buflst, char *data, size_t data_len)
+{
+	t_Buf	*new_buf;
+
+	if (data_len > BUFFER_SIZE)
+		return (ERROR_P);
+	new_buf = (t_Buf *)malloc(sizeof(t_Buf));
+	if (!new_buf)
+		return (ERROR_P);
+	new_buf->data = (char *)malloc(data_len + 1);
+	if (new_buf && !new_buf->data)
+	{
+		free(new_buf);
+		new_buf = NULL;
+		return (ERROR_P);
+	}
+	my_strcat(new_buf->data, data, data_len);
+	new_buf->data[data_len] = '\0';
+	new_buf->data_len = data_len;
+	new_buf->next = NULL;
+	if (!buflst->lst)
+		buflst->lst = new_buf;
+	else
+		buflst->last->next = new_buf;
+	return (new_buf);
+}
+
+char	data_2_buflst(char	*data, t_Lst *buflst, t_Buf **ep, size_t *line_len)
 {
 	char	*newline_p;
 	char	is_nextline_found;
@@ -39,13 +66,13 @@ char	data_2_buflst(char	*data, t_Buf **buflst, t_Buf **last, t_Buf **ep, size_t 
 	{
 		if (*newline_p == '\n' || *(newline_p + 1) == '\0')
 		{
-			*last = add_buf(buflst, last, data, newline_p - data + 1);
-			if (*last == ERROR_P)
+			buflst->last = add_buf(buflst, data, newline_p - data + 1);
+			if (buflst->last == ERROR_P)
 				return (ERROR_I);
 			if (!is_nextline_found)
 			{
-				*ep = *last;
-				*line_len += (*last)->data_len;
+				*ep = buflst->last;
+				*line_len += buflst->last->data_len;
 			}
 			if (*newline_p == '\n')
 				is_nextline_found = TRUE;
@@ -56,32 +83,6 @@ char	data_2_buflst(char	*data, t_Buf **buflst, t_Buf **last, t_Buf **ep, size_t 
 	return (is_nextline_found);
 }
 
-t_Buf	*add_buf(t_Buf **buflst, t_Buf **last, char *data, size_t data_len)
-{
-	t_Buf	*new_buf;
-
-	if (data_len > BUFFER_SIZE)
-		return (ERROR_P);
-	new_buf = (t_Buf *)malloc(sizeof(t_Buf));
-	if (!new_buf)
-		return (ERROR_P);
-	new_buf->data = (char *)malloc(data_len + 1);
-	if (!new_buf->data)
-	{
-		free(new_buf);
-		new_buf = NULL;
-		return (ERROR_P);
-	}
-	my_strcat(new_buf->data, data, data_len);
-	new_buf->data[data_len] = '\0';
-	new_buf->data_len = data_len;
-	new_buf->next = NULL;
-	if (!*buflst)
-		*buflst = new_buf;
-	else
-		(*last)->next = new_buf;
-	return (new_buf);
-}
 t_Buf	*find_next_line_buf(t_Buf *buflst, size_t *line_len)
 {
 	t_Buf	*buf_p;
