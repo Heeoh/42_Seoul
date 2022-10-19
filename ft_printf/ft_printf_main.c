@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 15:52:30 by heson             #+#    #+#             */
-/*   Updated: 2022/10/19 16:24:50 by heson            ###   ########.fr       */
+/*   Updated: 2022/10/19 18:19:44 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,11 @@ char	*check_format(char *p, t_va_argu *argu)
 		return (ERROR_P);
 }
 
-#include <stdio.h>
+// #include <stdio.h>
 
-void print_format(t_va_argu *node, va_list ap)
+int print_format(t_va_argu *argu_info, va_list ap)
 {
-	printf("\nformat, field_width: %d, type: %c\n", node->field_width, node->type);
+	// printf("\nformat, field_width: %d, type: %c\n", node->field_width, node->type);
 	
 	
 }
@@ -53,10 +53,11 @@ void print_format(t_va_argu *node, va_list ap)
 int	ft_printf(const char *str, ...)
 {
 	va_list 	ap;
-    int			res;
+    int			printed_len;
     char		*str_p;
     t_va_argu   *argu;
 
+	printed_len = 0;
     str_p = (char *)str;
     va_start(ap, str);
     argu = (t_va_argu *)malloc(sizeof(t_va_argu));
@@ -70,16 +71,22 @@ int	ft_printf(const char *str, ...)
                 printf("error\n");
                 return (ERROR_I);
             }
-            print_format(argu, ap);
+            printed_len += print_format(argu, ap);
 		}
 		else if (*str_p == '%')
+		{
 			write(1, str_p++, 1);
+			printed_len++;
+		}
 		else
+		{
 			write(1, str_p, 1);
+			printed_len++;
+		}
 		str_p++;
     }
 	
-	return (str_p - str);
+	return (printed_len);
 	
 }
 
