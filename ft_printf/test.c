@@ -12,7 +12,7 @@ void print_format(char *p, va_list ap) {
     if (*p == 'd')
         printf("%d\n", va_arg(ap, int));
     else if (*p == 'c') {
-        char c = va_arg(ap, int);
+        char *c = va_arg(ap, char*);
         write(1, &c, 1);
         write(1, "\n", 1);
     }
@@ -42,10 +42,10 @@ void my_print(char *str, ...) {
 int main()
 {
     int num = 10;
-    // my_print("cdsp", 'a', 10, "hello", &num);
+    my_print("cdsp", 'a', 10, "hello", &num);
     // printf("%p\n", &num);
 
-    printf("|%.1d|", num);
+    printf("", num);
 
     return 0;
 }

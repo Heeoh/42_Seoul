@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 11:14:15 by heson             #+#    #+#             */
-/*   Updated: 2022/10/19 16:23:56 by heson            ###   ########.fr       */
+/*   Updated: 2022/10/20 00:52:16 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,25 +21,27 @@
 # define ERROR_I -1
 # define TRUE 1
 # define FALSE 0
+# define TYPE_INIT 0
+# define TYPE_N 8
 
-enum e_type {
-	INIT = 0,
-	C = 'c',
-	S = 's',
-	P = 'p',
-	D = 'd',
-	I = 'i',
-	U = 'u',
-	LOW_X = 'x',
-	UP_X = 'X',
-	TYPE_N = 8
-};
+// typedef enum e_type {
+// 	INIT = 0,
+// 	C = 'c',
+// 	S = 's',
+// 	P = 'p',
+// 	D = 'd',
+// 	I = 'i',
+// 	U = 'u',
+// 	LOW_X = 'x',
+// 	UP_X = 'X',
+// 	TYPE_N = 8
+// }	t_type;
 
-enum e_type	g_types[8] = {C, S, P, D, I, U, LOW_X, UP_X};
+char	g_types[8] = {'c', 's', 'p', 'd', 'i', 'u', 'x', 'X'};
 
 typedef struct s_va_argu {
-    enum e_type			type;
-    int					field_width;
+	char	type;
+    int		field_width;
 } t_va_argu;
 
 int	ft_printf(const char *str, ...);
