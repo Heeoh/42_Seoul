@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf_main.c                                   :+:      :+:    :+:   */
+/*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 15:52:30 by heson             #+#    #+#             */
-/*   Updated: 2022/10/20 17:28:52 by heson            ###   ########.fr       */
+/*   Updated: 2022/10/20 19:15:25 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ t_data	*get_data(t_va_argu *argu, va_list ap)
 }
 
 size_t	get_printed_len(t_va_argu *argu_info, t_data *argu_data) {
-	if (argu_info->field_width > argu_data->len) return (argu_info->field_width);
+	if (argu_info->field_width > (int)argu_data->len) return (argu_info->field_width);
 	else return (argu_data->len);
 }
 
@@ -103,7 +103,7 @@ char	*get_printed_data(t_va_argu *argu_info, t_data *argu_data) {
 	if (!printed_data) // malloc error
 		return (ERROR_P);
 	p = printed_data;
-	while (printed_len-- > argu_data->len)
+	while (printed_len-- > (int)argu_data->len)
 		*p++ = ' ';
 	data_p = argu_data->data;
 	while (printed_len-- >= 0)
@@ -115,7 +115,7 @@ char	*get_printed_data(t_va_argu *argu_info, t_data *argu_data) {
 int print_format(t_va_argu *argu_info, va_list ap)
 {
 	// printf("\nformat, field_width: %d, type: %c\n", node->field_width, node->type);
-	size_t	printed_len;
+	// size_t	printed_len;
 	char	*printed_data;
 	t_data	*argu_data;
 
@@ -166,8 +166,8 @@ int	ft_printf(const char *str, ...)
 	
 }
 
-int main() {
-	int num = 10;
-	ft_printf("hello\n d %10d c %c s %1s x %5x X %X p %p", 123456789, 'a', "end", 12, 12, &num);
-	printf("\n%p\n", &num);
-}
+// int main() {
+// 	int num = 10;
+// 	ft_printf("hello\n d %10d c %c s %1s x %5x X %X p %p", 123456789, 'a', "end", 12, 12, &num);
+// 	printf("\n%p\n", &num);
+// }
