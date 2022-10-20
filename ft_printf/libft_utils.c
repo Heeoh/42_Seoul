@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 23:59:50 by heson             #+#    #+#             */
-/*   Updated: 2022/10/20 00:56:22 by heson            ###   ########.fr       */
+/*   Updated: 2022/10/20 15:32:45 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 size_t	ft_strlen(const char *s)
 {
-	int	cnt;
+	size_t	cnt;
 
 	cnt = 0;
 	while (*s++)
@@ -27,7 +27,7 @@ char	*ft_strndup(const char *s1, size_t *size)
 	char	*res;
 	size_t	i;
 
-	if (!size)
+	if (!size || !*size)
 		*size = ft_strlen(s1);
 	res = (char *)malloc(*size + 1);
 	if (!res)
@@ -42,8 +42,9 @@ char	*ft_strndup(const char *s1, size_t *size)
 	return (res);
 }
 
+
 // itoa
-int	get_num_len(int num)
+int	get_num_len(unsigned long long num)
 {
 	int	cnt;
 
@@ -58,7 +59,7 @@ int	get_num_len(int num)
 	return (cnt);
 }
 
-unsigned int	ft_abs(int n)
+unsigned long	ft_abs(unsigned long long n)
 {
 	if (n < 0)
 		return (-n);
@@ -66,11 +67,11 @@ unsigned int	ft_abs(int n)
 		return (n);
 }
 
-char	*ft_itoa(int n)
+char	*ft_itoa(unsigned long long n)
 {
-	unsigned int	res_len;
-	char			*res;
-	char			*p;
+	size_t	res_len;
+	char	*res;
+	char	*p;
 
 	res_len = get_num_len(n);
 	res = (char *)malloc(res_len + 1);
@@ -84,7 +85,7 @@ char	*ft_itoa(int n)
 		*res = '-';
 	while (n != 0)
 	{
-		*p-- = ft_abs(n % 10) + '0';
+		*p-- = n % 10 + '0';
 		n /= 10;
 	}
 	return (res);

@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/01 16:34:22 by heson             #+#    #+#             */
-/*   Updated: 2022/10/20 14:00:22 by heson            ###   ########.fr       */
+/*   Updated: 2022/10/20 15:31:37 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	find_base_idx(char c, char *base_val, int base_n)
 unsigned long long	ft_atoi_base(char *str, char *base, int base_n)
 {
 	int				base_idx;
-	unsigned int	absolute_res;
+	unsigned long long	absolute_res;
 	long				res;
 
 	res = 1;
