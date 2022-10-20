@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 15:52:30 by heson             #+#    #+#             */
-/*   Updated: 2022/10/20 01:14:07 by heson            ###   ########.fr       */
+/*   Updated: 2022/10/20 14:00:48 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 /* utils */
 size_t	ft_strlen(const char *s);
 char	*ft_strndup(const char *s1, size_t *size);
-char	*ft_itoa(int n);
+char	*ft_itoa(unsigned long long n);
+char	*ft_convert_base(char *nbr, char *base_from, char *base_to);
 
 size_t	ft_strlen(const char *s)
 {
@@ -32,7 +33,7 @@ char	*ft_strndup(const char *s1, size_t *size)
 	char	*res;
 	size_t	i;
 
-	if (!size)
+	if (!size || !*size)
 		*size = ft_strlen(s1);
 	res = (char *)malloc(*size + 1);
 	if (!res)
@@ -48,7 +49,7 @@ char	*ft_strndup(const char *s1, size_t *size)
 }
 
 // itoa
-int	get_num_len(int num)
+int	get_num_len(unsigned long long num)
 {
 	int	cnt;
 
@@ -63,7 +64,7 @@ int	get_num_len(int num)
 	return (cnt);
 }
 
-unsigned int	ft_abs(int n)
+unsigned long	ft_abs(unsigned long long n)
 {
 	if (n < 0)
 		return (-n);
@@ -71,11 +72,11 @@ unsigned int	ft_abs(int n)
 		return (n);
 }
 
-char	*ft_itoa(int n)
+char	*ft_itoa(unsigned long long n)
 {
-	unsigned int	res_len;
-	char			*res;
-	char			*p;
+	size_t	res_len;
+	char	*res;
+	char	*p;
 
 	res_len = get_num_len(n);
 	res = (char *)malloc(res_len + 1);
@@ -89,7 +90,7 @@ char	*ft_itoa(int n)
 		*res = '-';
 	while (n != 0)
 	{
-		*p-- = ft_abs(n % 10) + '0';
+		*p-- = n % 10 + '0';
 		n /= 10;
 	}
 	return (res);
@@ -107,7 +108,7 @@ char	*check_format(char *p, t_va_argu *argu)
 	{
 		while ('0' <= *p && *p <= '9')
 		{
-			argu->field_width += argu->field_width * 10 + (*p - '0');
+			argu->field_width = (argu->field_width * 10) + (*p - '0');
 			p++;
 		}
 		for (int i = 0; i < TYPE_N; i++)
@@ -133,37 +134,76 @@ char	*check_format(char *p, t_va_argu *argu)
 
 // }
 
-char	*get_data(char type, va_list ap, size_t *data_len)
+t_data	*get_data(t_va_argu *argu, va_list ap)
 {
-	char	*data;
+	t_data	*data;
+	char	tmp[2];
+	unsigned long long	tmp_n;
 
-	data_len = NULL;
-	if (type == 'c')
+	data = (t_data *)malloc(sizeof(t_data));
+	data->len = 0;
+	if (argu->type == 'c')
 	{
-		*data_len = 1;
-		data = ft_strndup(va_arg(ap, char*), data_len);
+		data->len = 1;
+		tmp[0] = (char)va_arg(ap, int);
+		tmp[1] = '\0';
+		data->data = ft_strndup(tmp, &(data->len));
 	}
-	else if (type == 's')
-	{
-		data = ft_strndup(va_arg(ap, char*), data_len);
+	else if (argu->type == 's')
+		data->data = ft_strndup(va_arg(ap, char*), &(data->len));
+	else if (argu->type == 'd' || argu->type == 'i')
+		data->data = ft_strndup(ft_itoa(va_arg(ap, int)), &(data->len));
+	else if (argu->type == 'x')
+		data->data = ft_strndup(ft_convert_base(ft_itoa(va_arg(ap, unsigned int)), "0123456789", "0123456789abcdef"), &(data->len));
+	else if (argu->type == 'X')
+		data->data = ft_strndup(ft_convert_base(ft_itoa(va_arg(ap, unsigned int)), "0123456789", "0123456789ABCDEF"), &(data->len));
+	else if (argu->type == 'p') {
+		tmp_n = va_arg(ap, unsigned long long);
+		printf("tmp_p: %llx\n", tmp_n);
+		printf("%llu, %s\n", tmp_n, ft_itoa(tmp_n));
+		data->data = ft_strndup(ft_convert_base(ft_itoa(tmp_n), "0123456789", "0123456789abcdef"), &(data->len));
 	}
-	else if (type == 'd')
-		data = ft_strndup(ft_itoa(va_arg(ap, int)), data_len);
-	
 	return (data);
+}
+
+size_t	get_printed_len(t_va_argu *argu_info, t_data *argu_data) {
+	if (argu_info->field_width > argu_data->len) return (argu_info->field_width);
+	else return (argu_data->len);
+}
+
+char	*get_printed_data(t_va_argu *argu_info, t_data *argu_data) {
+	int		printed_len;
+	char	*printed_data;
+	char	*p;
+	char	*data_p;
+
+	printed_len = get_printed_len(argu_info, argu_data);
+	printed_data = (char *)malloc(printed_len + 1);
+	if (!printed_data) // malloc error
+		return (ERROR_P);
+	p = printed_data;
+	while (printed_len-- > argu_data->len)
+		*p++ = ' ';
+	data_p = argu_data->data;
+	while (printed_len-- >= 0)
+		*p++ = *data_p++;
+	*p = '\0';
+	return (printed_data);
 }
 
 int print_format(t_va_argu *argu_info, va_list ap)
 {
 	// printf("\nformat, field_width: %d, type: %c\n", node->field_width, node->type);
-	size_t	data_len;
+	// size_t	data_len;
 	size_t	printed_len;
-	char	*data;
+	char	*printed_data;
+	t_data	*argu_data;
 
-	data = get_data(argu_info->type, ap, &data_len);	
-	printf("%s, %lu\n", data, data_len);
+	argu_data = get_data(argu_info, ap);	
+	printed_data = get_printed_data(argu_info, argu_data);
+	printf("%s, %lu, |%s|\n", argu_data->data, argu_data->len, printed_data);
 	
-	return (TRUE);
+	return (argu_data->len);
 }
 
 int	ft_printf(const char *str, ...)
@@ -208,5 +248,7 @@ int	ft_printf(const char *str, ...)
 
 int main() {
 	// ft_printf("hello\nd%3d c%10c s%17s p%1004p u%u i%i x%x X%X %%", 1);
-	ft_printf("hello\nd %d c %c s %s", 123, 'a', "end");
+	int num = 10;
+	ft_printf("hello\n d %10d c %c s %1s x %5x X %X p %p", 123456789, 'a', "end", 12, 12, &num);
+	printf("\n%p\n", &num);
 }

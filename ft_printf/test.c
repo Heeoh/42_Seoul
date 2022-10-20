@@ -45,7 +45,7 @@ int main()
     my_print("cdsp", 'a', 10, "hello", &num);
     // printf("%p\n", &num);
 
-    printf("", num);
+    // printf("%d", num);
 
     return 0;
 }

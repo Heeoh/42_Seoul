@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 11:14:15 by heson             #+#    #+#             */
-/*   Updated: 2022/10/20 00:52:16 by heson            ###   ########.fr       */
+/*   Updated: 2022/10/20 12:09:44 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 // 	C = 'c',
 // 	S = 's',
 // 	P = 'p',
-// 	D = 'd',
+// 	D = 'd',åå
 // 	I = 'i',
 // 	U = 'u',
 // 	LOW_X = 'x',
@@ -43,6 +43,11 @@ typedef struct s_va_argu {
 	char	type;
     int		field_width;
 } t_va_argu;
+
+typedef struct s_data {
+    char    *data;
+    size_t  len;
+}   t_data;
 
 int	ft_printf(const char *str, ...);
 
