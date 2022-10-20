@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 15:52:30 by heson             #+#    #+#             */
-/*   Updated: 2022/10/20 15:32:49 by heson            ###   ########.fr       */
+/*   Updated: 2022/10/20 17:28:52 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,6 @@ char	*get_printed_data(t_va_argu *argu_info, t_data *argu_data) {
 int print_format(t_va_argu *argu_info, va_list ap)
 {
 	// printf("\nformat, field_width: %d, type: %c\n", node->field_width, node->type);
-	// size_t	data_len;
 	size_t	printed_len;
 	char	*printed_data;
 	t_data	*argu_data;
@@ -168,7 +167,6 @@ int	ft_printf(const char *str, ...)
 }
 
 int main() {
-	// ft_printf("hello\nd%3d c%10c s%17s p%1004p u%u i%i x%x X%X %%", 1);
 	int num = 10;
 	ft_printf("hello\n d %10d c %c s %1s x %5x X %X p %p", 123456789, 'a', "end", 12, 12, &num);
 	printf("\n%p\n", &num);
