@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 15:52:30 by heson             #+#    #+#             */
-/*   Updated: 2022/10/20 19:15:25 by heson            ###   ########.fr       */
+/*   Updated: 2022/10/20 20:51:19 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*ft_itoa(unsigned long long n);
 char	*ft_convert_base(char *nbr, char *base_from, char *base_to);
 
 
-void	check_flag(){}
+// void	check_flag(){}
 
 char	*check_format(char *p, t_va_argu *argu)
 {
@@ -166,8 +166,6 @@ int	ft_printf(const char *str, ...)
 	
 }
 
-// int main() {
-// 	int num = 10;
-// 	ft_printf("hello\n d %10d c %c s %1s x %5x X %X p %p", 123456789, 'a', "end", 12, 12, &num);
-// 	printf("\n%p\n", &num);
-// }
+int main() {
+	ft_printf("%%");
+}

@@ -2,7 +2,7 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror
 NAME = libftprintf.a
 
-SRCS_MAN = $(wildcard *_man.c)
+SRCS_MAN = $(wildcard *.c)
 SRCS_BONUS = $(wildcard *_bonus.c)
 OBJS_MAN = $(SRCS_MAN:.c=.o)
 OBJS_BONUS = $(SRCS_BONUS:.c=.o)
