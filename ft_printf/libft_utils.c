@@ -6,11 +6,12 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 23:59:50 by heson             #+#    #+#             */
-/*   Updated: 2022/10/20 15:32:45 by heson            ###   ########.fr       */
+/*   Updated: 2022/11/19 22:09:27 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h> // malloc, free
+// #include <stdlib.h> // malloc, free
+#include "ft_printf.h"
 
 size_t	ft_strlen(const char *s)
 {
@@ -31,7 +32,7 @@ char	*ft_strndup(const char *s1, size_t *size)
 		*size = ft_strlen(s1);
 	res = (char *)malloc(*size + 1);
 	if (!res)
-		return (NULL);
+		return (ERROR_P);
 	i = 0;
 	while (((char *)s1)[i] && i < *size)
 	{

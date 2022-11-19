@@ -6,11 +6,13 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 15:52:30 by heson             #+#    #+#             */
-/*   Updated: 2022/10/20 20:51:19 by heson            ###   ########.fr       */
+/*   Updated: 2022/11/19 22:10:51 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+
+char g_types[8] = {'c', 's', 'p', 'd', 'i', 'u', 'x', 'X'};
 
 /* utils */
 size_t	ft_strlen(const char *s);
@@ -62,6 +64,8 @@ t_data	*get_data(t_va_argu *argu, va_list ap)
 	unsigned long long	tmp_n;
 
 	data = (t_data *)malloc(sizeof(t_data));
+	if (!data)
+		return (ERROR_P);
 	data->len = 0;
 	if (argu->type == 'c')
 	{
@@ -80,10 +84,10 @@ t_data	*get_data(t_va_argu *argu, va_list ap)
 		data->data = ft_strndup(ft_convert_base(ft_itoa(va_arg(ap, unsigned int)), "0123456789", "0123456789ABCDEF"), &(data->len));
 	else if (argu->type == 'p') {
 		tmp_n = va_arg(ap, unsigned long long);
-		printf("tmp_p: %llx\n", tmp_n);
-		printf("%llu, %s\n", tmp_n, ft_itoa(tmp_n));
 		data->data = ft_strndup(ft_convert_base(ft_itoa(tmp_n), "0123456789", "0123456789abcdef"), &(data->len));
 	}
+	if (!data->data)
+		return (ERROR_P);
 	return (data);
 }
 
@@ -118,11 +122,22 @@ int print_format(t_va_argu *argu_info, va_list ap)
 	// size_t	printed_len;
 	char	*printed_data;
 	t_data	*argu_data;
+	int 	return_val;
 
 	argu_data = get_data(argu_info, ap);	
+	if (!argu_data)
+		return (ERROR_I);
 	printed_data = get_printed_data(argu_info, argu_data);
-	printf("%s, %lu, |%s|\n", argu_data->data, argu_data->len, printed_data);
+	if (!printed_data)
+		return (ERROR_I);
+	while (*printed_data) 
+		write(1, printed_data++, 1);
+	// printf("%s, %lu, |%s|\n", argu_data->data, argu_data->len, printed_data);
 	
+	return_val = argu_data->len;
+	if (argu_data->data) free(argu_data->data);
+	if (argu_data) free(argu_data);
+	if (printed_data) free(printed_data);
 	return (argu_data->len);
 }
 
@@ -137,6 +152,8 @@ int	ft_printf(const char *str, ...)
     str_p = (char *)str;
     va_start(ap, str);
     argu = (t_va_argu *)malloc(sizeof(t_va_argu));
+	if (!argu) // malloc error
+		return (ERROR_I);
     while (*str_p)
     {
         if (*str_p == '%' && *(str_p+1) != '%')
@@ -162,10 +179,12 @@ int	ft_printf(const char *str, ...)
 		str_p++;
     }
 	
+	if (argu) free(argu);
 	return (printed_len);
 	
 }
 
-int main() {
-	ft_printf("%%");
-}
+// int main() {
+// 	ft_printf("%%\nabcd\nggg\t\n%d\n", 123);
+// 	while(1);
+// }
