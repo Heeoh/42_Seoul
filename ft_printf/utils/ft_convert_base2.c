@@ -6,13 +6,14 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/01 17:12:20 by heson             #+#    #+#             */
-/*   Updated: 2022/10/20 15:31:51 by heson            ###   ########.fr       */
+/*   Updated: 2022/11/23 18:56:56 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
+#include "ft_printf_utils.h"
 
-int	strlen_base(long num, int base_n)
+int	strlen_base(unsigned long long num, int base_n)
 {
 	int	cnt;
 

@@ -6,11 +6,12 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/01 16:34:22 by heson             #+#    #+#             */
-/*   Updated: 2022/10/20 15:31:37 by heson            ###   ########.fr       */
+/*   Updated: 2022/11/23 19:29:32 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
+#include "ft_printf_utils.h"
 
 char	*itoa_base(unsigned long long num, char *base, int base_n);
 
@@ -61,36 +62,26 @@ int	find_base_idx(char c, char *base_val, int base_n)
 
 unsigned long long	ft_atoi_base(char *str, char *base, int base_n)
 {
-	int				base_idx;
-	unsigned long long	absolute_res;
-	long				res;
+	int					base_idx;
+	unsigned long long	abs_res;
 
-	res = 1;
-	while (*str && ((*str == ' ') || (9 <= *str && *str <= 13)))
-		str++;
-	while (*str && ((*str == '+') || (*str == '-')))
-	{
-		if (*str++ == '-')
-			res *= -1;
-	}
-	absolute_res = 0;
+	abs_res = 0;
 	while (*str)
 	{
 		base_idx = find_base_idx(*str++, base, base_n);
 		if (base_idx == -1)
 			break ;
-		absolute_res = absolute_res * base_n + base_idx;
+		abs_res = abs_res * base_n + base_idx;
 	}
-	res *= absolute_res;
-	return (res);
+	return (abs_res);
 }
 
 char	*ft_convert_base(char *nbr, char *base_from, char *base_to)
 {
-	int		base_from_n;
-	int		base_to_n;
-	unsigned long long		num;
-	char	*res;
+	int					base_from_n;
+	int					base_to_n;
+	unsigned long long	num;
+	char				*res;
 
 	base_from_n = is_right_base(base_from);
 	base_to_n = is_right_base(base_to);

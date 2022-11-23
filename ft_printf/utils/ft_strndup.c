@@ -1,0 +1,33 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strndup.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/23 18:18:56 by heson             #+#    #+#             */
+/*   Updated: 2022/11/23 19:30:12 by heson            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "ft_printf_utils.h"
+#include <stdlib.h>
+
+char	*ft_strndup(const char *s1, size_t *size)
+{
+	char	*res;
+	size_t	i;
+
+	*size = ft_strlen(s1);
+	res = (char *)malloc(*size + 1);
+	if (!res)
+		return (ERROR_P);
+	i = 0;
+	while (((char *)s1)[i] && i < *size)
+	{
+		res[i] = s1[i];
+		i++;
+	}
+	res[i] = '\0';
+	return (res);
+}

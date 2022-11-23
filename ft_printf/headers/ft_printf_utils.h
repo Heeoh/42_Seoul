@@ -1,0 +1,31 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_printf_utils.h                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/23 18:19:31 by heson             #+#    #+#             */
+/*   Updated: 2022/11/23 19:38:10 by heson            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef FT_PRINTF_UTILS_H
+# define FT_PRINTF_UTILS_H
+
+# define ERROR_P NULL
+# define ERROR_I -1
+# define TRUE 1
+# define FALSE 0
+
+# include <stddef.h>
+
+size_t	ft_strlen(const char *s);
+char	*ft_strndup(const char *s1, size_t *size);
+char	*ft_strjoin(char const *s1, char const *s2, size_t len);
+char	*ft_ulltoa(unsigned long long n);
+char	*ft_uitoa(unsigned long n);
+char	*ft_itoa(long n);
+char	*ft_convert_base(char *nbr, char *base_from, char *base_to);
+
+#endif

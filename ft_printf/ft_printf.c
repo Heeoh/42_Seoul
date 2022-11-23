@@ -6,25 +6,30 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 15:52:30 by heson             #+#    #+#             */
-/*   Updated: 2022/11/19 22:10:51 by heson            ###   ########.fr       */
+/*   Updated: 2022/11/23 19:26:53 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "headers/ft_printf.h"
+#include "headers/ft_printf_utils.h"
+#include "headers/ft_printf_type_utils.h"
 
-char g_types[8] = {'c', 's', 'p', 'd', 'i', 'u', 'x', 'X'};
+# include <unistd.h> // write
+# include <stdlib.h> // malloc, free
+# include <stdarg.h> // va_start, va_arg, va_copy, va_end
 
-/* utils */
-size_t	ft_strlen(const char *s);
-char	*ft_strndup(const char *s1, size_t *size);
-char	*ft_itoa(unsigned long long n);
-char	*ft_convert_base(char *nbr, char *base_from, char *base_to);
-
+char	g_types[8] = {'c', 's', 'p', 'd', 'i', 'u', 'x', 'X'};
+int		(*g_to_string_by_type[TYPE_N])(t_data *, t_va_argu, va_list)
+	= {get_data_c, get_data_s, get_data_p,
+	get_data_diu, get_data_diu, get_data_diu,
+	get_data_x, get_data_x};
 
 // void	check_flag(){}
 
 char	*check_format(char *p, t_va_argu *argu)
 {
+	t_types	i;
+
 	argu->field_width = 0;
 	argu->type = TYPE_INIT;
 	if (p && *p)
@@ -34,137 +39,95 @@ char	*check_format(char *p, t_va_argu *argu)
 			argu->field_width = (argu->field_width * 10) + (*p - '0');
 			p++;
 		}
-		for (int i = 0; i < TYPE_N; i++)
+		i = TYPE_INIT;
+		while (++i < TYPE_N)
 		{
 			if (g_types[i] == *p)
 			{
-				argu->type = g_types[i];
-				break;
+				argu->type = i;
+				break ;
 			}
 		}
 		if (argu->type == TYPE_INIT)
 			return (ERROR_P);
 		return (p);
 	}
-	else
-		return (ERROR_P);
+	return (ERROR_P);
 }
 
-#include <stdio.h>
-
-// char	*get_number_data(char type, va_list ap)
-// {
-
-// }
-
-t_data	*get_data(t_va_argu *argu, va_list ap)
+int	get_data(t_data *data, t_va_argu argu, va_list ap)
 {
-	t_data	*data;
-	char	tmp[2];
-	unsigned long long	tmp_n;
-
-	data = (t_data *)malloc(sizeof(t_data));
-	if (!data)
-		return (ERROR_P);
 	data->len = 0;
-	if (argu->type == 'c')
-	{
-		data->len = 1;
-		tmp[0] = (char)va_arg(ap, int);
-		tmp[1] = '\0';
-		data->data = ft_strndup(tmp, &(data->len));
-	}
-	else if (argu->type == 's')
-		data->data = ft_strndup(va_arg(ap, char*), &(data->len));
-	else if (argu->type == 'd' || argu->type == 'i')
-		data->data = ft_strndup(ft_itoa(va_arg(ap, int)), &(data->len));
-	else if (argu->type == 'x')
-		data->data = ft_strndup(ft_convert_base(ft_itoa(va_arg(ap, unsigned int)), "0123456789", "0123456789abcdef"), &(data->len));
-	else if (argu->type == 'X')
-		data->data = ft_strndup(ft_convert_base(ft_itoa(va_arg(ap, unsigned int)), "0123456789", "0123456789ABCDEF"), &(data->len));
-	else if (argu->type == 'p') {
-		tmp_n = va_arg(ap, unsigned long long);
-		data->data = ft_strndup(ft_convert_base(ft_itoa(tmp_n), "0123456789", "0123456789abcdef"), &(data->len));
-	}
-	if (!data->data)
-		return (ERROR_P);
-	return (data);
+	if (g_to_string_by_type[argu.type](data, argu, ap) == ERROR_I)
+		return (ERROR_I);
+	return (data->len);
 }
 
-size_t	get_printed_len(t_va_argu *argu_info, t_data *argu_data) {
-	if (argu_info->field_width > (int)argu_data->len) return (argu_info->field_width);
-	else return (argu_data->len);
+size_t	get_printed_len(t_va_argu argu_info, t_data argu_data)
+{
+	if (argu_info.field_width > (int)argu_data.len)
+		return (argu_info.field_width);
+	else
+		return (argu_data.len);
 }
 
-char	*get_printed_data(t_va_argu *argu_info, t_data *argu_data) {
-	int		printed_len;
-	char	*printed_data;
+int	get_printed_data(t_data *printed, t_va_argu argu_info, t_data argu_data)
+{
 	char	*p;
 	char	*data_p;
+	int		cnt;
 
-	printed_len = get_printed_len(argu_info, argu_data);
-	printed_data = (char *)malloc(printed_len + 1);
-	if (!printed_data) // malloc error
-		return (ERROR_P);
-	p = printed_data;
-	while (printed_len-- > (int)argu_data->len)
+	printed->len = get_printed_len(argu_info, argu_data);
+	printed->data = (char *)malloc(printed->len + 1);
+	if (!printed->data)
+		return (ERROR_I);
+	p = printed->data;
+	cnt = printed->len;
+	while (cnt-- > (int)argu_data.len)
 		*p++ = ' ';
-	data_p = argu_data->data;
-	while (printed_len-- >= 0)
+	data_p = argu_data.data;
+	while (cnt-- >= 0)
 		*p++ = *data_p++;
 	*p = '\0';
-	return (printed_data);
+	return (printed->len);
 }
 
-int print_format(t_va_argu *argu_info, va_list ap)
+int	print_format(t_va_argu argu_info, va_list ap)
 {
-	// printf("\nformat, field_width: %d, type: %c\n", node->field_width, node->type);
-	// size_t	printed_len;
-	char	*printed_data;
-	t_data	*argu_data;
-	int 	return_val;
+	t_data	argu_data;
+	t_data	printed_data;
+	char	*p;
 
-	argu_data = get_data(argu_info, ap);	
-	if (!argu_data)
+	if (get_data(&argu_data, argu_info, ap) == ERROR_I)
 		return (ERROR_I);
-	printed_data = get_printed_data(argu_info, argu_data);
-	if (!printed_data)
+	if (get_printed_data(&printed_data, argu_info, argu_data) == ERROR_I)
 		return (ERROR_I);
-	while (*printed_data) 
-		write(1, printed_data++, 1);
-	// printf("%s, %lu, |%s|\n", argu_data->data, argu_data->len, printed_data);
-	
-	return_val = argu_data->len;
-	if (argu_data->data) free(argu_data->data);
-	if (argu_data) free(argu_data);
-	if (printed_data) free(printed_data);
-	return (argu_data->len);
+	free(argu_data.data);
+	p = printed_data.data;
+	while (*p)
+		write(1, p++, 1);
+	free(printed_data.data);
+	return (printed_data.len);
 }
 
 int	ft_printf(const char *str, ...)
 {
-	va_list 	ap;
-    int			printed_len;
-    char		*str_p;
-    t_va_argu   *argu;
+	va_list		ap;
+	int			printed_len;
+	char		*str_p;
+	t_va_argu	argu;
 
 	printed_len = 0;
-    str_p = (char *)str;
-    va_start(ap, str);
-    argu = (t_va_argu *)malloc(sizeof(t_va_argu));
-	if (!argu) // malloc error
-		return (ERROR_I);
-    while (*str_p)
-    {
-        if (*str_p == '%' && *(str_p+1) != '%')
+	str_p = (char *)str;
+	va_start(ap, str);
+	while (*str_p)
+	{
+		if (*str_p == '%' && *(str_p + 1) != '%')
 		{
-			str_p = check_format(++str_p, argu);
-            if (!str_p)
-            {
-                printf("error\n");
-                return (ERROR_I);
-            }
-            printed_len += print_format(argu, ap);
+			str_p = check_format(++str_p, &argu);
+			if (!str_p)
+				return (ERROR_I);
+			printed_len += print_format(argu, ap);
 		}
 		else if (*str_p == '%')
 		{
@@ -177,14 +140,30 @@ int	ft_printf(const char *str, ...)
 			printed_len++;
 		}
 		str_p++;
-    }
-	
-	if (argu) free(argu);
+	}
 	return (printed_len);
-	
 }
 
+// #include <limits.h>
+
 // int main() {
-// 	ft_printf("%%\nabcd\nggg\t\n%d\n", 123);
-// 	while(1);
+// 	// int tmp = 10;
+// 	// ft_printf("%c, %s, %d, %i, %u, %x, %X, %p\n", 'a', "abc", 123, 1234, 12345, 15, 15, &tmp);
+// 	// printf("%c, %s, %d, %i, %u, %x, %X, %p\n", 'a', "abc", 123, 1234, 12345, 15, 15, &tmp);
+
+// 	// ft_printf("| %c|\n", '1');
+// 	// printf("| %c|\n", '1');	
+
+// 	// ft_printf("%s\n", (char*)0);
+// 	// printf("%s\n", (char*)0);
+
+// 	ft_printf("|%p| |%p|\n", LONG_MAX, LONG_MIN);
+// 	printf("|%p| |%p|\n", LONG_MAX, LONG_MIN);
+// 	printf("%s\n", ft_convert_base(ft_ulltoa(LONG_MIN), "0123456789", "0123456789abcdef"));
+
+// 	// ft_printf(" %d, %d, %d, %d, %d, %d \n", -1, -9, -10, -14, -15, -16);
+// 	// printf(" %d, %d, %d, %d, %d, %d \n", -1, -9, -10, -14, -15, -16);
+
+// 	// printf("%s\n", ft_itoa(-1));
+// 	// while(1);
 // }

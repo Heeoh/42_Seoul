@@ -2,15 +2,16 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror
 NAME = libftprintf.a
 
-SRCS_MAN = $(wildcard *.c)
-SRCS_BONUS = $(wildcard *_bonus.c)
+HEADERS = headers
+SRCS_MAN = $(wildcard *.c) $(wildcard utils/*.c)
+# SRCS_BONUS = $(wildcard *_bonus.c)
 OBJS_MAN = $(SRCS_MAN:.c=.o)
-OBJS_BONUS = $(SRCS_BONUS:.c=.o)
+# OBJS_BONUS = $(SRCS_BONUS:.c=.o)
 
 OBJECTS = $(OBJS_MAN)
 
 %o : %c
-		$(CC) $(CFLAGS) -c $< -o $@
+		$(CC) $(CFLAGS) -I $(HEADERS) -c $< -o $@
 
 $(NAME) : $(OBJECTS)
 		ar -crs $@ $(OBJECTS)

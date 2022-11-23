@@ -6,26 +6,35 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 11:14:15 by heson             #+#    #+#             */
-/*   Updated: 2022/11/19 21:55:57 by heson            ###   ########.fr       */
+/*   Updated: 2022/11/23 19:22:22 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
 
-# include <unistd.h> // write
-# include <stdlib.h> // malloc, free
-# include <stdarg.h> // va_start, va_arg, va_copy, va_end
-
 # define ERROR_P NULL
 # define ERROR_I -1
 # define TRUE 1
 # define FALSE 0
-# define TYPE_INIT 0
-# define TYPE_N 8    
+
+# include <stddef.h>
+
+typedef enum e_types {
+	CHAR = 0,
+	STR,
+	POINTER,
+	DECIMAL,
+	INT,
+	U_INT,
+	LOWER_X,
+	UPPER_X,
+	TYPE_N,
+	TYPE_INIT = -1
+} t_types;
 
 typedef struct s_va_argu {
-	char	type;
+	t_types	type;
     int		field_width;
 } t_va_argu;
 
