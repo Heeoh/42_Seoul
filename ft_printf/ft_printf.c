@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 15:52:30 by heson             #+#    #+#             */
-/*   Updated: 2022/11/24 13:12:04 by heson            ###   ########.fr       */
+/*   Updated: 2022/11/24 16:59:28 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 #include "headers/ft_printf_utils.h"
 #include "headers/ft_printf_type_utils.h"
 
-# include <unistd.h> // write
-# include <stdlib.h> // malloc, free
-# include <stdarg.h> // va_start, va_arg, va_copy, va_end
+#include <unistd.h>
+#include <stdlib.h>
+#include <stdarg.h>
 
 char	g_types[8] = {'c', 's', 'p', 'd', 'i', 'u', 'x', 'X'};
 int		(*g_to_string_by_type[TYPE_N])(t_data *, t_va_argu, va_list)
@@ -24,9 +24,7 @@ int		(*g_to_string_by_type[TYPE_N])(t_data *, t_va_argu, va_list)
 	get_data_diu, get_data_diu, get_data_diu,
 	get_data_x, get_data_x};
 
-// void	check_flag(){}
-
-char	*check_format(char *p, t_va_argu *argu)
+const char	*check_format(const char *p, t_va_argu *argu)
 {
 	t_types	i;
 
@@ -48,8 +46,6 @@ char	*check_format(char *p, t_va_argu *argu)
 				break ;
 			}
 		}
-		// if (argu->type == TYPE_INIT)
-		// 	return (ERROR_P);
 		return (p);
 	}
 	return (ERROR_P);
@@ -63,21 +59,16 @@ int	get_data(t_data *data, t_va_argu argu, va_list ap)
 	return (data->len);
 }
 
-size_t	get_printed_len(t_va_argu argu_info, t_data argu_data)
-{
-	if (argu_info.field_width > (int)argu_data.len)
-		return (argu_info.field_width);
-	else
-		return (argu_data.len);
-}
-
 int	get_printed_data(t_data *printed, t_va_argu argu_info, t_data argu_data)
 {
 	char	*p;
 	char	*data_p;
 	int		cnt;
 
-	printed->len = get_printed_len(argu_info, argu_data);
+	if (argu_info.field_width > (int)argu_data.len)
+		printed->len = argu_info.field_width;
+	else
+		printed->len = argu_data.len;
 	printed->data = (char *)malloc(printed->len + 1);
 	if (!printed->data)
 		return (ERROR_I);
@@ -92,7 +83,7 @@ int	get_printed_data(t_data *printed, t_va_argu argu_info, t_data argu_data)
 	return (printed->len);
 }
 
-int	print_format(t_va_argu argu_info, va_list ap)
+int	print_by_format(t_va_argu argu_info, va_list ap)
 {
 	t_data	argu_data;
 	t_data	printed_data;
@@ -110,16 +101,14 @@ int	print_format(t_va_argu argu_info, va_list ap)
 	return (printed_data.len);
 }
 
-int	ft_printf(const char *str, ...)
+int	ft_printf(const char *str_p, ...)
 {
 	va_list		ap;
 	int			printed_len;
-	char		*str_p;
 	t_va_argu	argu;
 
 	printed_len = 0;
-	str_p = (char *)str;
-	va_start(ap, str);
+	va_start(ap, str_p);
 	while (*str_p)
 	{
 		if (*str_p == '%')
@@ -129,37 +118,33 @@ int	ft_printf(const char *str, ...)
 				return (ERROR_I);
 			if (argu.type != TYPE_INIT)
 			{
-				printed_len += print_format(argu, ap);
+				printed_len += print_by_format(argu, ap);
 				str_p++;
-				continue;
+				continue ;
 			}
 		}
 		write(1, str_p++, 1);
 		printed_len++;
-		// else if (*str_p == '%')
-		// {
-		// 	write(1, str_p++, 1);
-		// 	printed_len++;
-		// }
-		// else
-		// {
-		// 	write(1, str_p, 1);
-		// 	printed_len++;
-		// }
-		// str_p++;
 	}
 	return (printed_len);
 }
 
-// #include <limits.h>
-// #include <stdio.h>
+#include <limits.h>
+#include <stdio.h>
 
-// int main() {
-// 	// ft_printf("\f%d'V%cynht{W%cTG_(bg #\Q%cRX=@Z\nxuO%c(tc5\t{?0&%X9U_^%x3%i*%xS.Q-{JT.D", 392921044, 243115705, -1695961344, 1546056842, 1536353446, -1407275744, -753939550, 1263629710, -571117417);
-// 	// printf("\f%d'V%cynht{W%cTG_(bg #\Q%cRX=@Z\nxuO%c(tc5\t{?0&%X9U_^%x3%i*%xS.Q-{JT.D", 392921044, 243115705, -1695961344, 1546056842, 1536353446, -1407275744, -753939550, 1263629710, -571117417);
+int main() {
+	// ft_printf("\f%d'V%cynht{W%cTG_(bg #\Q%cRX=@Z\nxuO%c(tc5\t{?0&%X9U_^%x3%i*%xS.Q-{JT.D", 392921044, 243115705, -1695961344, 1546056842, 1536353446, -1407275744, -753939550, 1263629710, -571117417);
+	// printf("\f%d'V%cynht{W%cTG_(bg #\Q%cRX=@Z\nxuO%c(tc5\t{?0&%X9U_^%x3%i*%xS.Q-{JT.D", 392921044, 243115705, -1695961344, 1546056842, 1536353446, -1407275744, -753939550, 1263629710, -571117417);
 	
-// 	int ans = printf("\001\002\007\v\010\f\r\n");
-// 	int mine = ft_printf("\001\002\007\v\010\f\r\n");
-// 	printf("%d, %d\n", ans, mine);
-// 	// while(1);
-// }
+	int mine = ft_printf("m: %%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%% %%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%% %%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%%%c%%\n", 'A', "42", 42, 42 ,42 , 42, 42, 'B', "-42", -42, -42 ,-42 ,-42, 42, 'C', "0", 0, 0 ,0 ,0, 42, 0);
+	int ans = printf("a: %%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%% %%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%% %%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%%%c%%\n", 'A', "42", 42, 42 ,42 , 42, 42, 'B', "-42", -42, -42 ,-42 ,-42, 42, 'C', "0", 0, 0 ,0 ,0, 42, 0);
+	printf("%d, %d\n", ans, mine);
+
+	usleep(1);
+	
+	mine = ft_printf("m: %c %c %c\n", 0, '0', '1');
+	ans = printf("a: %c %c %c\n", 0, '0', '1');
+	printf("%d, %d\n", ans, mine);
+
+	// while(1);
+}

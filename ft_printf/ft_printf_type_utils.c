@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 14:43:28 by heson             #+#    #+#             */
-/*   Updated: 2022/11/24 13:05:25 by heson            ###   ########.fr       */
+/*   Updated: 2022/11/24 17:01:47 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 #include <stdarg.h> // va_start, va_arg, va_copy, va_end
 #include <stdlib.h> // free
 
+#include <stdio.h>
+
 int	get_data_c(t_data *data, t_va_argu argu, va_list ap)
 {
 	char	tmp[2];
@@ -24,9 +26,8 @@ int	get_data_c(t_data *data, t_va_argu argu, va_list ap)
 		return (ERROR_I);
 	tmp[0] = (char)va_arg(ap, int);
 	tmp[1] = '\0';
+	data->len = 1;
 	data->data = ft_strndup(tmp, &(data->len));
-	if (!tmp[0])
-		data->len = 1;
 	if (!data->data && !data->len)
 		return (ERROR_I);
 	return (data->len);

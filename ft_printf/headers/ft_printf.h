@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 11:14:15 by heson             #+#    #+#             */
-/*   Updated: 2022/11/23 19:22:22 by heson            ###   ########.fr       */
+/*   Updated: 2022/11/24 14:59:03 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,17 @@ typedef enum e_types {
 	UPPER_X,
 	TYPE_N,
 	TYPE_INIT = -1
-} t_types;
+}	t_types;
 
 typedef struct s_va_argu {
 	t_types	type;
-    int		field_width;
-} t_va_argu;
+	int		field_width;
+}	t_va_argu;
 
 typedef struct s_data {
-    char    *data;
-    size_t  len;
-}   t_data;
+	char	*data;
+	size_t	len;
+}	t_data;
 
 int	ft_printf(const char *str, ...);
 

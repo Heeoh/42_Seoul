@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 18:18:56 by heson             #+#    #+#             */
-/*   Updated: 2022/11/24 13:02:06 by heson            ###   ########.fr       */
+/*   Updated: 2022/11/24 17:05:39 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,13 @@ char	*ft_strndup(const char *s1, size_t *size)
 	char	*res;
 	size_t	i;
 
-	*size += ft_strlen(s1);
+	if (!*size)
+		*size = ft_strlen(s1);
 	res = (char *)malloc(*size + 1);
 	if (!res)
 		return (ERROR_P);
 	i = 0;
-	while (((char *)s1)[i] && i < *size)
+	while (i < *size)
 	{
 		res[i] = s1[i];
 		i++;
@@ -31,3 +32,17 @@ char	*ft_strndup(const char *s1, size_t *size)
 	res[i] = '\0';
 	return (res);
 }
+
+// #include <stdio.h>
+
+// int main() {
+// 	char	tmp[2];
+// 	size_t	len = 1;
+
+// 	tmp[0] = 0;
+// 	tmp[1] = '\0';
+
+// 	char *res = ft_strndup(tmp, &len);
+// 	printf("%s\n", res);
+
+// }
