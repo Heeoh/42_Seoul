@@ -6,12 +6,12 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 14:43:28 by heson             #+#    #+#             */
-/*   Updated: 2022/11/23 19:36:27 by heson            ###   ########.fr       */
+/*   Updated: 2022/11/24 13:05:25 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf_type_utils.h"
-#include "ft_printf_utils.h"
+#include "headers/ft_printf_type_utils.h"
+#include "headers/ft_printf_utils.h"
 
 #include <stdarg.h> // va_start, va_arg, va_copy, va_end
 #include <stdlib.h> // free
@@ -25,7 +25,9 @@ int	get_data_c(t_data *data, t_va_argu argu, va_list ap)
 	tmp[0] = (char)va_arg(ap, int);
 	tmp[1] = '\0';
 	data->data = ft_strndup(tmp, &(data->len));
-	if (!data->data)
+	if (!tmp[0])
+		data->len = 1;
+	if (!data->data && !data->len)
 		return (ERROR_I);
 	return (data->len);
 }

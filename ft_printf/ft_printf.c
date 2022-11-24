@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 15:52:30 by heson             #+#    #+#             */
-/*   Updated: 2022/11/23 19:26:53 by heson            ###   ########.fr       */
+/*   Updated: 2022/11/24 13:12:04 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ char	*check_format(char *p, t_va_argu *argu)
 				break ;
 			}
 		}
-		if (argu->type == TYPE_INIT)
-			return (ERROR_P);
+		// if (argu->type == TYPE_INIT)
+		// 	return (ERROR_P);
 		return (p);
 	}
 	return (ERROR_P);
@@ -122,48 +122,44 @@ int	ft_printf(const char *str, ...)
 	va_start(ap, str);
 	while (*str_p)
 	{
-		if (*str_p == '%' && *(str_p + 1) != '%')
+		if (*str_p == '%')
 		{
 			str_p = check_format(++str_p, &argu);
 			if (!str_p)
 				return (ERROR_I);
-			printed_len += print_format(argu, ap);
+			if (argu.type != TYPE_INIT)
+			{
+				printed_len += print_format(argu, ap);
+				str_p++;
+				continue;
+			}
 		}
-		else if (*str_p == '%')
-		{
-			write(1, str_p++, 1);
-			printed_len++;
-		}
-		else
-		{
-			write(1, str_p, 1);
-			printed_len++;
-		}
-		str_p++;
+		write(1, str_p++, 1);
+		printed_len++;
+		// else if (*str_p == '%')
+		// {
+		// 	write(1, str_p++, 1);
+		// 	printed_len++;
+		// }
+		// else
+		// {
+		// 	write(1, str_p, 1);
+		// 	printed_len++;
+		// }
+		// str_p++;
 	}
 	return (printed_len);
 }
 
 // #include <limits.h>
+// #include <stdio.h>
 
 // int main() {
-// 	// int tmp = 10;
-// 	// ft_printf("%c, %s, %d, %i, %u, %x, %X, %p\n", 'a', "abc", 123, 1234, 12345, 15, 15, &tmp);
-// 	// printf("%c, %s, %d, %i, %u, %x, %X, %p\n", 'a', "abc", 123, 1234, 12345, 15, 15, &tmp);
-
-// 	// ft_printf("| %c|\n", '1');
-// 	// printf("| %c|\n", '1');	
-
-// 	// ft_printf("%s\n", (char*)0);
-// 	// printf("%s\n", (char*)0);
-
-// 	ft_printf("|%p| |%p|\n", LONG_MAX, LONG_MIN);
-// 	printf("|%p| |%p|\n", LONG_MAX, LONG_MIN);
-// 	printf("%s\n", ft_convert_base(ft_ulltoa(LONG_MIN), "0123456789", "0123456789abcdef"));
-
-// 	// ft_printf(" %d, %d, %d, %d, %d, %d \n", -1, -9, -10, -14, -15, -16);
-// 	// printf(" %d, %d, %d, %d, %d, %d \n", -1, -9, -10, -14, -15, -16);
-
-// 	// printf("%s\n", ft_itoa(-1));
+// 	// ft_printf("\f%d'V%cynht{W%cTG_(bg #\Q%cRX=@Z\nxuO%c(tc5\t{?0&%X9U_^%x3%i*%xS.Q-{JT.D", 392921044, 243115705, -1695961344, 1546056842, 1536353446, -1407275744, -753939550, 1263629710, -571117417);
+// 	// printf("\f%d'V%cynht{W%cTG_(bg #\Q%cRX=@Z\nxuO%c(tc5\t{?0&%X9U_^%x3%i*%xS.Q-{JT.D", 392921044, 243115705, -1695961344, 1546056842, 1536353446, -1407275744, -753939550, 1263629710, -571117417);
+	
+// 	int ans = printf("\001\002\007\v\010\f\r\n");
+// 	int mine = ft_printf("\001\002\007\v\010\f\r\n");
+// 	printf("%d, %d\n", ans, mine);
 // 	// while(1);
 // }

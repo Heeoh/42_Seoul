@@ -6,12 +6,12 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 18:22:32 by heson             #+#    #+#             */
-/*   Updated: 2022/11/23 18:58:11 by heson            ###   ########.fr       */
+/*   Updated: 2022/11/24 12:43:24 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "ft_printf_utils.h"
+#include "../headers/ft_printf_utils.h"
 
 char	*ft_strjoin(char const *s1, char const *s2, size_t len)
 {
