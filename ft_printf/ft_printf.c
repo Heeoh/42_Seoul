@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 15:52:30 by heson             #+#    #+#             */
-/*   Updated: 2022/11/24 16:59:28 by heson            ###   ########.fr       */
+/*   Updated: 2022/11/28 14:42:02 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,9 +85,10 @@ int	get_printed_data(t_data *printed, t_va_argu argu_info, t_data argu_data)
 
 int	print_by_format(t_va_argu argu_info, va_list ap)
 {
-	t_data	argu_data;
-	t_data	printed_data;
-	char	*p;
+	t_data			argu_data;
+	t_data			printed_data;
+	unsigned int	cnt;
+	char			*p;
 
 	if (get_data(&argu_data, argu_info, ap) == ERROR_I)
 		return (ERROR_I);
@@ -95,7 +96,8 @@ int	print_by_format(t_va_argu argu_info, va_list ap)
 		return (ERROR_I);
 	free(argu_data.data);
 	p = printed_data.data;
-	while (*p)
+	cnt = 0;
+	while (cnt++ < printed_data.len)
 		write(1, p++, 1);
 	free(printed_data.data);
 	return (printed_data.len);
@@ -129,22 +131,14 @@ int	ft_printf(const char *str_p, ...)
 	return (printed_len);
 }
 
-#include <limits.h>
-#include <stdio.h>
+// #include <limits.h>
+// #include <stdio.h>
 
-int main() {
-	// ft_printf("\f%d'V%cynht{W%cTG_(bg #\Q%cRX=@Z\nxuO%c(tc5\t{?0&%X9U_^%x3%i*%xS.Q-{JT.D", 392921044, 243115705, -1695961344, 1546056842, 1536353446, -1407275744, -753939550, 1263629710, -571117417);
-	// printf("\f%d'V%cynht{W%cTG_(bg #\Q%cRX=@Z\nxuO%c(tc5\t{?0&%X9U_^%x3%i*%xS.Q-{JT.D", 392921044, 243115705, -1695961344, 1546056842, 1536353446, -1407275744, -753939550, 1263629710, -571117417);
-	
-	int mine = ft_printf("m: %%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%% %%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%% %%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%%%c%%\n", 'A', "42", 42, 42 ,42 , 42, 42, 'B', "-42", -42, -42 ,-42 ,-42, 42, 'C', "0", 0, 0 ,0 ,0, 42, 0);
-	int ans = printf("a: %%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%% %%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%% %%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%%%c%%\n", 'A', "42", 42, 42 ,42 , 42, 42, 'B', "-42", -42, -42 ,-42 ,-42, 42, 'C', "0", 0, 0 ,0 ,0, 42, 0);
-	printf("%d, %d\n", ans, mine);
+// int main() {
 
-	usleep(1);
-	
-	mine = ft_printf("m: %c %c %c\n", 0, '0', '1');
-	ans = printf("a: %c %c %c\n", 0, '0', '1');
-	printf("%d, %d\n", ans, mine);
+// 	int mine = ft_printf("m: %c\n", 0);
+// 	int ans = printf("a: %c\n", 0);
+// 	printf("a: %d, m: %d\n", mine, ans);
 
-	// while(1);
-}
+// 	// while(1);
+// }
