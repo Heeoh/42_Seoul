@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 15:52:30 by heson             #+#    #+#             */
-/*   Updated: 2022/11/28 14:42:02 by heson            ###   ########.fr       */
+/*   Updated: 2022/11/28 15:39:41 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,8 +136,8 @@ int	ft_printf(const char *str_p, ...)
 
 // int main() {
 
-// 	int mine = ft_printf("m: %c\n", 0);
-// 	int ans = printf("a: %c\n", 0);
+// 	int mine = ft_printf("%10c\n", 0);
+// 	int ans = printf("%10c\n", 0);
 // 	printf("a: %d, m: %d\n", mine, ans);
 
 // 	// while(1);
