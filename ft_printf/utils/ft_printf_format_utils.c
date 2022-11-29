@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 11:41:08 by heson             #+#    #+#             */
-/*   Updated: 2022/11/29 12:23:02 by heson            ###   ########.fr       */
+/*   Updated: 2022/11/29 13:19:01 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,24 @@ int	checker(const char *p, char *target, int n)
 			break ;
 	}
 	return (i);
+}
+
+const char	*check_right_format(t_va_argu *argu, const char *right_sign)
+{
+	t_types t;
+
+	t = argu->type;
+	if (t == TYPE_N)
+		return (ERROR_P);
+	if (argu->flags[BASE] 
+		&& !(t == LOWER_X || t == UPPER_X))
+		return (ERROR_P);
+	if ((argu->flags[SIGN] || argu->flags[SPACE])
+		&& !(t == DECIMAL || t == INT))
+		return (ERROR_P);
+	if (argu->flags[ZERO] 
+		&& (t == CHAR || t == STR || t == POINTER))
+		return (ERROR_P);	
+	return (right_sign);
 }
 

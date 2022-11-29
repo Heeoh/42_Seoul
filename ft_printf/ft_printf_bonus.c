@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 20:39:33 by heson             #+#    #+#             */
-/*   Updated: 2022/11/29 12:26:25 by heson            ###   ########.fr       */
+/*   Updated: 2022/11/29 13:21:15 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ const char	*check_format(const char *p, t_va_argu *argu)
 			argu->field_width = *p++ - '0';
 			while ('0' <= *p && *p <= '9')
 				argu->field_width = (argu->field_width * 10) + (*p++ - '0');
+			continue ;
 		}
 		flag_i = checker(p, g_flags, 6);
 		if (flag_i != ERROR_I && flag_i != 6)
@@ -48,11 +49,10 @@ const char	*check_format(const char *p, t_va_argu *argu)
 			p++;
 			continue ;
 		}
-		argu->type = checker(p, g_types, TYPE_N);
-		if (argu->type != TYPE_N)
-			return (p);
+		break ;
 	}
-	return (ERROR_P);
+	argu->type = checker(p, g_types, TYPE_N);
+	return (check_right_format(argu, p));
 }
 
 int	get_data(t_data *data, t_va_argu argu, va_list ap)
@@ -135,21 +135,21 @@ int	ft_printf(const char *str_p, ...)
 	return (printed_len);
 }
 
-// #include <limits.h>
-// #include <stdio.h>
+#include <limits.h>
+#include <stdio.h>
 
-// int main() {
+int main() {
 
-// 	// int mine = ft_printf("%%\n");
-// 	// int ans = printf("%%\n");
-// 	// printf("a: %d, m: %d\n", mine, ans);
+	// int mine = ft_printf("%%\n");
+	// int ans = printf("%%\n");
+	// printf("a: %d, m: %d\n", mine, ans);
 
-// 	ft_printf("%#x\n", 15);
-// 	ft_printf("%+10d\n", 123);
-// 	ft_printf("% d\n", 123);
-// 	ft_printf("%-10d\n", 123);
-// 	ft_printf("%010d\n", 123);
-// 	ft_printf("%.10d\n", 123);
+	ft_printf("1. %#d\n", 15);
+	ft_printf("2. %+10u\n", 123);
+	ft_printf("3. % x\n", 123);
+	ft_printf("4. %0c\n", 'a');
+	ft_printf("5. %010d\n", 123);
+	// ft_printf("6. %.10d\n", 123);
 
-// 	// while(1);
-// }
+	// while(1);
+}

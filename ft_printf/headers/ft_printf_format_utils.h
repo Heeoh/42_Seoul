@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 11:43:53 by heson             #+#    #+#             */
-/*   Updated: 2022/11/29 11:47:49 by heson            ###   ########.fr       */
+/*   Updated: 2022/11/29 13:19:39 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,5 +18,6 @@
 
 void	init_format(t_va_argu *argu);
 int		checker(const char *p, char *target, int n);
+const char	*check_right_format(t_va_argu *argu, const char *right_sign);
 
 #endif

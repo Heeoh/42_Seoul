@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 11:14:15 by heson             #+#    #+#             */
-/*   Updated: 2022/11/29 11:06:56 by heson            ###   ########.fr       */
+/*   Updated: 2022/11/29 13:08:49 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,16 @@ typedef enum e_types {
 	TYPE_N,
 	TYPE_INIT = -1
 }	t_types;
+
+typedef enum e_flags {
+	NEGATIVE_FW = 0,
+	ZERO,
+	PRECISION,
+	BASE,
+	SIGN,
+	SPACE,
+	FLAG_N
+}	t_flags;
 
 typedef struct s_va_argu {
 	t_types	type;
