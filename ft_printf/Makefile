@@ -16,7 +16,6 @@ OBJECTS = $(OBJS_MAN)
 $(NAME) : $(OBJECTS)
 		ar -crs $@ $(OBJECTS)
 
-
 all : $(NAME)
 
 clean :

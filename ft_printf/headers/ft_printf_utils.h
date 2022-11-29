@@ -6,19 +6,19 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 18:19:31 by heson             #+#    #+#             */
-/*   Updated: 2022/11/23 19:38:10 by heson            ###   ########.fr       */
+/*   Updated: 2022/11/28 20:45:25 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_PRINTF_UTILS_H
 # define FT_PRINTF_UTILS_H
 
+# include <stddef.h>
+
 # define ERROR_P NULL
 # define ERROR_I -1
 # define TRUE 1
 # define FALSE 0
-
-# include <stddef.h>
 
 size_t	ft_strlen(const char *s);
 char	*ft_strndup(const char *s1, size_t *size);

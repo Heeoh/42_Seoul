@@ -6,12 +6,12 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 14:43:28 by heson             #+#    #+#             */
-/*   Updated: 2022/11/24 17:01:47 by heson            ###   ########.fr       */
+/*   Updated: 2022/11/29 11:04:19 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "headers/ft_printf_type_utils.h"
-#include "headers/ft_printf_utils.h"
+#include "../headers/ft_printf_type_utils.h"
+#include "../headers/ft_printf_utils.h"
 
 #include <stdarg.h> // va_start, va_arg, va_copy, va_end
 #include <stdlib.h> // free
