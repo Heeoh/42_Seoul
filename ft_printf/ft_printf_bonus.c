@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 20:39:33 by heson             #+#    #+#             */
-/*   Updated: 2022/11/29 13:21:15 by heson            ###   ########.fr       */
+/*   Updated: 2022/11/30 01:27:21 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	g_types[8] = {'c', 's', 'p', 'd', 'i', 'u', 'x', 'X'};
 char	g_flags[6] = {'-', '0', '.', '#', '+', ' '};
 int		(*g_to_string_by_type[TYPE_N])(t_data *, t_va_argu, va_list)
 	= {get_data_c, get_data_s, get_data_p,
-	get_data_diu, get_data_diu, get_data_diu,
+	get_data_di, get_data_di, get_data_u,
 	get_data_x, get_data_x};
 
 const char	*check_format(const char *p, t_va_argu *argu)
@@ -144,12 +144,14 @@ int main() {
 	// int ans = printf("%%\n");
 	// printf("a: %d, m: %d\n", mine, ans);
 
-	ft_printf("1. %#d\n", 15);
-	ft_printf("2. %+10u\n", 123);
-	ft_printf("3. % x\n", 123);
-	ft_printf("4. %0c\n", 'a');
-	ft_printf("5. %010d\n", 123);
-	// ft_printf("6. %.10d\n", 123);
+	ft_printf("%+d\n", 15);
+	ft_printf("% d\n", 15);
+	ft_printf("%#X, %X\n", 15, 15);
+	// ft_printf("%+10d\n", 123);
+	// ft_printf("% d\n", 123);
+	// ft_printf("%-10d\n", 123);
+	// ft_printf("%010d\n", 123);
+	// ft_printf("%.10d\n", 123);
 
 	// while(1);
 }

@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 18:19:31 by heson             #+#    #+#             */
-/*   Updated: 2022/11/28 20:45:25 by heson            ###   ########.fr       */
+/*   Updated: 2022/11/29 13:51:52 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,6 @@ char	*ft_ulltoa(unsigned long long n);
 char	*ft_uitoa(unsigned long n);
 char	*ft_itoa(long n);
 char	*ft_convert_base(char *nbr, char *base_from, char *base_to);
+void	ft_str_toupper(char *str, size_t len);
 
 #endif

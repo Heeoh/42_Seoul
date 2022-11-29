@@ -6,11 +6,12 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 14:43:28 by heson             #+#    #+#             */
-/*   Updated: 2022/11/29 11:04:19 by heson            ###   ########.fr       */
+/*   Updated: 2022/11/30 01:25:10 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/ft_printf_type_utils.h"
+#include "../headers/ft_printf_flag_utils.h"
 #include "../headers/ft_printf_utils.h"
 
 #include <stdarg.h> // va_start, va_arg, va_copy, va_end
@@ -49,14 +50,27 @@ int	get_data_s(t_data *data, t_va_argu argu, va_list ap)
 	return (data->len);
 }
 
-int	get_data_diu(t_data *data, t_va_argu argu, va_list ap)
+int	get_data_di(t_data *data, t_va_argu argu, va_list ap)
 {
 	char	*tmp;
 
-	if (argu.type == DECIMAL || argu.type == INT)
-		tmp = ft_itoa(va_arg(ap, int));
-	else
-		tmp = ft_uitoa(va_arg(ap, unsigned int));
+	tmp = ft_itoa(va_arg(ap, int));
+	data->data = ft_strndup(tmp, &(data->len));
+	if (argu.flags[SIGN])
+		data->data = apply_sign_flag(data->data, argu, &(data->len));
+	else if (argu.flags[SPACE])
+		data->data = apply_space_flag(data->data, argu, &(data->len));
+	free(tmp);
+	if (!data->data)
+		return (ERROR_I);
+	return (data->len);
+}
+
+int	get_data_u(t_data *data, t_va_argu argu, va_list ap)
+{
+	char	*tmp;
+
+	tmp = ft_uitoa(va_arg(ap, unsigned int));
 	data->data = ft_strndup(tmp, &(data->len));
 	free(tmp);
 	if (!data->data)
@@ -66,18 +80,19 @@ int	get_data_diu(t_data *data, t_va_argu argu, va_list ap)
 
 int	get_data_x(t_data *data, t_va_argu argu, va_list ap)
 {
-	char	*tmp[2];
+	unsigned int	tmp_n;
+	char			*tmp_str;
 
-	tmp[0] = ft_itoa(va_arg(ap, unsigned int));
-	if (argu.type == LOWER_X)
-		tmp[1] = ft_convert_base(tmp[0], "0123456789", "0123456789abcdef");
-	else if (argu.type == UPPER_X)
-		tmp[1] = ft_convert_base(tmp[0], "0123456789", "0123456789ABCDEF");
-	data->data = ft_strndup(tmp[1], &(data->len));
-	free(tmp[0]);
-	free(tmp[1]);
+	tmp_n = va_arg(ap, unsigned int);
+	tmp_str = ft_convert_base(ft_itoa(tmp_n), "0123456789", "0123456789abcdef");
+	data->data = ft_strndup(tmp_str, &(data->len));	
+	if (argu.flags[BASE] && tmp_n != 0)
+		data->data = apply_base_flag(data->data, argu, &(data->len));
+	free(tmp_str);
 	if (!data->data)
 		return (ERROR_I);
+	if (argu.type == UPPER_X)
+		ft_str_toupper(data->data, data->len);
 	return (data->len);
 }
 

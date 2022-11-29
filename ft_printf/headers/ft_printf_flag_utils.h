@@ -1,26 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf_type_utils.h                             :+:      :+:    :+:   */
+/*   ft_printf_flag_utils.h                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/23 18:01:25 by heson             #+#    #+#             */
-/*   Updated: 2022/11/30 01:27:07 by heson            ###   ########.fr       */
+/*   Created: 2022/11/29 21:17:15 by heson             #+#    #+#             */
+/*   Updated: 2022/11/30 01:19:22 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_TYPE_UTILS_H
-# define FT_PRINTF_TYPE_UTILS_H
+#ifndef FT_PRINTF_FLAG_UTILS_H
+# define FT_PRINTF_FLAG_UTILS_H
 
 # include "ft_printf.h"
 # include <stdarg.h> // va_start, va_arg, va_copy, va_end
 
-int	get_data_c(t_data *data, t_va_argu argu, va_list ap);
-int	get_data_s(t_data *data, t_va_argu argu, va_list ap);
-int	get_data_di(t_data *data, t_va_argu argu, va_list ap);
-int	get_data_u(t_data *data, t_va_argu argu, va_list ap);
-int	get_data_x(t_data *data, t_va_argu argu, va_list ap);
-int	get_data_p(t_data *data, t_va_argu argu, va_list ap);
+char	*apply_base_flag(char *str, t_va_argu argu, size_t	*len);
+char	*apply_sign_flag(char *str, t_va_argu argu, size_t *len);
+char	*apply_space_flag(char *str, t_va_argu argu, size_t *len);
+
+
 
 #endif
