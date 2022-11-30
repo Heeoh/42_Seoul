@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 21:06:05 by heson             #+#    #+#             */
-/*   Updated: 2022/11/30 13:25:41 by heson            ###   ########.fr       */
+/*   Updated: 2022/11/30 18:11:18 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,34 @@ char	*apply_space_flag(char *str, t_va_argu argu, size_t *len)
 		free(str);
 	}
 	return (res);
+}
+
+char	*apply_minus_flag(char *str, t_va_argu argu, size_t *len)
+{
+	int		cnt;
+	char	*p;
+
+	cnt = *len;
+	p = str;
+	while (cnt--)
+		*p++ = ' ';
+	return (str);
+}
+
+char	*apply_zero_flag(t_data	*printed, t_va_argu argu, t_data *data)
+{
+	int		cnt;
+	char	*p;
+
+	cnt = printed->len;
+	p = printed->data;
+	while (cnt--)
+		*p++ = '0';
+	if (argu.flags[SPACE] || argu.flags[SIGN] || data->data[0] == '-')
+	{
+		*(printed->data) = *(data->data);
+		(data->data)++;
+		data->len--;
+	}
+	return (printed->data);
 }

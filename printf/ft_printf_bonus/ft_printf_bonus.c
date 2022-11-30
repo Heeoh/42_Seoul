@@ -6,12 +6,13 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 20:39:33 by heson             #+#    #+#             */
-/*   Updated: 2022/11/30 16:17:11 by heson            ###   ########.fr       */
+/*   Updated: 2022/11/30 18:11:43 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/ft_printf.h"
 #include "headers/ft_printf_utils.h"
+#include "headers/ft_printf_flag_utils.h"
 #include "headers/ft_printf_type_utils.h"
 #include "headers/ft_printf_format_utils.h"
 
@@ -76,12 +77,26 @@ int	get_printed_data(t_data *printed, t_va_argu argu_info, t_data argu_data)
 	printed->data = (char *)malloc(printed->len + 1);
 	if (!printed->data)
 		return (ERROR_I);
-	p = printed->data;
-	cnt = printed->len;
-	while (cnt-- > (int)argu_data.len)
-		*p++ = ' ';
+	if (argu_info.flags[NEGATIVE_FW])
+	{
+		apply_minus_flag(printed->data, argu_info, &(printed->len));
+		p = printed->data;
+	}
+	else if (argu_info.flags[ZERO])
+	{
+		apply_zero_flag(printed, argu_info, &argu_data);
+		p = printed->data + (printed->len - argu_data.len);
+	}
+	else
+	{
+		p = printed->data;
+		cnt = printed->len;
+		while (cnt-- > (int)argu_data.len)
+			*p++ = ' ';
+		p = printed->data + (printed->len - argu_data.len);
+	}
 	data_p = argu_data.data;
-	while (cnt-- >= 0)
+	while (*data_p)
 		*p++ = *data_p++;
 	*p = '\0';
 	return (printed->len);
@@ -135,21 +150,18 @@ int	ft_printf(const char *str_p, ...)
 	return (printed_len);
 }
 
-// #include <limits.h>
-// #include <stdio.h>
+#include <limits.h>
+#include <stdio.h>
 
-// int main() {
-
-// 	// char *str[7] = {" %% ", " %%%% ", " %% %% %% ", " %%  %%  %% ", " %%   %%   %% ", "%%", "%% %%"};
-// 	int i = 1;
-// 	printf("%d (%d)\n", i++, ft_printf(" %% ") - printf(" %% "));
-// 	printf("%d (%d)\n", i++, ft_printf(" %%%% ") - printf(" %%%% "));
-// 	printf("%d (%d)\n", i++, ft_printf(" %% %% %% ") - printf(" %% %% %% "));
-// 	printf("%d (%d)\n", i++, ft_printf(" %%  %%  %% ") - printf(" %%  %%  %% "));
-// 	printf("%d (%d)\n", i++, ft_printf(" %%   %%   %% ") - printf(" %%   %%   %% "));
-// 	printf("%d (%d)\n", i++, ft_printf("%%") - printf("%%"));
-// 	printf("%d (%d)\n", i++, ft_printf("%% %%") - printf("%% %%"));
-
-// 	// while(1);
-// }
-
+int main() {
+	int tmp = 10;
+	printf("%d\n", ft_printf("|%010d|", -123) - printf("|%010d|", -123));
+	printf("%d\n", ft_printf("|%010i|", 123) - printf("|%010i|", 123));
+	printf("%d\n", ft_printf("|%010u|", 123) - printf("|%010u|", 123));
+	printf("%d\n", ft_printf("|%010x|", 15) - printf("|%010x|", 15));
+	printf("%d\n", ft_printf("|%010X|", 15) - printf("|%010X|", 15));
+	// printf("%d\n", ft_printf("|%010c|", 'a') - printf("|%010c|", 'a'));
+	// printf("%d\n", ft_printf("|%010s|", "hello") - printf("|%010s|", "hello"));
+	// printf("%d\n", ft_printf("|%010p|", &tmp) - printf("|%010p|", &tmp));
+	// while(1);
+}
