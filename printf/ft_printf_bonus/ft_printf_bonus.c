@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 20:39:33 by heson             #+#    #+#             */
-/*   Updated: 2022/11/30 13:15:23 by heson            ###   ########.fr       */
+/*   Updated: 2022/11/30 16:17:11 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ const char	*check_format(const char *p, t_va_argu *argu)
 {
 	int	flag_i;
 
+	init_format(argu);
 	if (*p == '%')
 		return (p);
-	init_format(argu);
 	while (p && *p)
 	{
 		if ('1' <= *p && *p <= '9')
@@ -135,34 +135,21 @@ int	ft_printf(const char *str_p, ...)
 	return (printed_len);
 }
 
-#include <limits.h>
-#include <stdio.h>
+// #include <limits.h>
+// #include <stdio.h>
 
-int main() {
+// int main() {
 
-	// int mine = ft_printf("%%\n");
-	// int ans = printf("%%\n");
-	// printf("a: %d, m: %d\n", mine, ans);
+// 	// char *str[7] = {" %% ", " %%%% ", " %% %% %% ", " %%  %%  %% ", " %%   %%   %% ", "%%", "%% %%"};
+// 	int i = 1;
+// 	printf("%d (%d)\n", i++, ft_printf(" %% ") - printf(" %% "));
+// 	printf("%d (%d)\n", i++, ft_printf(" %%%% ") - printf(" %%%% "));
+// 	printf("%d (%d)\n", i++, ft_printf(" %% %% %% ") - printf(" %% %% %% "));
+// 	printf("%d (%d)\n", i++, ft_printf(" %%  %%  %% ") - printf(" %%  %%  %% "));
+// 	printf("%d (%d)\n", i++, ft_printf(" %%   %%   %% ") - printf(" %%   %%   %% "));
+// 	printf("%d (%d)\n", i++, ft_printf("%%") - printf("%%"));
+// 	printf("%d (%d)\n", i++, ft_printf("%% %%") - printf("%% %%"));
 
-	printf("mine\n");
-	printf("%d\n", ft_printf("%+10u\n", 15));
-	ft_printf("% 10u\n", 15);
-	ft_printf("%#10X, %X\n", 15, 15);
-	// ft_printf("%+10d\n", 123);
-	// ft_printf("% d\n", 123);
-	// ft_printf("%-10d\n", 123);
-	// ft_printf("%010d\n", 123);
-	// ft_printf("%.10d\n", 123);
+// 	// while(1);
+// }
 
-	// printf("ans\n");
-	// printf("%+10u\n", 15);
-	// printf("% 10u\n", 15);
-	// printf("%#10X, %X\n", 15, 15);
-	// ft_printf("%+10d\n", 123);
-	// ft_printf("% d\n", 123);
-	// ft_printf("%-10d\n", 123);
-	// ft_printf("%010d\n", 123);
-	// ft_printf("%.10d\n", 123);
-
-	// while(1);
-}

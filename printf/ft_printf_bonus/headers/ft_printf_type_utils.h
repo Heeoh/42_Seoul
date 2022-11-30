@@ -1,23 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf_format_utils.h                           :+:      :+:    :+:   */
+/*   ft_printf_type_utils.h                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/29 11:43:53 by heson             #+#    #+#             */
-/*   Updated: 2022/11/29 13:19:39 by heson            ###   ########.fr       */
+/*   Created: 2022/11/23 18:01:25 by heson             #+#    #+#             */
+/*   Updated: 2022/11/30 01:27:07 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_FORMAT_UTILS_H
-# define FT_PRINTF_FORMAT_UTILS_H
+#ifndef FT_PRINTF_TYPE_UTILS_H
+# define FT_PRINTF_TYPE_UTILS_H
 
 # include "ft_printf.h"
 # include <stdarg.h> // va_start, va_arg, va_copy, va_end
 
-void	init_format(t_va_argu *argu);
-int		checker(const char *p, char *target, int n);
-const char	*check_right_format(t_va_argu *argu, const char *right_sign);
+int	get_data_c(t_data *data, t_va_argu argu, va_list ap);
+int	get_data_s(t_data *data, t_va_argu argu, va_list ap);
+int	get_data_di(t_data *data, t_va_argu argu, va_list ap);
+int	get_data_u(t_data *data, t_va_argu argu, va_list ap);
+int	get_data_x(t_data *data, t_va_argu argu, va_list ap);
+int	get_data_p(t_data *data, t_va_argu argu, va_list ap);
 
 #endif

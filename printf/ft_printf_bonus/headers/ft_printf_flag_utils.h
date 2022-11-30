@@ -1,26 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_str_toupper.c                                   :+:      :+:    :+:   */
+/*   ft_printf_flag_utils.h                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/29 13:48:04 by heson             #+#    #+#             */
-/*   Updated: 2022/11/29 13:53:23 by heson            ###   ########.fr       */
+/*   Created: 2022/11/29 21:17:15 by heson             #+#    #+#             */
+/*   Updated: 2022/11/30 15:00:13 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/ft_printf_utils.h"
+#ifndef FT_PRINTF_FLAG_UTILS_H
+# define FT_PRINTF_FLAG_UTILS_H
 
-void	ft_str_toupper(char *str, size_t len)
-{
-	char	*p;
+# include "ft_printf.h"
+# include <stdarg.h> // va_start, va_arg, va_copy, va_end
 
-	p = str;
-	while (p && *p)
-	{
-		if ('a' <= *p && *p <= 'z')
-			*p -= ('a' - 'A');
-		p++;
-	}
-}
+char	*apply_base_flag(char *str, t_va_argu argu, size_t	*len);
+char	*apply_sign_flag(char *str, t_va_argu argu, size_t *len);
+char	*apply_space_flag(char *str, t_va_argu argu, size_t *len);
+
+#endif

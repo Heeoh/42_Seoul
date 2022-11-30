@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf_type_utils.c                             :+:      :+:    :+:   */
+/*   type_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 14:43:28 by heson             #+#    #+#             */
-/*   Updated: 2022/11/30 01:25:10 by heson            ###   ########.fr       */
+/*   Updated: 2022/11/30 13:34:48 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/ft_printf_type_utils.h"
-#include "../headers/ft_printf_flag_utils.h"
-#include "../headers/ft_printf_utils.h"
+#include "headers/ft_printf_type_utils.h"
+#include "headers/ft_printf_flag_utils.h"
+#include "headers/ft_printf_utils.h"
 
 #include <stdarg.h> // va_start, va_arg, va_copy, va_end
 #include <stdlib.h> // free
@@ -70,6 +70,8 @@ int	get_data_u(t_data *data, t_va_argu argu, va_list ap)
 {
 	char	*tmp;
 
+	if (argu.type != U_INT)
+		return (ERROR_I);
 	tmp = ft_uitoa(va_arg(ap, unsigned int));
 	data->data = ft_strndup(tmp, &(data->len));
 	free(tmp);
@@ -81,18 +83,20 @@ int	get_data_u(t_data *data, t_va_argu argu, va_list ap)
 int	get_data_x(t_data *data, t_va_argu argu, va_list ap)
 {
 	unsigned int	tmp_n;
-	char			*tmp_str;
+	char			*tmp[2];
 
 	tmp_n = va_arg(ap, unsigned int);
-	tmp_str = ft_convert_base(ft_itoa(tmp_n), "0123456789", "0123456789abcdef");
-	data->data = ft_strndup(tmp_str, &(data->len));	
+	tmp[0] = ft_itoa(tmp_n);
+	tmp[1] = ft_convert_base(tmp[0], "0123456789", "0123456789abcdef");
+	data->data = ft_strndup(tmp[1], &(data->len));
 	if (argu.flags[BASE] && tmp_n != 0)
 		data->data = apply_base_flag(data->data, argu, &(data->len));
-	free(tmp_str);
+	free(tmp[0]);
+	free(tmp[1]);
 	if (!data->data)
 		return (ERROR_I);
 	if (argu.type == UPPER_X)
-		ft_str_toupper(data->data, data->len);
+		ft_str_toupper(data->data);
 	return (data->len);
 }
 

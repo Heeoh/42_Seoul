@@ -1,12 +1,12 @@
 // /* ************************************************************************** */
 // /*                                                                            */
 // /*                                                        :::      ::::::::   */
-// /*   ft_printf.c                                        :+:      :+:    :+:   */
+// /*   ft_printf_man.c                                    :+:      :+:    :+:   */
 // /*                                                    +:+ +:+         +:+     */
 // /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 // /*                                                +#+#+#+#+#+   +#+           */
 // /*   Created: 2022/10/19 15:52:30 by heson             #+#    #+#             */
-// /*   Updated: 2022/11/29 11:48:19 by heson            ###   ########.fr       */
+// /*   Updated: 2022/11/30 15:12:08 by heson            ###   ########.fr       */
 // /*                                                                            */
 // /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 // char	g_types[8] = {'c', 's', 'p', 'd', 'i', 'u', 'x', 'X'};
 // int		(*g_to_string_by_type[TYPE_N])(t_data *, t_va_argu, va_list)
 // 	= {get_data_c, get_data_s, get_data_p,
-// 	get_data_diu, get_data_diu, get_data_diu,
+// 	get_data_di, get_data_di, get_data_u,
 // 	get_data_x, get_data_x};
 
 // const char	*check_format(const char *p, t_va_argu *argu)
@@ -130,9 +130,9 @@
 
 // // int main() {
 
-// // 	int mine = ft_printf("%%\n");
+// // 	int mine = ft_printf("%x\n", 15);
 // // 	// int ans = printf("%%\n");
 // // 	// printf("a: %d, m: %d\n", mine, ans);
 
-// // 	// while(1);
+// // 	while(1);
 // // }
