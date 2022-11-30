@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 20:39:33 by heson             #+#    #+#             */
-/*   Updated: 2022/11/30 01:27:21 by heson            ###   ########.fr       */
+/*   Updated: 2022/11/30 13:15:23 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,9 +144,20 @@ int main() {
 	// int ans = printf("%%\n");
 	// printf("a: %d, m: %d\n", mine, ans);
 
-	ft_printf("%+d\n", 15);
-	ft_printf("% d\n", 15);
-	ft_printf("%#X, %X\n", 15, 15);
+	printf("mine\n");
+	printf("%d\n", ft_printf("%+10u\n", 15));
+	ft_printf("% 10u\n", 15);
+	ft_printf("%#10X, %X\n", 15, 15);
+	// ft_printf("%+10d\n", 123);
+	// ft_printf("% d\n", 123);
+	// ft_printf("%-10d\n", 123);
+	// ft_printf("%010d\n", 123);
+	// ft_printf("%.10d\n", 123);
+
+	// printf("ans\n");
+	// printf("%+10u\n", 15);
+	// printf("% 10u\n", 15);
+	// printf("%#10X, %X\n", 15, 15);
 	// ft_printf("%+10d\n", 123);
 	// ft_printf("% d\n", 123);
 	// ft_printf("%-10d\n", 123);
