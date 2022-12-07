@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 20:39:33 by heson             #+#    #+#             */
-/*   Updated: 2022/11/30 18:11:43 by heson            ###   ########.fr       */
+/*   Updated: 2022/12/07 21:37:44 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,23 +30,37 @@ int		(*g_to_string_by_type[TYPE_N])(t_data *, t_va_argu, va_list)
 const char	*check_format(const char *p, t_va_argu *argu)
 {
 	int	flag_i;
+	int tmp;
+	int is_precision_on;
 
 	init_format(argu);
+	is_precision_on = FALSE;
 	if (*p == '%')
 		return (p);
 	while (p && *p)
 	{
-		if ('1' <= *p && *p <= '9')
+		while ('1' <= *p && *p <= '9')
 		{
-			argu->field_width = *p++ - '0';
+			tmp = *p++ - '0';
 			while ('0' <= *p && *p <= '9')
-				argu->field_width = (argu->field_width * 10) + (*p++ - '0');
+				tmp = (tmp * 10) + (*p++ - '0');
+			if (is_precision_on)
+				argu->flags[PRECISION] = tmp;
+			else
+				argu->field_width = tmp;
 			continue ;
 		}
 		flag_i = checker(p, g_flags, 6);
 		if (flag_i != ERROR_I && flag_i != 6)
 		{
 			argu->flags[flag_i] = TRUE;
+			if (flag_i == PRECISION)
+			{
+				is_precision_on = TRUE;
+				argu->flags[flag_i] = 0;
+				if (*(p + 1) == '0')
+					p++;
+			}
 			p++;
 			continue ;
 		}
@@ -79,7 +93,7 @@ int	get_printed_data(t_data *printed, t_va_argu argu_info, t_data argu_data)
 		return (ERROR_I);
 	if (argu_info.flags[NEGATIVE_FW])
 	{
-		apply_minus_flag(printed->data, argu_info, &(printed->len));
+		apply_minus_flag(printed->data, &(printed->len));
 		p = printed->data;
 	}
 	else if (argu_info.flags[ZERO])
@@ -96,9 +110,9 @@ int	get_printed_data(t_data *printed, t_va_argu argu_info, t_data argu_data)
 		p = printed->data + (printed->len - argu_data.len);
 	}
 	data_p = argu_data.data;
-	while (*data_p)
+	while (argu_data.len--)
 		*p++ = *data_p++;
-	*p = '\0';
+	*(printed->data + printed->len) = '\0';
 	return (printed->len);
 }
 
@@ -150,18 +164,14 @@ int	ft_printf(const char *str_p, ...)
 	return (printed_len);
 }
 
-#include <limits.h>
-#include <stdio.h>
+// #include <limits.h>
+// #include <stdio.h>
 
-int main() {
-	int tmp = 10;
-	printf("%d\n", ft_printf("|%010d|", -123) - printf("|%010d|", -123));
-	printf("%d\n", ft_printf("|%010i|", 123) - printf("|%010i|", 123));
-	printf("%d\n", ft_printf("|%010u|", 123) - printf("|%010u|", 123));
-	printf("%d\n", ft_printf("|%010x|", 15) - printf("|%010x|", 15));
-	printf("%d\n", ft_printf("|%010X|", 15) - printf("|%010X|", 15));
-	// printf("%d\n", ft_printf("|%010c|", 'a') - printf("|%010c|", 'a'));
-	// printf("%d\n", ft_printf("|%010s|", "hello") - printf("|%010s|", "hello"));
-	// printf("%d\n", ft_printf("|%010p|", &tmp) - printf("|%010p|", &tmp));
-	// while(1);
-}
+// int main() {
+	
+// 	int mine = ft_printf("%.d\n", 0);
+// 	int ans = printf("%.d\n", 0);
+// 	printf("%d, %d\n", mine, ans);
+
+// 	// while(1);
+// }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   type_utils2.c                                      :+:      :+:    :+:   */
+/*   type2_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 14:43:28 by heson             #+#    #+#             */
-/*   Updated: 2022/11/30 16:27:34 by heson            ###   ########.fr       */
+/*   Updated: 2022/12/07 21:16:37 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ int	get_data_s(t_data *data, t_va_argu argu, va_list ap)
 		data->data = ft_strndup("(null)", &(data->len));
 	else
 		data->data = ft_strndup(tmp, &(data->len));
+	if (argu.flags[PRECISION] != -1)
+			data->data = apply_precision_flag(data->data, argu, data);
 	if (!data->data)
 		return (ERROR_I);
 	return (data->len);

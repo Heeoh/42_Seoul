@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   type_utils1.c                                      :+:      :+:    :+:   */
+/*   type1_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 14:43:28 by heson             #+#    #+#             */
-/*   Updated: 2022/11/30 16:27:30 by heson            ###   ########.fr       */
+/*   Updated: 2022/12/07 21:33:42 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ int	get_data_di(t_data *data, t_va_argu argu, va_list ap)
 
 	tmp = ft_itoa(va_arg(ap, int));
 	data->data = ft_strndup(tmp, &(data->len));
+	if (argu.flags[PRECISION] != -1)
+		data->data = apply_precision_flag(data->data, argu, data);
 	if (argu.flags[SIGN])
 		data->data = apply_sign_flag(data->data, argu, &(data->len));
 	else if (argu.flags[SPACE])
@@ -40,6 +42,8 @@ int	get_data_u(t_data *data, t_va_argu argu, va_list ap)
 		return (ERROR_I);
 	tmp = ft_uitoa(va_arg(ap, unsigned int));
 	data->data = ft_strndup(tmp, &(data->len));
+	if (argu.flags[PRECISION])
+		data->data = apply_precision_flag(data->data, argu, data);
 	free(tmp);
 	if (!data->data)
 		return (ERROR_I);
@@ -55,6 +59,8 @@ int	get_data_x(t_data *data, t_va_argu argu, va_list ap)
 	tmp[0] = ft_itoa(tmp_n);
 	tmp[1] = ft_convert_base(tmp[0], "0123456789", "0123456789abcdef");
 	data->data = ft_strndup(tmp[1], &(data->len));
+	if (argu.flags[PRECISION])
+		data->data = apply_precision_flag(data->data, argu, data);
 	if (argu.flags[BASE] && tmp_n != 0)
 		data->data = apply_base_flag(data->data, argu, &(data->len));
 	free(tmp[0]);
