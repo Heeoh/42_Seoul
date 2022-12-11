@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 21:06:05 by heson             #+#    #+#             */
-/*   Updated: 2022/12/07 21:36:41 by heson            ###   ########.fr       */
+/*   Updated: 2022/12/11 20:10:46 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,13 @@ char	*apply_zero_flag(t_data	*printed, t_va_argu argu, t_data *data)
 		(data->data)++;
 		data->len--;
 	}
+	else if (argu.flags[BASE] && data->len >= 3)
+	{
+		p = printed->data;
+		*p++ = *(data->data)++;
+		*p++ = *(data->data)++;
+		data->len -= 2;
+	}
 	return (printed->data);
 }
 
@@ -70,33 +77,33 @@ char	*precision_str(size_t len, t_data *data)
 
 char	*precision_diux(t_va_argu argu, t_data *data)
 {
-	size_t	len;
-	char	*new_data;
+	t_data	org;
 	int		cnt;
-	char	*data_p;
+	char	*org_data_p;
 
-	len = data->len;
-	if (data->data[0] == '-')
-		len--;
-	if (data->data[0] != '0' && (int)len >= argu.flags[PRECISION])
-		return (data->data);
-	cnt = 0;
-	data_p = data->data;
-	data->len = argu.flags[PRECISION]; 
-	if (data->data[0] == '-')
+	org.len = data->len;
+	org.data = data->data;
+	if (org.data[0] == '-')
+		org.len--;
+	if (org.data[0] != '0' && (int)(org.len) >= argu.flags[PRECISION])
+		return (org.data);
+	data->len = argu.flags[PRECISION];
+	if (org.data[0] == '-')
 		data->len++;
-	new_data = (char *)malloc(data->len + 1);
-	if (!new_data)
+	data->data = (char *)malloc(data->len + 1);
+	if (!data->data)
 		return (ERROR_P);
-	if (data->data[0] == '-')
-		new_data[cnt++] = *data_p++;
-	while (cnt < (int)(data->len - len))
-		new_data[cnt++] = '0';
+	cnt = 0;
+	org_data_p = org.data;
+	if (org.data[0] == '-')
+		data->data[cnt++] = *org_data_p++;
+	while (cnt < (int)(data->len - org.len))
+		data->data[cnt++] = '0';
 	while (cnt < (int)data->len)
-		new_data[cnt++] = *data_p++;
-	new_data[cnt] = '\0';	
-	free(data->data);
-	return (new_data);
+		data->data[cnt++] = *org_data_p++;
+	data->data[cnt] = '\0';
+	free(org.data);
+	return (data->data);
 }
 
 char	*apply_precision_flag(char *str, t_va_argu argu, t_data *data)

@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 14:43:28 by heson             #+#    #+#             */
-/*   Updated: 2022/12/07 21:16:37 by heson            ###   ########.fr       */
+/*   Updated: 2022/12/11 18:54:04 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,5 +67,11 @@ int	get_data_p(t_data *data, t_va_argu argu, va_list ap)
 	free(tmp_str[2]);
 	if (!data->data)
 		return (ERROR_I);
+	return (data->len);
+}
+
+int	get_data_per(t_data *data)
+{
+	data->data = ft_strndup("%", &(data->len));
 	return (data->len);
 }

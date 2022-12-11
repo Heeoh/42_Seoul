@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 20:39:33 by heson             #+#    #+#             */
-/*   Updated: 2022/12/11 16:25:42 by heson            ###   ########.fr       */
+/*   Updated: 2022/12/11 20:02:26 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 
-char	g_types[8] = {'c', 's', 'p', 'd', 'i', 'u', 'x', 'X'};
+char	g_types[9] = {'c', 's', 'p', 'd', 'i', 'u', 'x', 'X', '%'};
 char	g_flags[6] = {'-', '0', '.', '#', '+', ' '};
 int		(*g_to_string_by_type[TYPE_N])(t_data *, t_va_argu, va_list)
 	= {get_data_c, get_data_s, get_data_p,
@@ -30,13 +30,11 @@ int		(*g_to_string_by_type[TYPE_N])(t_data *, t_va_argu, va_list)
 const char	*check_format(const char *p, t_va_argu *argu)
 {
 	int	flag_i;
-	int tmp;
-	int is_precision_on;
+	int	tmp;
+	int	is_precision_on;
 
 	init_format(argu);
 	is_precision_on = FALSE;
-	if (*p == '%')
-		return (p);
 	while (p && *p)
 	{
 		while ('1' <= *p && *p <= '9')
@@ -72,10 +70,14 @@ const char	*check_format(const char *p, t_va_argu *argu)
 
 int	get_data(t_data *data, t_va_argu argu, va_list ap)
 {
+	int	ret;
+
 	data->len = 0;
-	if (g_to_string_by_type[argu.type](data, argu, ap) == ERROR_I)
-		return (ERROR_I);
-	return (data->len);
+	if (argu.type == PERCENT)
+		ret = get_data_per(data);
+	else
+		ret = g_to_string_by_type[argu.type](data, argu, ap);
+	return (ret);
 }
 
 int	get_printed_data(t_data *printed, t_va_argu argu_info, t_data argu_data)
@@ -168,9 +170,8 @@ int	ft_printf(const char *str_p, ...)
 // #include <stdio.h>
 
 // int main() {
-	
-// 	int mine = ft_printf("%u\n", 0);
-// 	int ans = printf("%u\n", 0);
+// 	int mine = ft_printf("%.5d\n", -1);
+// 	int ans = printf("%.5d\n", -1);
 // 	printf("%d, %d\n", mine, ans);
 
 // 	// while(1);
