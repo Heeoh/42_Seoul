@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 21:06:05 by heson             #+#    #+#             */
-/*   Updated: 2022/12/02 16:32:57 by heson            ###   ########.fr       */
+/*   Updated: 2022/12/12 20:54:26 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 
 #include <stdlib.h>
 
-char	*apply_base_flag(char *str, t_va_argu argu, size_t	*len)
+char	*apply_hash_flag(char *str, t_va_argu argu, size_t	*len)
 {
 	char	*res;
 
 	res = NULL;
-	if (!(argu.type == UPPER_X || argu.type == LOWER_X))
+	if (!(argu.type == UPPER_X || argu.type == LOWER_X || argu.type == POINTER))
 		return (ERROR_P);
 	*len += 2;
 	res = ft_strjoin("0x", str, *len);
@@ -28,7 +28,7 @@ char	*apply_base_flag(char *str, t_va_argu argu, size_t	*len)
 	return (res);
 }
 
-char	*apply_sign_flag(char *str, t_va_argu argu, size_t *len)
+char	*apply_plus_flag(char *str, t_va_argu argu, size_t *len)
 {
 	char	*res;
 

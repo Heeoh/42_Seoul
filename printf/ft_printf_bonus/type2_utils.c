@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 14:43:28 by heson             #+#    #+#             */
-/*   Updated: 2022/12/11 18:54:04 by heson            ###   ########.fr       */
+/*   Updated: 2022/12/12 21:05:00 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ int	get_data_c(t_data *data, t_va_argu argu, va_list ap)
 	tmp[0] = (char)va_arg(ap, int);
 	tmp[1] = '\0';
 	data->len = 1;
-	data->data = ft_strndup(tmp, &(data->len));
-	if (!data->data && !data->len)
+	data->str = ft_strndup(tmp, &(data->len));
+	if (!data->str)
 		return (ERROR_I);
 	return (data->len);
 }
@@ -39,12 +39,12 @@ int	get_data_s(t_data *data, t_va_argu argu, va_list ap)
 		return (ERROR_I);
 	tmp = va_arg(ap, char *);
 	if (!tmp)
-		data->data = ft_strndup("(null)", &(data->len));
+		data->str = ft_strndup("(null)", &(data->len));
 	else
-		data->data = ft_strndup(tmp, &(data->len));
+		data->str = ft_strndup(tmp, &(data->len));
 	if (argu.flags[PRECISION] != -1)
-			data->data = apply_precision_flag(data->data, argu, data);
-	if (!data->data)
+			data->str = apply_precision_flag(data->str, argu, data);
+	if (!data->str)
 		return (ERROR_I);
 	return (data->len);
 }
@@ -52,26 +52,24 @@ int	get_data_s(t_data *data, t_va_argu argu, va_list ap)
 int	get_data_p(t_data *data, t_va_argu argu, va_list ap)
 {
 	unsigned long long	tmp_n;
-	char				*tmp_str[3];
+	char				*tmp_str[2];
 
 	if (argu.type != POINTER)
 		return (ERROR_I);
 	tmp_n = va_arg(ap, unsigned long long);
 	tmp_str[0] = ft_ulltoa(tmp_n);
 	tmp_str[1] = ft_convert_base(tmp_str[0], "0123456789", "0123456789abcdef");
-	tmp_str[2] = ft_strndup(tmp_str[1], &(data->len));
-	data->len += 2;
-	data->data = ft_strjoin("0x", tmp_str[2], data->len);
+	data->str = ft_strndup(tmp_str[1], &(data->len));
+	data->str = apply_hash_flag(data->str, argu, &(data->len));
 	free(tmp_str[0]);
 	free(tmp_str[1]);
-	free(tmp_str[2]);
-	if (!data->data)
+	if (!data->str)
 		return (ERROR_I);
 	return (data->len);
 }
 
 int	get_data_per(t_data *data)
 {
-	data->data = ft_strndup("%", &(data->len));
+	data->str = ft_strndup("%", &(data->len));
 	return (data->len);
 }

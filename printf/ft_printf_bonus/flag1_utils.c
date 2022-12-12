@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 21:06:05 by heson             #+#    #+#             */
-/*   Updated: 2022/12/11 21:52:33 by heson            ###   ########.fr       */
+/*   Updated: 2022/12/12 21:31:20 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,23 +33,23 @@ char	*apply_zero_flag(t_data	*printed, t_va_argu argu, t_data *data)
 	char	*p;
 
 	cnt = printed->len;
-	p = printed->data;
+	p = printed->str;
 	while (cnt--)
 		*p++ = '0';
-	if (argu.flags[SPACE] || argu.flags[SIGN] || data->data[0] == '-')
+	if (argu.flags[SPACE] || argu.flags[PLUS] || data->str[0] == '-')
 	{
-		*(printed->data) = *(data->data);
-		(data->data)++;
+		printed->str[0] = data->str[0];
+		(data->str)++;
 		data->len--;
 	}
-	else if (argu.flags[BASE] && data->len >= 3)
+	else if (argu.flags[HASH] && data->len >= 3)
 	{
-		p = printed->data;
-		*p++ = *(data->data)++;
-		*p++ = *(data->data)++;
+		p = printed->str;
+		*p++ = *(data->str)++;
+		*p++ = *(data->str)++;
 		data->len -= 2;
 	}
-	return (printed->data + (printed->len - data->len));
+	return (printed->str + (printed->len - data->len));
 }
 
 char	*precision_str(size_t len, t_data *data)
@@ -59,19 +59,17 @@ char	*precision_str(size_t len, t_data *data)
 	int		cnt;
 
 	if (len >= data->len)
-		return (data->data);
+		return (data->str);
 	new_data = (char *)malloc(len + 1);
 	if (!new_data)
 		return (ERROR_P);
 	cnt = 0;
-	data_p = data->data;
-	while (cnt < (int)(len - data->len))
-		new_data[cnt++] = ' ';
+	data_p = data->str;
 	while (cnt < (int)len)
 		new_data[cnt++] = *data_p++;
 	new_data[cnt] = '\0';
 	data->len = len;
-	free (data->data);
+	free (data->str);
 	return (new_data);
 }
 
@@ -81,24 +79,24 @@ char	*precision_diux(t_va_argu argu, t_data *data)
 	char	*new_p;
 
 	org.len = data->len;
-	org.data = data->data;
-	if (org.data[0] == '-')
+	org.str = data->str;
+	if (org.str[0] == '-')
 		argu.flags[PRECISION]++;
-	if (org.data[0] != '0' && (int)org.len >= argu.flags[PRECISION])
-		return (org.data);
+	if (org.str[0] != '0' && (int)org.len >= argu.flags[PRECISION])
+		return (org.str);
 	data->len = argu.flags[PRECISION];
-	data->data = (char *)malloc(data->len + 1);
-	if (!data->data)
+	data->str = (char *)malloc(data->len + 1);
+	if (!data->str)
 		return (ERROR_P);
-	new_p = data->data + data->len;
-	while (new_p >= data->data && (int)org.len >= 0 && org.data[org.len] != '-')
-		*new_p-- = org.data[org.len--];
-	while (new_p >= data->data)
+	new_p = data->str + data->len;
+	while (new_p >= data->str && (int)org.len >= 0 && org.str[org.len] != '-')
+		*new_p-- = org.str[org.len--];
+	while (new_p >= data->str)
 		*new_p-- = '0';
-	if (org.data[0] == '-')
-		data->data[0] = '-';
-	free(org.data);
-	return (data->data);
+	if (org.str[0] == '-')
+		data->str[0] = '-';
+	free(org.str);
+	return (data->str);
 }
 
 char	*apply_precision_flag(char *str, t_va_argu argu, t_data *data)

@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 15:52:30 by heson             #+#    #+#             */
-/*   Updated: 2022/12/12 17:31:48 by heson            ###   ########.fr       */
+/*   Updated: 2022/12/12 21:17:06 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,31 +55,48 @@ int	get_data(t_data *data, t_va_argu argu, va_list ap)
 	return (ret);
 }
 
+int	get_printed_data(t_data *printed, t_va_argu argu_info, t_data argu_data)
+{
+	char	*p;
+	char	*data_p;
+	int		cnt;
+
+	if (argu_info.field_width > (int)argu_data.len)
+		printed->len = argu_info.field_width;
+	else
+		printed->len = argu_data.len;
+	printed->str = (char *)malloc(printed->len + 1);
+	if (!printed->str)
+		return (ERROR_I);
+	p = printed->str;
+	cnt = printed->len;
+	while (cnt-- > (int)argu_data.len)
+		*p++ = ' ';
+	data_p = argu_data.str;
+	while (cnt-- >= 0)
+		*p++ = *data_p++;
+	*p = '\0';
+	return (printed->len);
+}
+
 int	print_by_format(t_va_argu argu_info, va_list ap)
 {
 	t_data			argu_data;
-	unsigned int	printed_len;
+	t_data			printed_data;
 	unsigned int	cnt;
-	char			*data_p;
+	char			*p;
 
 	if (get_data(&argu_data, argu_info, ap) == ERROR_I)
 		return (ERROR_I);
-	if (argu_info.field_width > (int)argu_data.len)
-		printed_len = argu_info.field_width;
-	else
-		printed_len = argu_data.len;
+	if (get_printed_data(&printed_data, argu_info, argu_data) == ERROR_I)
+		return (ERROR_I);
+	free(argu_data.str);
+	p = printed_data.str;
 	cnt = 0;
-	data_p = argu_data.data;
-	while (cnt < printed_len)
-	{
-		if (cnt < printed_len - argu_data.len)
-			write(1, " ", 1);
-		else
-			write(1, data_p++, 1);
-		cnt++;
-	}
-	free(argu_data.data);
-	return (printed_len);
+	while (cnt++ < printed_data.len)
+		write(1, p++, 1);
+	free(printed_data.str);
+	return (printed_data.len);
 }
 
 int	ft_printf(const char *str_p, ...)
@@ -97,7 +114,7 @@ int	ft_printf(const char *str_p, ...)
 			str_p = check_format(++str_p, &argu);
 			if (!str_p)
 				return (ERROR_I);
-			else if (argu.type != TYPE_INIT && argu.type != TYPE_N)
+			else if (argu.type != TYPE_INIT)
 			{
 				printed_len += print_by_format(argu, ap);
 				str_p++;
@@ -115,9 +132,8 @@ int	ft_printf(const char *str_p, ...)
 
 // int main() {
 
-// 	// int mine = ft_printf("\001\002\007\v\010\f\r\n");
-// 	int ans = printf("\001\002\007\v\010\f\r\n");
-// 	printf("ans: %d", ans);
+// 	int mine = ft_printf("%x\n", 15);
+// 	// int ans = printf("%%\n");
 // 	// printf("a: %d, m: %d\n", mine, ans);
 
 // 	while(1);

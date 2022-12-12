@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 20:39:33 by heson             #+#    #+#             */
-/*   Updated: 2022/12/12 17:32:15 by heson            ###   ########.fr       */
+/*   Updated: 2022/12/12 21:17:00 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,24 +75,24 @@ int	get_printed_data(t_data *printed, t_va_argu argu_info, t_data argu_data)
 	printed->len = argu_data.len;
 	if (argu_info.field_width > (int)argu_data.len)
 		printed->len = argu_info.field_width;
-	printed->data = (char *)malloc(printed->len + 1);
-	if (!printed->data)
+	printed->str = (char *)malloc(printed->len + 1);
+	if (!printed->str)
 		return (ERROR_I);
-	if (argu_info.flags[NEGATIVE_FW])
-		p = apply_minus_flag(printed->data, &(printed->len));
+	if (argu_info.flags[MINUS])
+		p = apply_minus_flag(printed->str, &(printed->len));
 	else if (argu_info.flags[ZERO])
 		p = apply_zero_flag(printed, argu_info, &argu_data);
 	else
 	{
-		p = printed->data;
+		p = printed->str;
 		cnt = printed->len;
 		while (cnt-- > (int)argu_data.len)
 			*p++ = ' ';
 	}	
 	cnt = 0;
 	while (cnt < (int)argu_data.len)
-		*p++ = argu_data.data[cnt++];
-	*(printed->data + printed->len) = '\0';
+		*p++ = argu_data.str[cnt++];
+	*(printed->str + printed->len) = '\0';
 	return (printed->len);
 }
 
@@ -107,12 +107,12 @@ int	print_by_format(t_va_argu argu_info, va_list ap)
 		return (ERROR_I);
 	if (get_printed_data(&printed_data, argu_info, argu_data) == ERROR_I)
 		return (ERROR_I);
-	free(argu_data.data);
-	p = printed_data.data;
+	free(argu_data.str);
+	p = printed_data.str;
 	cnt = 0;
 	while (cnt++ < printed_data.len)
 		write(1, p++, 1);
-	free(printed_data.data);
+	free(printed_data.str);
 	return (printed_data.len);
 }
 
@@ -148,8 +148,8 @@ int	ft_printf(const char *str_p, ...)
 // #include <stdio.h>
 
 // int main() {
-// 	int mine = ft_printf("%12+d\n", 123);
-// 	int ans = printf("%12+d\n", 123);
+// 	int mine = ft_printf("%10.5%\n");
+// 	int ans = printf("%10.5%\n");
 // 	printf("%d, %d\n", mine, ans);
 
 // 	// while(1);

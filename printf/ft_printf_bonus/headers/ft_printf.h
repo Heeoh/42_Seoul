@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 11:14:15 by heson             #+#    #+#             */
-/*   Updated: 2022/12/12 16:42:39 by heson            ###   ########.fr       */
+/*   Updated: 2022/12/12 18:57:17 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,11 @@ typedef enum e_types {
 }	t_types;
 
 typedef enum e_flags {
-	NEGATIVE_FW = 0,
+	MINUS = 0,
 	ZERO,
 	PRECISION,
-	BASE,
-	SIGN,
+	HASH,
+	PLUS,
 	SPACE,
 	FLAG_N
 }	t_flags;
@@ -47,11 +47,11 @@ typedef enum e_flags {
 typedef struct s_va_argu {
 	t_types	type;
 	int		field_width;
-	int		flags[6];
+	int		flags[FLAG_N];
 }	t_va_argu;
 
 typedef struct s_data {
-	char	*data;
+	char	*str;
 	size_t	len;
 }	t_data;
 

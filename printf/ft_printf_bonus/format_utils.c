@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 11:41:08 by heson             #+#    #+#             */
-/*   Updated: 2022/12/12 17:27:55 by heson            ###   ########.fr       */
+/*   Updated: 2022/12/12 19:02:07 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,16 +53,16 @@ const char	*check_right_format(t_va_argu *argu, const char *right_sign)
 	t = argu->type;
 	if (t == TYPE_N)
 		argu->type = TYPE_INIT;
-	else if (argu->flags[BASE]
+	else if (argu->flags[HASH]
 		&& !(t == LOWER_X || t == UPPER_X))
-		argu->flags[BASE] = FALSE;
-	else if ((argu->flags[SIGN] || argu->flags[SPACE])
+		argu->flags[HASH] = FALSE;
+	else if ((argu->flags[PLUS] || argu->flags[SPACE])
 		&& !(t == DECIMAL || t == INT))
 	{
-		argu->flags[SIGN] = FALSE;
+		argu->flags[PLUS] = FALSE;
 		argu->flags[SPACE] = FALSE;
 	}
-	else if ((argu->flags[NEGATIVE_FW] || argu->flags[PRECISION] != -1)
+	else if ((argu->flags[MINUS] || argu->flags[PRECISION] != -1)
 		&& argu->flags[ZERO])
 		argu->flags[ZERO] = FALSE;
 	else if (argu->flags[ZERO]
