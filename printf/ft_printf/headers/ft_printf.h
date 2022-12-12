@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 11:14:15 by heson             #+#    #+#             */
-/*   Updated: 2022/11/29 13:08:49 by heson            ###   ########.fr       */
+/*   Updated: 2022/12/12 16:30:31 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef enum e_types {
 	U_INT,
 	LOWER_X,
 	UPPER_X,
+	PERCENT,
 	TYPE_N,
 	TYPE_INIT = -1
 }	t_types;

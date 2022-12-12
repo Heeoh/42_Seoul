@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 18:01:25 by heson             #+#    #+#             */
-/*   Updated: 2022/12/11 18:30:38 by heson            ###   ########.fr       */
+/*   Updated: 2022/12/12 16:02:36 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,6 @@ int	get_data_di(t_data *data, t_va_argu argu, va_list ap);
 int	get_data_u(t_data *data, t_va_argu argu, va_list ap);
 int	get_data_x(t_data *data, t_va_argu argu, va_list ap);
 int	get_data_p(t_data *data, t_va_argu argu, va_list ap);
-int get_data_per(t_data *data);
+int	get_data_per(t_data *data);
 
 #endif

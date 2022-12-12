@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 20:39:33 by heson             #+#    #+#             */
-/*   Updated: 2022/12/11 20:02:26 by heson            ###   ########.fr       */
+/*   Updated: 2022/12/12 17:18:44 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@
 #include <stdlib.h>
 #include <stdarg.h>
 
-char	g_types[9] = {'c', 's', 'p', 'd', 'i', 'u', 'x', 'X', '%'};
-char	g_flags[6] = {'-', '0', '.', '#', '+', ' '};
+char	g_types[TYPE_N] = {'c', 's', 'p', 'd', 'i', 'u', 'x', 'X', '%'};
+char	g_flags[FLAG_N] = {'-', '0', '.', '#', '+', ' '};
 int		(*g_to_string_by_type[TYPE_N])(t_data *, t_va_argu, va_list)
 	= {get_data_c, get_data_s, get_data_p,
 	get_data_di, get_data_di, get_data_u,
@@ -30,40 +30,25 @@ int		(*g_to_string_by_type[TYPE_N])(t_data *, t_va_argu, va_list)
 const char	*check_format(const char *p, t_va_argu *argu)
 {
 	int	flag_i;
-	int	tmp;
-	int	is_precision_on;
 
 	init_format(argu);
-	is_precision_on = FALSE;
 	while (p && *p)
 	{
-		while ('1' <= *p && *p <= '9')
+		flag_i = checker(p, g_flags, FLAG_N);
+		if (flag_i == FLAG_N)
+			break ;
+		argu->flags[flag_i] = TRUE;
+		if (flag_i == PRECISION)
 		{
-			tmp = *p++ - '0';
-			while ('0' <= *p && *p <= '9')
-				tmp = (tmp * 10) + (*p++ - '0');
-			if (is_precision_on)
-				argu->flags[PRECISION] = tmp;
-			else
-				argu->field_width = tmp;
+			p = atoi_iter(++p, &argu->flags[PRECISION]);
 			continue ;
 		}
-		flag_i = checker(p, g_flags, 6);
-		if (flag_i != ERROR_I && flag_i != 6)
-		{
-			argu->flags[flag_i] = TRUE;
-			if (flag_i == PRECISION)
-			{
-				is_precision_on = TRUE;
-				argu->flags[flag_i] = 0;
-				if (*(p + 1) == '0')
-					p++;
-			}
-			p++;
-			continue ;
-		}
-		break ;
+		p++;
 	}
+	if (argu->flags[PRECISION] == -1)
+		p = atoi_iter(p, &argu->field_width);
+	if (*p == g_flags[PRECISION])
+		p = atoi_iter(++p, &argu->flags[PRECISION]);
 	argu->type = checker(p, g_types, TYPE_N);
 	return (check_right_format(argu, p));
 }
@@ -83,37 +68,28 @@ int	get_data(t_data *data, t_va_argu argu, va_list ap)
 int	get_printed_data(t_data *printed, t_va_argu argu_info, t_data argu_data)
 {
 	char	*p;
-	char	*data_p;
 	int		cnt;
 
+	printed->len = argu_data.len;
 	if (argu_info.field_width > (int)argu_data.len)
 		printed->len = argu_info.field_width;
-	else
-		printed->len = argu_data.len;
 	printed->data = (char *)malloc(printed->len + 1);
 	if (!printed->data)
 		return (ERROR_I);
 	if (argu_info.flags[NEGATIVE_FW])
-	{
-		apply_minus_flag(printed->data, &(printed->len));
-		p = printed->data;
-	}
+		p = apply_minus_flag(printed->data, &(printed->len));
 	else if (argu_info.flags[ZERO])
-	{
-		apply_zero_flag(printed, argu_info, &argu_data);
-		p = printed->data + (printed->len - argu_data.len);
-	}
+		p = apply_zero_flag(printed, argu_info, &argu_data);
 	else
 	{
 		p = printed->data;
 		cnt = printed->len;
 		while (cnt-- > (int)argu_data.len)
 			*p++ = ' ';
-		p = printed->data + (printed->len - argu_data.len);
-	}
-	data_p = argu_data.data;
-	while (argu_data.len--)
-		*p++ = *data_p++;
+	}	
+	cnt = 0;
+	while (cnt < (int)argu_data.len)
+		*p++ = argu_data.data[cnt++];
 	*(printed->data + printed->len) = '\0';
 	return (printed->len);
 }
@@ -166,13 +142,13 @@ int	ft_printf(const char *str_p, ...)
 	return (printed_len);
 }
 
-// #include <limits.h>
-// #include <stdio.h>
+#include <limits.h>
+#include <stdio.h>
 
-// int main() {
-// 	int mine = ft_printf("%.5d\n", -1);
-// 	int ans = printf("%.5d\n", -1);
-// 	printf("%d, %d\n", mine, ans);
+int main() {
+	int mine = ft_printf("%12+d\n", 123);
+	int ans = printf("%#12+d\n", 123);
+	printf("%d, %d\n", mine, ans);
 
-// 	// while(1);
-// }
+	// while(1);
+}

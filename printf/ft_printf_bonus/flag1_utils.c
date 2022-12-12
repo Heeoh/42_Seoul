@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 21:06:05 by heson             #+#    #+#             */
-/*   Updated: 2022/12/11 20:10:46 by heson            ###   ########.fr       */
+/*   Updated: 2022/12/11 21:52:33 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ char	*apply_zero_flag(t_data	*printed, t_va_argu argu, t_data *data)
 		*p++ = *(data->data)++;
 		data->len -= 2;
 	}
-	return (printed->data);
+	return (printed->data + (printed->len - data->len));
 }
 
 char	*precision_str(size_t len, t_data *data)
@@ -78,30 +78,25 @@ char	*precision_str(size_t len, t_data *data)
 char	*precision_diux(t_va_argu argu, t_data *data)
 {
 	t_data	org;
-	int		cnt;
-	char	*org_data_p;
+	char	*new_p;
 
 	org.len = data->len;
 	org.data = data->data;
 	if (org.data[0] == '-')
-		org.len--;
-	if (org.data[0] != '0' && (int)(org.len) >= argu.flags[PRECISION])
+		argu.flags[PRECISION]++;
+	if (org.data[0] != '0' && (int)org.len >= argu.flags[PRECISION])
 		return (org.data);
 	data->len = argu.flags[PRECISION];
-	if (org.data[0] == '-')
-		data->len++;
 	data->data = (char *)malloc(data->len + 1);
 	if (!data->data)
 		return (ERROR_P);
-	cnt = 0;
-	org_data_p = org.data;
+	new_p = data->data + data->len;
+	while (new_p >= data->data && (int)org.len >= 0 && org.data[org.len] != '-')
+		*new_p-- = org.data[org.len--];
+	while (new_p >= data->data)
+		*new_p-- = '0';
 	if (org.data[0] == '-')
-		data->data[cnt++] = *org_data_p++;
-	while (cnt < (int)(data->len - org.len))
-		data->data[cnt++] = '0';
-	while (cnt < (int)data->len)
-		data->data[cnt++] = *org_data_p++;
-	data->data[cnt] = '\0';
+		data->data[0] = '-';
 	free(org.data);
 	return (data->data);
 }

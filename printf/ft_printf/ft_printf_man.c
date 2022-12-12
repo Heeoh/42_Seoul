@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*   ft_printf_man.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 15:52:30 by heson             #+#    #+#             */
-/*   Updated: 2022/11/30 15:02:51 by heson            ###   ########.fr       */
+/*   Updated: 2022/12/12 16:35:20 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 
-char	g_types[8] = {'c', 's', 'p', 'd', 'i', 'u', 'x', 'X'};
+char	g_types[8] = {'c', 's', 'p', 'd', 'i', 'u', 'x', 'X', '%'};
 int		(*g_to_string_by_type[TYPE_N])(t_data *, t_va_argu, va_list)
 	= {get_data_c, get_data_s, get_data_p,
 	get_data_di, get_data_di, get_data_u,
@@ -30,8 +30,6 @@ const char	*check_format(const char *p, t_va_argu *argu)
 	init_format(argu);
 	if (p && *p)
 	{
-		if (*p == '%')
-			return (p);
 		if ('1' <= *p && *p <= '9')
 		{
 			argu->field_width = *p++ - '0';
@@ -47,54 +45,41 @@ const char	*check_format(const char *p, t_va_argu *argu)
 
 int	get_data(t_data *data, t_va_argu argu, va_list ap)
 {
+	int	ret;
+
 	data->len = 0;
-	if (g_to_string_by_type[argu.type](data, argu, ap) == ERROR_I)
-		return (ERROR_I);
-	return (data->len);
-}
-
-int	get_printed_data(t_data *printed, t_va_argu argu_info, t_data argu_data)
-{
-	char	*p;
-	char	*data_p;
-	int		cnt;
-
-	if (argu_info.field_width > (int)argu_data.len)
-		printed->len = argu_info.field_width;
+	if (argu.type == PERCENT)
+		ret = get_data_per(data);
 	else
-		printed->len = argu_data.len;
-	printed->data = (char *)malloc(printed->len + 1);
-	if (!printed->data)
-		return (ERROR_I);
-	p = printed->data;
-	cnt = printed->len;
-	while (cnt-- > (int)argu_data.len)
-		*p++ = ' ';
-	data_p = argu_data.data;
-	while (cnt-- >= 0)
-		*p++ = *data_p++;
-	*p = '\0';
-	return (printed->len);
+		ret = g_to_string_by_type[argu.type](data, argu, ap);
+	return (ret);
 }
 
 int	print_by_format(t_va_argu argu_info, va_list ap)
 {
 	t_data			argu_data;
-	t_data			printed_data;
+	unsigned int	printed_len;
 	unsigned int	cnt;
-	char			*p;
+	char			*data_p;
 
 	if (get_data(&argu_data, argu_info, ap) == ERROR_I)
 		return (ERROR_I);
-	if (get_printed_data(&printed_data, argu_info, argu_data) == ERROR_I)
-		return (ERROR_I);
-	free(argu_data.data);
-	p = printed_data.data;
+	if (argu_info.field_width > (int)argu_data.len)
+		printed_len = argu_info.field_width;
+	else
+		printed_len = argu_data.len;
 	cnt = 0;
-	while (cnt++ < printed_data.len)
-		write(1, p++, 1);
-	free(printed_data.data);
-	return (printed_data.len);
+	data_p = argu_data.data;
+	while (cnt < printed_len)
+	{
+		if (cnt < printed_len - argu_data.len)
+			write(1, " ", 1);
+		else
+			write(1, data_p++, 1);
+		cnt++;
+	}
+	free(argu_data.data);
+	return (printed_len);
 }
 
 int	ft_printf(const char *str_p, ...)
@@ -112,7 +97,7 @@ int	ft_printf(const char *str_p, ...)
 			str_p = check_format(++str_p, &argu);
 			if (!str_p)
 				return (ERROR_I);
-			else if (argu.type != TYPE_INIT)
+			else if (argu.type != TYPE_INIT && argu.type != TYPE_N)
 			{
 				printed_len += print_by_format(argu, ap);
 				str_p++;
@@ -130,8 +115,9 @@ int	ft_printf(const char *str_p, ...)
 
 // int main() {
 
-// 	int mine = ft_printf("%x\n", 15);
-// 	// int ans = printf("%%\n");
+// 	// int mine = ft_printf("\001\002\007\v\010\f\r\n");
+// 	int ans = printf("\001\002\007\v\010\f\r\n");
+// 	printf("ans: %d", ans);
 // 	// printf("a: %d, m: %d\n", mine, ans);
 
 // 	while(1);

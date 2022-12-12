@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 11:41:08 by heson             #+#    #+#             */
-/*   Updated: 2022/12/11 18:52:09 by heson            ###   ########.fr       */
+/*   Updated: 2022/12/12 17:02:06 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,20 @@ int	checker(const char *p, char *target, int n)
 	int	i;
 
 	i = -1;
-	while (++i < n)
+	while (p && *p && ++i < n)
 	{
 		if (target[i] == *p)
 			break ;
 	}
 	return (i);
+}
+
+const char	*atoi_iter(const char *p, int *ret)
+{
+	*ret = 0;
+	while ('0' <= *p && *p <= '9')
+		*ret = (*ret * 10) + (*p++ - '0');
+	return (p);
 }
 
 const char	*check_right_format(t_va_argu *argu, const char *right_sign)
