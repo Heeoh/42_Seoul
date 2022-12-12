@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 20:39:33 by heson             #+#    #+#             */
-/*   Updated: 2022/12/12 17:18:44 by heson            ###   ########.fr       */
+/*   Updated: 2022/12/12 17:32:15 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,21 +35,23 @@ const char	*check_format(const char *p, t_va_argu *argu)
 	while (p && *p)
 	{
 		flag_i = checker(p, g_flags, FLAG_N);
-		if (flag_i == FLAG_N)
-			break ;
-		argu->flags[flag_i] = TRUE;
-		if (flag_i == PRECISION)
+		if (flag_i != FLAG_N)
 		{
-			p = atoi_iter(++p, &argu->flags[PRECISION]);
+			argu->flags[flag_i] = TRUE;
+			if (flag_i == PRECISION)
+			{
+				p = atoi_iter(++p, &argu->flags[PRECISION]);
+				continue ;
+			}
+			p++;
 			continue ;
 		}
-		p++;
+		if (!argu->field_width)
+			p = atoi_iter(p, &argu->field_width);
+		argu->type = checker(p, g_types, TYPE_N);
+		if (argu->type != TYPE_N)
+			return (check_right_format(argu, p));
 	}
-	if (argu->flags[PRECISION] == -1)
-		p = atoi_iter(p, &argu->field_width);
-	if (*p == g_flags[PRECISION])
-		p = atoi_iter(++p, &argu->flags[PRECISION]);
-	argu->type = checker(p, g_types, TYPE_N);
 	return (check_right_format(argu, p));
 }
 
@@ -142,13 +144,13 @@ int	ft_printf(const char *str_p, ...)
 	return (printed_len);
 }
 
-#include <limits.h>
-#include <stdio.h>
+// #include <limits.h>
+// #include <stdio.h>
 
-int main() {
-	int mine = ft_printf("%12+d\n", 123);
-	int ans = printf("%#12+d\n", 123);
-	printf("%d, %d\n", mine, ans);
+// int main() {
+// 	int mine = ft_printf("%12+d\n", 123);
+// 	int ans = printf("%12+d\n", 123);
+// 	printf("%d, %d\n", mine, ans);
 
-	// while(1);
-}
+// 	// while(1);
+// }
