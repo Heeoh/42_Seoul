@@ -10,8 +10,6 @@ OBJS = $(SRCS:.c=.o)
 OBJS_MAN = $(SRCS_MAN:.c=.o)
 OBJS_BONUS = $(SRCS_BONUS:.c=.o)
 
-OBJECTS = $(OBJS) $(OBJS_MAN) 
-
 ifdef ADD_BONUS
 		OBJECTS = $(OBJS) $(OBJS_BONUS)
 else

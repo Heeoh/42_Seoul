@@ -6,12 +6,11 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 20:39:33 by heson             #+#    #+#             */
-/*   Updated: 2022/12/12 21:17:00 by heson            ###   ########.fr       */
+/*   Updated: 2022/12/14 16:50:10 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/ft_printf.h"
-#include "headers/ft_printf_utils.h"
 #include "headers/ft_printf_flag_utils.h"
 #include "headers/ft_printf_type_utils.h"
 #include "headers/ft_printf_format_utils.h"
@@ -22,66 +21,66 @@
 
 char	g_types[TYPE_N] = {'c', 's', 'p', 'd', 'i', 'u', 'x', 'X', '%'};
 char	g_flags[FLAG_N] = {'-', '0', '.', '#', '+', ' '};
-int		(*g_to_string_by_type[TYPE_N])(t_data *, t_va_argu, va_list)
+int		(*g_to_string_by_type[TYPE_N])(t_data *, t_format, va_list)
 	= {get_data_c, get_data_s, get_data_p,
 	get_data_di, get_data_di, get_data_u,
 	get_data_x, get_data_x};
 
-const char	*check_format(const char *p, t_va_argu *argu)
+const char	*check_format(const char *p, t_format *format)
 {
 	int	flag_i;
 
-	init_format(argu);
+	init_format(format);
 	while (p && *p)
 	{
 		flag_i = checker(p, g_flags, FLAG_N);
 		if (flag_i != FLAG_N)
 		{
-			argu->flags[flag_i] = TRUE;
+			format->flags[flag_i] = TRUE;
 			if (flag_i == PRECISION)
 			{
-				p = atoi_iter(++p, &argu->flags[PRECISION]);
+				p = atoi_iter(++p, &format->flags[PRECISION]);
 				continue ;
 			}
 			p++;
 			continue ;
 		}
-		if (!argu->field_width)
-			p = atoi_iter(p, &argu->field_width);
-		argu->type = checker(p, g_types, TYPE_N);
-		if (argu->type != TYPE_N)
-			return (check_right_format(argu, p));
+		if (!format->field_width)
+			p = atoi_iter(p, &format->field_width);
+		format->type = checker(p, g_types, TYPE_N);
+		if (format->type != TYPE_N)
+			return (check_right_format(format, p));
 	}
-	return (check_right_format(argu, p));
+	return (ERROR_P);
 }
 
-int	get_data(t_data *data, t_va_argu argu, va_list ap)
+int	get_data(t_data *data, t_format format, va_list ap)
 {
 	int	ret;
 
 	data->len = 0;
-	if (argu.type == PERCENT)
+	if (format.type == PERCENT)
 		ret = get_data_per(data);
 	else
-		ret = g_to_string_by_type[argu.type](data, argu, ap);
+		ret = g_to_string_by_type[format.type](data, format, ap);
 	return (ret);
 }
 
-int	get_printed_data(t_data *printed, t_va_argu argu_info, t_data argu_data)
+int	get_printed_data(t_data *printed, t_format format_info, t_data argu_data)
 {
 	char	*p;
 	int		cnt;
 
 	printed->len = argu_data.len;
-	if (argu_info.field_width > (int)argu_data.len)
-		printed->len = argu_info.field_width;
+	if (format_info.field_width > (int)argu_data.len)
+		printed->len = format_info.field_width;
 	printed->str = (char *)malloc(printed->len + 1);
 	if (!printed->str)
 		return (ERROR_I);
-	if (argu_info.flags[MINUS])
+	if (format_info.flags[MINUS])
 		p = apply_minus_flag(printed->str, &(printed->len));
-	else if (argu_info.flags[ZERO])
-		p = apply_zero_flag(printed, argu_info, &argu_data);
+	else if (format_info.flags[ZERO])
+		p = apply_zero_flag(printed, format_info, &argu_data);
 	else
 	{
 		p = printed->str;
@@ -96,16 +95,16 @@ int	get_printed_data(t_data *printed, t_va_argu argu_info, t_data argu_data)
 	return (printed->len);
 }
 
-int	print_by_format(t_va_argu argu_info, va_list ap)
+int	print_by_format(t_format format_info, va_list ap)
 {
 	t_data			argu_data;
 	t_data			printed_data;
 	unsigned int	cnt;
 	char			*p;
 
-	if (get_data(&argu_data, argu_info, ap) == ERROR_I)
+	if (get_data(&argu_data, format_info, ap) == ERROR_I)
 		return (ERROR_I);
-	if (get_printed_data(&printed_data, argu_info, argu_data) == ERROR_I)
+	if (get_printed_data(&printed_data, format_info, argu_data) == ERROR_I)
 		return (ERROR_I);
 	free(argu_data.str);
 	p = printed_data.str;
@@ -120,7 +119,7 @@ int	ft_printf(const char *str_p, ...)
 {
 	va_list		ap;
 	int			printed_len;
-	t_va_argu	argu;
+	t_format	format;
 
 	printed_len = 0;
 	va_start(ap, str_p);
@@ -128,12 +127,12 @@ int	ft_printf(const char *str_p, ...)
 	{
 		if (*str_p == '%')
 		{
-			str_p = check_format(++str_p, &argu);
+			str_p = check_format(++str_p, &format);
 			if (!str_p)
 				return (ERROR_I);
-			else if (argu.type != TYPE_INIT)
+			else if (format.type != TYPE_INIT)
 			{
-				printed_len += print_by_format(argu, ap);
+				printed_len += print_by_format(format, ap);
 				str_p++;
 				continue ;
 			}

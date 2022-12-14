@@ -6,14 +6,14 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 11:41:08 by heson             #+#    #+#             */
-/*   Updated: 2022/12/12 19:02:07 by heson            ###   ########.fr       */
+/*   Updated: 2022/12/14 16:02:03 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/ft_printf.h"
 #include <unistd.h>
 
-void	init_format(t_va_argu *argu)
+void	init_format(t_format *argu)
 {
 	int	i;
 
@@ -46,7 +46,7 @@ const char	*atoi_iter(const char *p, int *ret)
 	return (p);
 }
 
-const char	*check_right_format(t_va_argu *argu, const char *right_sign)
+const char	*check_right_format(t_format *argu, const char *right_sign)
 {
 	t_types	t;
 

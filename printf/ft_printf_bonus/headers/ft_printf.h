@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 11:14:15 by heson             #+#    #+#             */
-/*   Updated: 2022/12/12 18:57:17 by heson            ###   ########.fr       */
+/*   Updated: 2022/12/14 16:02:07 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,11 @@ typedef enum e_flags {
 	FLAG_N
 }	t_flags;
 
-typedef struct s_va_argu {
+typedef struct s_format {
 	t_types	type;
 	int		field_width;
 	int		flags[FLAG_N];
-}	t_va_argu;
+}	t_format;
 
 typedef struct s_data {
 	char	*str;

@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 14:43:28 by heson             #+#    #+#             */
-/*   Updated: 2022/12/12 21:05:00 by heson            ###   ########.fr       */
+/*   Updated: 2022/12/14 16:35:11 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@
 
 #include <stdlib.h> // free
 
-int	get_data_c(t_data *data, t_va_argu argu, va_list ap)
+int	get_data_c(t_data *data, t_format format, va_list ap)
 {
 	char	tmp[2];
 
-	if (argu.type != CHAR)
+	if (format.type != CHAR)
 		return (ERROR_I);
 	tmp[0] = (char)va_arg(ap, int);
 	tmp[1] = '\0';
@@ -31,36 +31,36 @@ int	get_data_c(t_data *data, t_va_argu argu, va_list ap)
 	return (data->len);
 }
 
-int	get_data_s(t_data *data, t_va_argu argu, va_list ap)
+int	get_data_s(t_data *data, t_format format, va_list ap)
 {
 	char	*tmp;
 
-	if (argu.type != STR)
+	if (format.type != STR)
 		return (ERROR_I);
 	tmp = va_arg(ap, char *);
 	if (!tmp)
 		data->str = ft_strndup("(null)", &(data->len));
 	else
 		data->str = ft_strndup(tmp, &(data->len));
-	if (argu.flags[PRECISION] != -1)
-			data->str = apply_precision_flag(data->str, argu, data);
+	if (format.flags[PRECISION] != -1)
+			data->str = apply_precision_flag(data->str, format, data);
 	if (!data->str)
 		return (ERROR_I);
 	return (data->len);
 }
 
-int	get_data_p(t_data *data, t_va_argu argu, va_list ap)
+int	get_data_p(t_data *data, t_format format, va_list ap)
 {
 	unsigned long long	tmp_n;
 	char				*tmp_str[2];
 
-	if (argu.type != POINTER)
+	if (format.type != POINTER)
 		return (ERROR_I);
 	tmp_n = va_arg(ap, unsigned long long);
 	tmp_str[0] = ft_ulltoa(tmp_n);
 	tmp_str[1] = ft_convert_base(tmp_str[0], "0123456789", "0123456789abcdef");
 	data->str = ft_strndup(tmp_str[1], &(data->len));
-	data->str = apply_hash_flag(data->str, argu, &(data->len));
+	data->str = apply_hash_flag(data->str, format, &(data->len));
 	free(tmp_str[0]);
 	free(tmp_str[1]);
 	if (!data->str)

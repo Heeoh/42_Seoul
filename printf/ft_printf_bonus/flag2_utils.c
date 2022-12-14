@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 21:06:05 by heson             #+#    #+#             */
-/*   Updated: 2022/12/12 20:54:26 by heson            ###   ########.fr       */
+/*   Updated: 2022/12/14 16:51:09 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,13 @@
 
 #include <stdlib.h>
 
-char	*apply_hash_flag(char *str, t_va_argu argu, size_t	*len)
+char	*apply_hash_flag(char *str, t_format foramt, size_t *len)
 {
 	char	*res;
 
 	res = NULL;
-	if (!(argu.type == UPPER_X || argu.type == LOWER_X || argu.type == POINTER))
+	if (!(foramt.type == UPPER_X || foramt.type == LOWER_X
+			|| foramt.type == POINTER))
 		return (ERROR_P);
 	*len += 2;
 	res = ft_strjoin("0x", str, *len);
@@ -28,12 +29,12 @@ char	*apply_hash_flag(char *str, t_va_argu argu, size_t	*len)
 	return (res);
 }
 
-char	*apply_plus_flag(char *str, t_va_argu argu, size_t *len)
+char	*apply_plus_flag(char *str, t_format foramt, size_t *len)
 {
 	char	*res;
 
 	res = str;
-	if (!(argu.type == DECIMAL || argu.type == INT))
+	if (!(foramt.type == DECIMAL || foramt.type == INT))
 		return (ERROR_P);
 	if (*str != '-')
 	{
@@ -44,12 +45,12 @@ char	*apply_plus_flag(char *str, t_va_argu argu, size_t *len)
 	return (res);
 }
 
-char	*apply_space_flag(char *str, t_va_argu argu, size_t *len)
+char	*apply_space_flag(char *str, t_format foramt, size_t *len)
 {
 	char	*res;
 
 	res = str;
-	if (!(argu.type == DECIMAL || argu.type == INT))
+	if (!(foramt.type == DECIMAL || foramt.type == INT))
 		return (ERROR_P);
 	if (*str != '-')
 	{

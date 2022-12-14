@@ -6,12 +6,11 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 15:52:30 by heson             #+#    #+#             */
-/*   Updated: 2022/12/12 21:17:06 by heson            ###   ########.fr       */
+/*   Updated: 2022/12/14 16:52:55 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/ft_printf.h"
-#include "headers/ft_printf_utils.h"
 #include "headers/ft_printf_type_utils.h"
 #include "headers/ft_printf_format_utils.h"
 
@@ -20,49 +19,49 @@
 #include <stdarg.h>
 
 char	g_types[TYPE_N] = {'c', 's', 'p', 'd', 'i', 'u', 'x', 'X', '%'};
-int		(*g_to_string_by_type[TYPE_N])(t_data *, t_va_argu, va_list)
+int		(*g_to_string_by_type[TYPE_N])(t_data *, t_format, va_list)
 	= {get_data_c, get_data_s, get_data_p,
 	get_data_di, get_data_di, get_data_u,
 	get_data_x, get_data_x};
 
-const char	*check_format(const char *p, t_va_argu *argu)
+const char	*check_format(const char *p, t_format *format)
 {
-	init_format(argu);
+	init_format(format);
 	if (p && *p)
 	{
 		if ('1' <= *p && *p <= '9')
 		{
-			argu->field_width = *p++ - '0';
+			format->field_width = *p++ - '0';
 			while ('0' <= *p && *p <= '9')
-				argu->field_width = (argu->field_width * 10) + (*p++ - '0');
+				format->field_width = (format->field_width * 10) + (*p++ - '0');
 		}
-		argu->type = checker(p, g_types, TYPE_N);
-		if (argu->type != TYPE_N)
-			return (p);
+		format->type = checker(p, g_types, TYPE_N);
+		if (format->type != TYPE_N)
+			return (check_right_format(format, p));
 	}
 	return (ERROR_P);
 }
 
-int	get_data(t_data *data, t_va_argu argu, va_list ap)
+int	get_data(t_data *data, t_format format, va_list ap)
 {
 	int	ret;
 
 	data->len = 0;
-	if (argu.type == PERCENT)
+	if (format.type == PERCENT)
 		ret = get_data_per(data);
 	else
-		ret = g_to_string_by_type[argu.type](data, argu, ap);
+		ret = g_to_string_by_type[format.type](data, format, ap);
 	return (ret);
 }
 
-int	get_printed_data(t_data *printed, t_va_argu argu_info, t_data argu_data)
+int	get_printed_data(t_data *printed, t_format format, t_data argu_data)
 {
 	char	*p;
 	char	*data_p;
 	int		cnt;
 
-	if (argu_info.field_width > (int)argu_data.len)
-		printed->len = argu_info.field_width;
+	if (format.field_width > (int)argu_data.len)
+		printed->len = format.field_width;
 	else
 		printed->len = argu_data.len;
 	printed->str = (char *)malloc(printed->len + 1);
@@ -79,16 +78,16 @@ int	get_printed_data(t_data *printed, t_va_argu argu_info, t_data argu_data)
 	return (printed->len);
 }
 
-int	print_by_format(t_va_argu argu_info, va_list ap)
+int	print_by_format(t_format format, va_list ap)
 {
 	t_data			argu_data;
 	t_data			printed_data;
 	unsigned int	cnt;
 	char			*p;
 
-	if (get_data(&argu_data, argu_info, ap) == ERROR_I)
+	if (get_data(&argu_data, format, ap) == ERROR_I)
 		return (ERROR_I);
-	if (get_printed_data(&printed_data, argu_info, argu_data) == ERROR_I)
+	if (get_printed_data(&printed_data, format, argu_data) == ERROR_I)
 		return (ERROR_I);
 	free(argu_data.str);
 	p = printed_data.str;
@@ -99,29 +98,29 @@ int	print_by_format(t_va_argu argu_info, va_list ap)
 	return (printed_data.len);
 }
 
-int	ft_printf(const char *str_p, ...)
+int	ft_printf(const char *str, ...)
 {
 	va_list		ap;
 	int			printed_len;
-	t_va_argu	argu;
+	t_format	format;
 
 	printed_len = 0;
-	va_start(ap, str_p);
-	while (*str_p)
+	va_start(ap, str);
+	while (*str)
 	{
-		if (*str_p == '%')
+		if (*str == '%')
 		{
-			str_p = check_format(++str_p, &argu);
-			if (!str_p)
+			str = check_format(++str, &format);
+			if (!str)
 				return (ERROR_I);
-			else if (argu.type != TYPE_INIT)
+			else if (format.type != TYPE_INIT)
 			{
-				printed_len += print_by_format(argu, ap);
-				str_p++;
+				printed_len += print_by_format(format, ap);
+				str++;
 				continue ;
 			}
 		}
-		write(1, str_p++, 1);
+		write(1, str++, 1);
 		printed_len++;
 	}
 	return (printed_len);
@@ -132,9 +131,9 @@ int	ft_printf(const char *str_p, ...)
 
 // int main() {
 
-// 	int mine = ft_printf("%x\n", 15);
+// 	int mine = ft_printf("hello, %d\n");
 // 	// int ans = printf("%%\n");
 // 	// printf("a: %d, m: %d\n", mine, ans);
 
-// 	while(1);
+// 	// while(1);
 // }

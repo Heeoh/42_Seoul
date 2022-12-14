@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 18:18:56 by heson             #+#    #+#             */
-/*   Updated: 2022/11/24 17:05:39 by heson            ###   ########.fr       */
+/*   Updated: 2022/12/14 15:17:18 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,3 @@ char	*ft_strndup(const char *s1, size_t *size)
 	res[i] = '\0';
 	return (res);
 }
-
-// #include <stdio.h>
-
-// int main() {
-// 	char	tmp[2];
-// 	size_t	len = 1;
-
-// 	tmp[0] = 0;
-// 	tmp[1] = '\0';
-
-// 	char *res = ft_strndup(tmp, &len);
-// 	printf("%s\n", res);
-
-// }
