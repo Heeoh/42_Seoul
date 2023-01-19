@@ -16,7 +16,6 @@ OBJS_DIR	= objects/
 
 LIBS = $(LIBFT_DIR)libft.a $(PRINTF_DIR)libftprintf.a
 INCLUDE = -I $(HDRS_DIR) -I $(LIBFT_DIR) -I $(PRINTF_DIR)headers
-HDRS = $(HDRS_DIR)minitalk.h $(LIBS)
 
 SRCS_CLIENT = client.c
 SRCS_SERVER = server.c
@@ -41,18 +40,16 @@ CC		= cc
 
 # --------------------------------- RULES ------------------------------------ #
 
-$(LIBS):
-		make -C $(LIBFT_DIR)
-		make -C $(PRINTF_DIR)
-
-$(OBJS_DIR)%.o:%.c
+$(OBJS_DIR)%.o:%.c 
 		$(MD) $(dir $@)
 		$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@	
+	
+all: 
+	make $(NAME)
 
-all: $(LIBS)
-		make $(NAME)
-
-$(NAME): 
+$(NAME):
+		make -C $(LIBFT_DIR)
+		make -C $(PRINTF_DIR)
 		make $(NAME_CLIENT) 
 		make $(NAME_SERVER)	
 
