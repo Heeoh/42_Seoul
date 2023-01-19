@@ -7,8 +7,7 @@ NAME_SERVER			= server
 
 # ------------------------------- DIRECTORIES -------------------------------- #
 
-SRCS_DIR	= sources/
-INC_DIR		= headers/
+HDRS_DIR	= headers/
 LIBFT_DIR	= library/libft/
 PRINTF_DIR  = library/printf/
 OBJS_DIR	= objects/
@@ -16,100 +15,66 @@ OBJS_DIR	= objects/
 # ---------------------------------- FILES ----------------------------------- #
 
 LIBS = $(LIBFT_DIR)libft.a $(PRINTF_DIR)libftprintf.a
-INCLUDE = -I $(INC_DIR) -I $(LIBFT_DIR)*.h -I $(PRINTF_DIR)headers
-HDRS = $(INC_DIR)minitalk.h $(LIBS)
+INCLUDE = -I $(HDRS_DIR) -I $(LIBFT_DIR) -I $(PRINTF_DIR)headers
+HDRS = $(HDRS_DIR)minitalk.h $(LIBS)
 
-CLIENT_SRCS = client.c
-SERVER_SRCS = server.c
-CLIENTBONUS_SRCS = client_bonus.c
-SERVERBONUS_SRCS = server_bonus.c
+SRCS_CLIENT = client.c
+SRCS_SERVER = server.c
 
-SRCS_CLIENT += $(addprefix $(SRCS_DIR), $(CLIENT_SRCS))
-SRCS_SERVER += $(addprefix $(SRCS_DIR), $(SERVER_SRCS))
+OBJS_CLIENT = $(addprefix $(OBJS_DIR), $(SRCS_CLIENT:.c=.o))
+OBJS_SERVER = $(addprefix $(OBJS_DIR), $(SRCS_SERVER:.c=.o))
 
-OBJS_CLIENT = $(addprefix $(OBJS_DIR), $(CLIENT_SRCS:.c=.o))
-OBJS_SERVER = $(addprefix $(OBJS_DIR), $(SERVER_SRCS:.c=.o))
-
-# DEP_CLIENT = $(addsuffix .d, $(basename $(OBJS_CLIENT)))
-# DEP_SERVER = $(addsuffix .d, $(basename $(OBJS_SERVER)))
-
-# SRCS_CLIENTBONUS += $(addprefix $(SRCS_DIR), $(CLIENTBONUS_SRCS))
-# SRCS_SERVERBONUS += $(addprefix $(SRCS_DIR), $(SERVERBONUS_SRCS))
+# SRCS_CLIENTBONUS = $(addprefix $(SRCS_DIR), $(CLIENTBONUS_SRCS))
+# SRCS_SERVERBONUS = $(addprefix $(SRCS_DIR), $(SERVERBONUS_SRCS))
 
 # OBJS_CLIENTBONUS = $(addprefix $(OBJS_DIR), $(CLIENTBONUS_SRCS:.c=.o))
 # OBJS_SERVERBONUS = $(addprefix $(OBJS_DIR), $(SERVERBONUS_SRCS:.c=.o))
 
-# DEP_CLIENTBONUS = $(addsuffix .d, $(basename $(OBJS_CLIENTBONUS)))
-# DEP_SERVERBONUS = $(addsuffix .d, $(basename $(OBJS_SERVERBONUS)))
 
 # -------------------------------- COMPILATE --------------------------------- #
 
 CFLAGS	= -Wall -Werror -Wextra
-RM		= rm -f
+RM		= rm -rf
 AR		= ar -rcs
 MD		= mkdir -p
-CP		= cp -f
-CC		= gcc
+CC		= cc
 
 # --------------------------------- RULES ------------------------------------ #
 
-$(OBJS_DIR)%.o:$(SRCS_DIR)%.c
-	@$(MD) $(dir $@)
-	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@	
+$(LIBS):
+		make -C $(LIBFT_DIR)
+		make -C $(PRINTF_DIR)
 
-all:	
-		@$(MAKE) -C $(LIBFT_DIR)
-		@$(MAKE) -C $(PRINTF_DIR)
-		@$(MAKE) $(NAME)
+$(OBJS_DIR)%.o:%.c
+		$(MD) $(dir $@)
+		$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@	
 
+all: $(LIBS)
+		make $(NAME)
 
-$(NAME):		
-		@$(MAKE) $(NAME_CLIENT)
-		@$(MAKE) $(NAME_SERVER)
+$(NAME): 
+		make $(NAME_CLIENT) 
+		make $(NAME_SERVER)	
 
-$(NAME_CLIENT): $(OBJS_CLIENT) $(HDRS)
-	$(CC) $(CFLAGS) $(OBJS_CLIENT) $(LIBS) -o $(NAME_CLIENT)
-# @echo "$(GREEN) Client compilado!$(DEF_COLOR)"
+$(NAME_CLIENT): $(OBJS_CLIENT)
+		$(CC) $(CFLAGS) $(OBJS_CLIENT) $(LIBS) -o $(NAME_CLIENT)
 
-$(NAME_SERVER): $(OBJS_SERVER) $(HDRS)	
-	$(CC) $(CFLAGS) $(OBJS_SERVER) $(LIBS) -o $(NAME_SERVER)
-# @echo "$(GREEN) Server compilado!$(DEF_COLOR)"
-# @touch $@
-
-$(NAME_CLIENTBONUS): $(OBJS_CLIENTBONUS) $(HDRS) 
-	$(CC) $(CFLAGS) $(OBJS_CLIENTBONUS) $(LIBS) -o $(NAME_CLIENTBONUS)
-# @echo "$(GREEN) Client Bonus compilado!$(DEF_COLOR)"
-# @touch $@
-
-$(NAME_SERVERBONUS): $(OBJS_SERVERBONUS) $(HDRS)	
-	$(CC) $(CFLAGS) $(OBJS_SERVERBONUS) $(LIBS) -o $(NAME_SERVERBONUS)
-# @echo "$(GREEN) Server Bonus compilado!$(DEF_COLOR)"
-# @touch $@
-
-# -include $(DEP_CLIENT)
-# -include $(DEP_SERVER)
-
-# -include $(DEP_CLIENTBONUS)
-# -include $(DEP_SERVERBONUS)
+$(NAME_SERVER): $(OBJS_SERVER)
+		$(CC) $(CFLAGS) $(OBJS_SERVER) $(LIBS) -o $(NAME_SERVER)	
 
 clean:		
-	@$(MAKE) clean -C $(LIBFT_DIR)
-	@$(MAKE) clean -C $(PRINTF_DIR)
-	@$(RM) -rf $(OBJS_DIR)
-# @$(RM) $(DEP)
-# @echo "$(RED)Borrando objetos... $(DEF_COLOR)"
+		make clean -C $(LIBFT_DIR)
+		make clean -C $(PRINTF_DIR)
+		$(RM) $(OBJS_DIR)
 
 fclean:
-	@$(MAKE) clean
-	@$(MAKE) fclean -C $(LIBFT_DIR)
-	@$(MAKE) fclean -C $(PRINTF_DIR)
-	@$(RM) $(NAME) $(NAME_CLIENT) $(NAME_SERVER) 
-# @echo "$(RED)Borrando archivos...$(DEF_COLOR)"
+		make clean
+		make fclean -C $(LIBFT_DIR)
+		make fclean -C $(PRINTF_DIR)
+		$(RM) $(NAME) $(NAME_CLIENT) $(NAME_SERVER) 
 
 re:
-	@$(MAKE)  fclean 
-	@$(MAKE)  all
-# @echo ""
-# @echo "$(GREEN) Borrado y recompilado$(DEF_COLOR)"
+		make  fclean 
+		make  all
 
 .PHONY:		all clean fclean re

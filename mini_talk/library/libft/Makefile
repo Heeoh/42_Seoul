@@ -2,10 +2,10 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror
 NAME = libft.a
 
+OBJS_DIR = objects/
+
 SRCS_MAN = $(wildcard *_man.c)
 SRCS_BONUS = $(wildcard *_bonus.c)
-
-OBJS_DIR = objects/
 
 OBJS_MAN = $(addprefix $(OBJS_DIR), $(SRCS_MAN:.c=.o))
 OBJS_BONUS = $(addprefix $(OBJS_DIR), $(SRCS_BONUS:.c=.o))

@@ -6,11 +6,11 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 15:34:15 by heson             #+#    #+#             */
-/*   Updated: 2023/01/19 02:24:02 by heson            ###   ########.fr       */
+/*   Updated: 2023/01/20 02:46:40 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/minitalk.h"
+#include "headers/minitalk.h"
 
 void signal_handler (int sig)
 {
@@ -26,7 +26,7 @@ void signal_handler (int sig)
 	cnt++;
 	// printf("client is connected %d, %d\n", cnt, bit);
 	if (cnt >= 8) {
-		if (write(1, &my_char, 1))
+		if (ft_printf("%c", my_char))
 			my_char = 0;
 		cnt = 0;
 	}

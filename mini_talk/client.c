@@ -6,11 +6,11 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 15:34:17 by heson             #+#    #+#             */
-/*   Updated: 2023/01/19 02:24:23 by heson            ###   ########.fr       */
+/*   Updated: 2023/01/20 01:59:05 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/minitalk.h"
+#include "headers/minitalk.h"
 
 void convert2binary_n_send(int server_pid, char ch)
 {
