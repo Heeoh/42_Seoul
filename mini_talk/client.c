@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 15:34:17 by heson             #+#    #+#             */
-/*   Updated: 2023/01/20 03:38:29 by heson            ###   ########.fr       */
+/*   Updated: 2023/01/20 03:41:03 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,4 +44,5 @@ int	main(int ac, char *av[])
 			convert2binary_n_send(server_pid, av[2][i++]);
 		convert2binary_n_send(server_pid, '\n');
 	}
+	return (0);
 }
