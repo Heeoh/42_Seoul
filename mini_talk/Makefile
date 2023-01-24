@@ -4,6 +4,10 @@
 NAME				= minitalk
 NAME_CLIENT			= client
 NAME_SERVER			= server
+NAME_BONUS			= minitalk_bonus
+NAME_CLIENT_BONUS	= client_bonus
+NAME_SERVER_BONUS	= server_bonus
+
 
 # ------------------------------- DIRECTORIES -------------------------------- #
 
@@ -23,11 +27,11 @@ SRCS_SERVER = server.c
 OBJS_CLIENT = $(addprefix $(OBJS_DIR), $(SRCS_CLIENT:.c=.o))
 OBJS_SERVER = $(addprefix $(OBJS_DIR), $(SRCS_SERVER:.c=.o))
 
-# SRCS_CLIENTBONUS = $(addprefix $(SRCS_DIR), $(CLIENTBONUS_SRCS))
-# SRCS_SERVERBONUS = $(addprefix $(SRCS_DIR), $(SERVERBONUS_SRCS))
+SRCS_CLIENT_BONUS = client_bonus.c
+SRCS_SERVER_BONUS = server_bonus.c
 
-# OBJS_CLIENTBONUS = $(addprefix $(OBJS_DIR), $(CLIENTBONUS_SRCS:.c=.o))
-# OBJS_SERVERBONUS = $(addprefix $(OBJS_DIR), $(SERVERBONUS_SRCS:.c=.o))
+OBJS_CLIENT_BONUS = $(addprefix $(OBJS_DIR), $(SRCS_CLIENT_BONUS:.c=.o))
+OBJS_SERVER_BONUS = $(addprefix $(OBJS_DIR), $(SRCS_SERVER_BONUS:.c=.o))
 
 
 # -------------------------------- COMPILATE --------------------------------- #
@@ -43,9 +47,13 @@ CC		= cc
 $(OBJS_DIR)%.o:%.c 
 		$(MD) $(dir $@)
 		$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@	
-	
+
 all: 
-	make $(NAME)
+		make $(NAME)
+
+bonus:
+		make $(NAME_BONUS)
+	
 
 $(NAME):
 		make -C $(LIBFT_DIR)
@@ -54,10 +62,24 @@ $(NAME):
 		make $(NAME_SERVER)	
 
 $(NAME_CLIENT): $(OBJS_CLIENT)
-		$(CC) $(CFLAGS) $(OBJS_CLIENT) $(LIBS) -o $(NAME_CLIENT)
+		$(CC) $(CFLAGS) $< $(LIBS) -o $@
 
 $(NAME_SERVER): $(OBJS_SERVER)
-		$(CC) $(CFLAGS) $(OBJS_SERVER) $(LIBS) -o $(NAME_SERVER)	
+		$(CC) $(CFLAGS) $< $(LIBS) -o $@
+
+
+$(NAME_BONUS):
+		make -C $(LIBFT_DIR)
+		make -C $(PRINTF_DIR)
+		make $(NAME_CLIENT_BONUS) 
+		make $(NAME_SERVER_BONUS)	
+
+$(NAME_CLIENT_BONUS): $(OBJS_CLIENT_BONUS)
+		$(CC) $(CFLAGS) $< $(LIBS) -o $@
+
+$(NAME_SERVER_BONUS): $(OBJS_SERVER_BONUS)
+		$(CC) $(CFLAGS) $< $(LIBS) -o $@
+
 
 clean:		
 		make clean -C $(LIBFT_DIR)
@@ -68,7 +90,7 @@ fclean:
 		make clean
 		make fclean -C $(LIBFT_DIR)
 		make fclean -C $(PRINTF_DIR)
-		$(RM) $(NAME) $(NAME_CLIENT) $(NAME_SERVER) 
+		$(RM) $(NAME_CLIENT) $(NAME_SERVER) $(NAME_CLIENT_BONUS) $(NAME_SERVER_BONUS)	
 
 re:
 		make  fclean 
