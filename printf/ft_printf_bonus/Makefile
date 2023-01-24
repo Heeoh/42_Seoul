@@ -23,7 +23,6 @@ $(NAME) : $(OBJECTS)
 		ar -crs $@ $(OBJECTS)
 
 bonus :
-		sleep 1
 		make ADD_BONUS=1 
 		make all
 
