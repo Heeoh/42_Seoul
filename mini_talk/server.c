@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 15:34:15 by heson             #+#    #+#             */
-/*   Updated: 2023/01/24 19:09:49 by heson            ###   ########.fr       */
+/*   Updated: 2023/01/25 16:50:07 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,19 @@
 
 void	signal_handler(int sig)
 {
-	static int	cnt;
-	static char	my_char;
+	static int	recv_cnt;
+	static char	ch;
 	int			bit;
 
 	bit = 1;
-	if (sig == SIGUSR1)
-		bit = 0;
-	my_char = (my_char << 1) | bit;
-	cnt++;
-	if (cnt >= 8)
+	bit = (sig == ONE);
+	ch = (ch << 1) | bit;
+	recv_cnt++;
+	if (recv_cnt >= 8)
 	{
-		if (write(1, &my_char, 1))
-			my_char = 0;
-		cnt = 0;
+		write(1, &ch, 1);
+		ch = 0;
+		recv_cnt = 0;
 	}
 }
 

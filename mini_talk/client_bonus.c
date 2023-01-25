@@ -6,65 +6,65 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 20:17:53 by heson             #+#    #+#             */
-/*   Updated: 2023/01/24 21:44:45 by heson            ###   ########.fr       */
+/*   Updated: 2023/01/25 16:55:44 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minitalk.h"
 
-void	signal_handler(int sig, siginfo_t *siginfo, void *cnt)
-{
-	if (siginfo->si_signo == sig)
-		ft_printf("sane");
-	if (sig == SIGUSR1) {
-		(*(int*)cnt)++;
-		ft_printf("%d\n", *(int*)cnt);
-	}
-}
+int	g_send_cnt = 0;
 
-void	init_sigaction(struct sigaction *sa)
+void	signal_handler(int sig)
 {
-	sa->sa_sigaction = signal_handler;
-	sa->sa_flags = SA_SIGINFO;
-}
+	static int	recv_cnt;
 
-void	convert2binary_n_send(int server_pid, char ch)
-{
-	int					i;
-	struct sigaction	sa;
-	int					cnt;
-
-	cnt = 0;
-	init_sigaction(&sa);
-	sigaction(SIGUSR1, &sa, (void*)&cnt);
-	i = (1 << 7);
-	while (i > 0)
+	if (sig == SIG_ACK)
+		recv_cnt++;
+	else if (sig == END)
 	{
-		if ((ch & i) == 0)
-			kill(server_pid, SIGUSR1);
+		if (recv_cnt == g_send_cnt)
+			write(1, "OK\n", 3);
 		else
-			kill(server_pid, SIGUSR2);
-		usleep(100);
-		i >>= 1;
+			write(1, "ERROR\n", 6);
+		g_send_cnt = 0;
+		recv_cnt = 0;
 	}
-	if (cnt < 8)
-		ft_printf("error\n");
+}
+
+void	send_str(int server_pid, char *str)
+{
+	int					bit_i;
+
+	g_send_cnt = 0;
+	while (str && *str)
+	{
+		signal(END, signal_handler);
+		bit_i = (1 << 7);
+		while (bit_i > 0)
+		{
+			signal(SIG_ACK, signal_handler);
+			if ((*str & bit_i) == 0)
+				kill(server_pid, ZERO);
+			else
+				kill(server_pid, ONE);
+			g_send_cnt++;
+			bit_i >>= 1;
+			pause();
+		}
+		str++;
+		g_send_cnt = 0;
+	}
 }
 
 int	main(int ac, char *av[])
 {
 	int	server_pid;
-	int	str_len;
-	int	i;
 
 	if (ac == 3)
 	{
 		server_pid = atoi(av[1]);
 		ft_printf("client(%d) is connecting to %d ...\n", getpid(), server_pid);
-		str_len = ft_strlen(av[2]);
-		i = 0;
-		while (i < str_len)
-			convert2binary_n_send(server_pid, av[2][i++]);
+		send_str(server_pid, av[2]);
 	}
 	return (0);
 }
