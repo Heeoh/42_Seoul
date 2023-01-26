@@ -27,8 +27,8 @@ SRCS_SERVER = server.c
 OBJS_CLIENT = $(addprefix $(OBJS_DIR), $(SRCS_CLIENT:.c=.o))
 OBJS_SERVER = $(addprefix $(OBJS_DIR), $(SRCS_SERVER:.c=.o))
 
-SRCS_CLIENT_BONUS = client_bonus.c
-SRCS_SERVER_BONUS = server_bonus.c
+SRCS_CLIENT_BONUS = client_bonus2.c
+SRCS_SERVER_BONUS = server_bonus2.c
 
 OBJS_CLIENT_BONUS = $(addprefix $(OBJS_DIR), $(SRCS_CLIENT_BONUS:.c=.o))
 OBJS_SERVER_BONUS = $(addprefix $(OBJS_DIR), $(SRCS_SERVER_BONUS:.c=.o))

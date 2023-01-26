@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server_bonus.c                                     :+:      :+:    :+:   */
+/*   server_bonus2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 20:17:49 by heson             #+#    #+#             */
-/*   Updated: 2023/01/26 16:52:49 by heson            ###   ########.fr       */
+/*   Updated: 2023/01/26 21:37:09 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minitalk.h"
 
-int g_prev_sig = 0;
+int	g_signal = 0;
 
 void	signal_handler(int sig, siginfo_t *siginfo, void *p)
 {
@@ -30,17 +30,16 @@ void	signal_handler(int sig, siginfo_t *siginfo, void *p)
 		ch = 0;
 		recv_cnt = 0;
 	}
-	if (g_prev_sig == 0)
-		kill(siginfo->si_pid, ONE);
-	else
-		kill(siginfo->si_pid, ZERO);
-	g_prev_sig = !g_prev_sig;
+	kill(siginfo->si_pid, sig);
 }
 
 void	init_sigaction(struct sigaction *sa)
 {
 	sa->sa_sigaction = signal_handler;
-	sa->sa_flags = SA_SIGINFO;
+	sigemptyset(&(sa->sa_mask));
+	sigaddset(&(sa->sa_mask), SIGUSR1);
+	sigaddset(&(sa->sa_mask), SIGUSR2);
+	sa->sa_flags = SIGINFO | SA_RESTART;
 }
 
 int	main(void)
@@ -48,12 +47,16 @@ int	main(void)
 	pid_t				pid;
 	struct sigaction	sa;
 
-	init_sigaction(&sa);
+    init_sigaction(&sa);
 	pid = getpid();
 	ft_printf("%d\n", pid);
 	sigaction(ZERO, &sa, 0);
 	sigaction(ONE, &sa, 0);
 	while (1)
-		pause();
+	{
+		if (!g_signal)
+			continue;
+		g_signal = 0;
+	}
 	return (0);
 }

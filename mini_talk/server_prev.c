@@ -1,26 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server_bonus.c                                     :+:      :+:    :+:   */
+/*   server.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/24 20:17:49 by heson             #+#    #+#             */
-/*   Updated: 2023/01/26 16:52:49 by heson            ###   ########.fr       */
+/*   Created: 2023/01/18 15:34:15 by heson             #+#    #+#             */
+/*   Updated: 2023/01/25 16:50:07 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minitalk.h"
 
-int g_prev_sig = 0;
-
-void	signal_handler(int sig, siginfo_t *siginfo, void *p)
+void	signal_handler(int sig)
 {
 	static int	recv_cnt;
 	static char	ch;
 	int			bit;
 
-	p = 0;
+	bit = 1;
 	bit = (sig == ONE);
 	ch = (ch << 1) | bit;
 	recv_cnt++;
@@ -30,29 +28,16 @@ void	signal_handler(int sig, siginfo_t *siginfo, void *p)
 		ch = 0;
 		recv_cnt = 0;
 	}
-	if (g_prev_sig == 0)
-		kill(siginfo->si_pid, ONE);
-	else
-		kill(siginfo->si_pid, ZERO);
-	g_prev_sig = !g_prev_sig;
-}
-
-void	init_sigaction(struct sigaction *sa)
-{
-	sa->sa_sigaction = signal_handler;
-	sa->sa_flags = SA_SIGINFO;
 }
 
 int	main(void)
 {
-	pid_t				pid;
-	struct sigaction	sa;
+	pid_t	pid;
 
-	init_sigaction(&sa);
 	pid = getpid();
 	ft_printf("%d\n", pid);
-	sigaction(ZERO, &sa, 0);
-	sigaction(ONE, &sa, 0);
+	signal(SIGUSR1, signal_handler);
+	signal(SIGUSR2, signal_handler);
 	while (1)
 		pause();
 	return (0);

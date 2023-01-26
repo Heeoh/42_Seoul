@@ -5,51 +5,43 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/26 18:31:36 by heson             #+#    #+#             */
-/*   Updated: 2023/01/26 21:18:29 by heson            ###   ########.fr       */
+/*   Created: 2023/01/18 15:34:17 by heson             #+#    #+#             */
+/*   Updated: 2023/01/24 19:10:28 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minitalk.h"
 
-void	send_bit(int server_pid, int bit)
+void	convert2binary_n_send(int server_pid, char ch)
 {
-	if (bit == 0)
-		kill(server_pid, ZERO);
-	else
-		kill(server_pid, ONE);
-	usleep(100);
-}
+	int	i;
 
-void	send_str(int server_pid, char *str)
-{
-	int	bit_i;
-
-	while (str)
+	i = (1 << 7);
+	while (i > 0)
 	{
-		bit_i = (1 << 7);
-		while (bit_i > 0)
-		{
-			send_bit(server_pid, (*str & bit_i));
-			bit_i >>= 1;
-		}
-		if (*str == '\0')
-			break;
-		str++;
+		if ((ch & i) == 0)
+			kill(server_pid, SIGUSR1);
+		else
+			kill(server_pid, SIGUSR2);
+		usleep(100);
+		i >>= 1;
 	}
 }
 
 int	main(int ac, char *av[])
 {
 	int	server_pid;
+	int	str_len;
+	int	i;
 
 	if (ac == 3)
 	{
 		server_pid = atoi(av[1]);
-		if (server_pid <= 0)
-			return (0);
-		ft_printf("client(%d) is connecting to %d ...\n", getpid(), server_pid);
-		send_str(server_pid, av[2]);
+		ft_printf("client is connecting to %d ...\n", server_pid);
+		str_len = ft_strlen(av[2]);
+		i = 0;
+		while (i < str_len)
+			convert2binary_n_send(server_pid, av[2][i++]);
 	}
 	return (0);
 }

@@ -1,27 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client_bonus.c                                     :+:      :+:    :+:   */
+/*   client_bonus2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 20:17:53 by heson             #+#    #+#             */
-/*   Updated: 2023/01/26 21:36:10 by heson            ###   ########.fr       */
+/*   Updated: 2023/01/26 21:35:58 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minitalk.h"
 
 int	g_signal = 0;
+int send_cnt = 0;
+int recv_cnt = 0;
 
-void	ack_signal_handler(int sig)
+void	signal_handler(int sig)
 {
-	if (g_prev_ack < 0)
-		g_prev_ack = sig;
-	else if (g_prev_ack == sig)
-		write(1, "error\n", 6);
-	g_prev_ack = sig;
+	if (sig != ONE) return;
 	recv_cnt++;
+	g_signal = 1;
 }
 
 void	send_bit(int server_pid, int bit)
@@ -31,24 +30,36 @@ void	send_bit(int server_pid, int bit)
 	else
 		kill(server_pid, ONE);
 	send_cnt++;
-	usleep(100);
+	g_signal = 0;
+}
+
+void	init_sigaction(struct sigaction *sa)
+{
+	sa->sa_handler = signal_handler;
+	sigemptyset(&(sa->sa_mask));
+	sigaddset(&(sa->sa_mask), SIGUSR1);
+	sigaddset(&(sa->sa_mask), SIGUSR2);
+	sa->sa_flags = SA_RESTART;
 }
 
 void	send_str(int server_pid, char *str)
 {
 	int	bit_i;
+	struct sigaction	sa;
 
+	init_sigaction(&sa);
 	while (str && *str)
 	{
 		bit_i = (1 << 7);
-		ft_printf("\n%c ", *str);
-		while (bit_i > 0)
+		while (1)
 		{
-			signal(ZERO, ack_signal_handler);
-			signal(ONE, ack_signal_handler);
+			sigaction(ZERO, &sa, 0);
+			sigaction(ONE, &sa, 0);
 			send_bit(server_pid, (*str & bit_i));
 			bit_i >>= 1;
-			pause();
+			if (bit_i <= 0)
+				break;
+			while (!g_signal);
 		}
 		str++;
 	}
