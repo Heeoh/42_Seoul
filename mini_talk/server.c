@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 18:32:02 by heson             #+#    #+#             */
-/*   Updated: 2023/01/26 21:17:45 by heson            ###   ########.fr       */
+/*   Updated: 2023/01/27 07:08:18 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,10 @@ int	main(void)
 	sigaction(SIGUSR2, &sa, 0);
 	while (1)
 	{
-		if (!g_signal)
-			continue;
-		g_signal = 0;
+		pause();
+		// if (!g_signal)
+		// 	continue;
+		// g_signal = 0;
 	}
 	return (0);
 }

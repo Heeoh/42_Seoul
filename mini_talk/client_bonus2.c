@@ -6,31 +6,48 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 20:17:53 by heson             #+#    #+#             */
-/*   Updated: 2023/01/26 21:35:58 by heson            ###   ########.fr       */
+/*   Updated: 2023/01/27 16:45:00 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minitalk.h"
 
-int	g_signal = 0;
-int send_cnt = 0;
-int recv_cnt = 0;
+// volatile sig_atomic_t lock = 0;
+volatile sig_atomic_t flag = -1;
 
 void	signal_handler(int sig)
 {
-	if (sig != ONE) return;
-	recv_cnt++;
-	g_signal = 1;
+	// lock = 1;
+	flag = sig;
 }
 
-void	send_bit(int server_pid, int bit)
+void	check_ack(int *recv_cnt, int *send_cnt, int send_sig)
 {
+	ft_printf("%d) ", flag - 30);
+	(*recv_cnt)++;
+	if (flag != send_sig)
+	{
+		write(1, "ERROR, send again\n", 18);
+		send_cnt--;
+		(*recv_cnt)--;
+		flag = -1;
+		return;
+	}
+	flag = -1;
+}
+
+int	send_bit(int server_pid, int bit, int *send_cnt)
+{
+	int	sig;
+
 	if (bit == 0)
-		kill(server_pid, ZERO);
+		sig = ZERO;
 	else
-		kill(server_pid, ONE);
-	send_cnt++;
-	g_signal = 0;
+		sig = ONE;
+	ft_printf("(%d, ", sig - 30);
+	(*send_cnt)++;
+	kill(server_pid, sig);
+	return (sig);
 }
 
 void	init_sigaction(struct sigaction *sa)
@@ -42,25 +59,30 @@ void	init_sigaction(struct sigaction *sa)
 	sa->sa_flags = SA_RESTART;
 }
 
-void	send_str(int server_pid, char *str)
+void	send_str(int server_pid, char *str, int *send_cnt, int *recv_cnt)
 {
-	int	bit_i;
+	int					bit_i;
 	struct sigaction	sa;
+	int 				send_sig;
 
 	init_sigaction(&sa);
-	while (str && *str)
+	while (str)
 	{
-		bit_i = (1 << 7);
-		while (1)
+		ft_printf("\n%c ", *str);
+		bit_i = (1 << 8);
+		while (bit_i > 1)
 		{
 			sigaction(ZERO, &sa, 0);
 			sigaction(ONE, &sa, 0);
-			send_bit(server_pid, (*str & bit_i));
+			if (flag >= 0)
+				check_ack(recv_cnt, send_cnt, send_sig);
 			bit_i >>= 1;
-			if (bit_i <= 0)
-				break;
-			while (!g_signal);
+			send_sig = send_bit(server_pid, (*str & bit_i), send_cnt);
+			pause();
 		}
+		check_ack(recv_cnt, send_cnt, send_sig);
+		if (!*str)
+			break;
 		str++;
 	}
 }
@@ -68,14 +90,20 @@ void	send_str(int server_pid, char *str)
 int	main(int ac, char *av[])
 {
 	int	server_pid;
+	int send_cnt;
+	int recv_cnt;
 
-	if (ac == 3)
-	{
-		server_pid = atoi(av[1]);
-		ft_printf("client(%d) is connecting to %d ...\n", getpid(), server_pid);
-		send_str(server_pid, av[2]);
-	}
+	if (ac != 3)
+		return (0);
+	server_pid = atoi(av[1]);
+	send_cnt = 0;
+	recv_cnt = 0;
+	ft_printf("client(%d) is connecting to server(%d) ...\n", getpid(), server_pid);
+	send_str(server_pid, av[2], &send_cnt, &recv_cnt);
+
 	if (recv_cnt != send_cnt)
-		ft_printf("error\n");
+		ft_printf("ERROR\n");
+	else
+		ft_printf("SUCCESS\n");
 	return (0);
 }
