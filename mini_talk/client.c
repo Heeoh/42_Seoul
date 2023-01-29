@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 18:31:36 by heson             #+#    #+#             */
-/*   Updated: 2023/01/26 21:18:29 by heson            ###   ########.fr       */
+/*   Updated: 2023/01/29 13:26:30 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	send_str(int server_pid, char *str)
 			bit_i >>= 1;
 		}
 		if (*str == '\0')
-			break;
+			break ;
 		str++;
 	}
 }

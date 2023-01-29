@@ -6,18 +6,18 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 20:17:49 by heson             #+#    #+#             */
-/*   Updated: 2023/01/27 17:07:27 by heson            ###   ########.fr       */
+/*   Updated: 2023/01/29 13:26:55 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minitalk.h"
 
-volatile sig_atomic_t flag = -1;
-volatile sig_atomic_t c_pid;
+volatile sig_atomic_t	g_flag = -1;
+volatile sig_atomic_t	c_pid;
 
 void	signal_handler(int sig, siginfo_t *siginfo, void *p)
 {
-	flag = sig;
+	g_flag = sig;
 	c_pid = siginfo->si_pid;
 	p = 0;
 }
@@ -37,7 +37,7 @@ void	bit_2char()
 	static char		ch;
 	int				bit;
 
-	bit = (flag == ONE);
+	bit = (g_flag == ONE);
 	ch = (ch << 1) | bit;
 	recv_cnt++;
 	if (recv_cnt == 8)
@@ -63,13 +63,13 @@ int	main(void)
 	{
 		sigaction(ZERO, &sa, 0);
 		sigaction(ONE, &sa, 0);
-		while (flag < 0);
-		if (flag >= 0)
+		while (g_flag < 0);
+		if (g_flag >= 0)
 		{
-			ft_printf("%d ", flag - 30);
+			ft_printf("%d ", g_flag - 30);
 			bit_2char();
-			kill(c_pid, flag);
-			flag = -1;
+			kill(c_pid, g_flag);
+			g_flag = -1;
 		}
 	}
 	return (0);

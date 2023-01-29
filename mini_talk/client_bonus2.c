@@ -6,34 +6,31 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 20:17:53 by heson             #+#    #+#             */
-/*   Updated: 2023/01/27 16:45:00 by heson            ###   ########.fr       */
+/*   Updated: 2023/01/29 13:25:28 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minitalk.h"
 
-// volatile sig_atomic_t lock = 0;
-volatile sig_atomic_t flag = -1;
+volatile sig_atomic_t	g_flag = -1;
 
 void	signal_handler(int sig)
 {
-	// lock = 1;
-	flag = sig;
+	g_flag = sig;
 }
 
 void	check_ack(int *recv_cnt, int *send_cnt, int send_sig)
 {
-	ft_printf("%d) ", flag - 30);
 	(*recv_cnt)++;
-	if (flag != send_sig)
+	if (g_flag != send_sig)
 	{
 		write(1, "ERROR, send again\n", 18);
 		send_cnt--;
 		(*recv_cnt)--;
-		flag = -1;
-		return;
+		g_flag = -1;
+		return ;
 	}
-	flag = -1;
+	g_flag = -1;
 }
 
 int	send_bit(int server_pid, int bit, int *send_cnt)
@@ -44,7 +41,6 @@ int	send_bit(int server_pid, int bit, int *send_cnt)
 		sig = ZERO;
 	else
 		sig = ONE;
-	ft_printf("(%d, ", sig - 30);
 	(*send_cnt)++;
 	kill(server_pid, sig);
 	return (sig);
@@ -63,18 +59,17 @@ void	send_str(int server_pid, char *str, int *send_cnt, int *recv_cnt)
 {
 	int					bit_i;
 	struct sigaction	sa;
-	int 				send_sig;
+	int					send_sig;
 
 	init_sigaction(&sa);
 	while (str)
 	{
-		ft_printf("\n%c ", *str);
 		bit_i = (1 << 8);
 		while (bit_i > 1)
 		{
 			sigaction(ZERO, &sa, 0);
 			sigaction(ONE, &sa, 0);
-			if (flag >= 0)
+			if (g_flag >= 0)
 				check_ack(recv_cnt, send_cnt, send_sig);
 			bit_i >>= 1;
 			send_sig = send_bit(server_pid, (*str & bit_i), send_cnt);
@@ -82,25 +77,24 @@ void	send_str(int server_pid, char *str, int *send_cnt, int *recv_cnt)
 		}
 		check_ack(recv_cnt, send_cnt, send_sig);
 		if (!*str)
-			break;
+			break ;
 		str++;
 	}
 }
 
 int	main(int ac, char *av[])
 {
-	int	server_pid;
-	int send_cnt;
-	int recv_cnt;
+	int	s_pid;
+	int	send_cnt;
+	int	recv_cnt;
 
 	if (ac != 3)
 		return (0);
-	server_pid = atoi(av[1]);
+	s_pid = atoi(av[1]);
 	send_cnt = 0;
 	recv_cnt = 0;
-	ft_printf("client(%d) is connecting to server(%d) ...\n", getpid(), server_pid);
-	send_str(server_pid, av[2], &send_cnt, &recv_cnt);
-
+	ft_printf("client(%d) is connecting to server(%d) ...\n", getpid(), s_pid);
+	send_str(s_pid, av[2], &send_cnt, &recv_cnt);
 	if (recv_cnt != send_cnt)
 		ft_printf("ERROR\n");
 	else

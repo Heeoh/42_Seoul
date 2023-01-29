@@ -6,13 +6,13 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 18:32:02 by heson             #+#    #+#             */
-/*   Updated: 2023/01/27 07:08:18 by heson            ###   ########.fr       */
+/*   Updated: 2023/01/29 13:26:17 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minitalk.h"
 
-int g_signal = 0;
+int	g_signal = 0;
 
 void	signal_handler(int sig)
 {
@@ -48,17 +48,12 @@ int	main(void)
 	pid_t				pid;
 	struct sigaction	sa;
 
-    init_sigaction(&sa);
+	init_sigaction(&sa);
 	pid = getpid();
 	ft_printf("%d\n", pid);
 	sigaction(SIGUSR1, &sa, 0);
 	sigaction(SIGUSR2, &sa, 0);
 	while (1)
-	{
 		pause();
-		// if (!g_signal)
-		// 	continue;
-		// g_signal = 0;
-	}
 	return (0);
 }
