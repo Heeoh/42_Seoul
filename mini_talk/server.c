@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 18:32:02 by heson             #+#    #+#             */
-/*   Updated: 2023/01/29 13:26:17 by heson            ###   ########.fr       */
+/*   Updated: 2023/01/29 14:50:23 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,11 @@ int	main(void)
 	init_sigaction(&sa);
 	pid = getpid();
 	ft_printf("%d\n", pid);
-	sigaction(SIGUSR1, &sa, 0);
-	sigaction(SIGUSR2, &sa, 0);
 	while (1)
+	{
+		sigaction(SIGUSR1, &sa, 0);
+		sigaction(SIGUSR2, &sa, 0);
 		pause();
+	}
 	return (0);
 }
