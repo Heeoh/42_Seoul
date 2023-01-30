@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 01:12:04 by heson             #+#    #+#             */
-/*   Updated: 2023/01/26 15:31:32 by heson            ###   ########.fr       */
+/*   Updated: 2023/01/30 11:49:35 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include "../library/libft/libft.h"
 # include "../library/printf/headers/ft_printf.h"
 
-# define ZERO SIGUSR1
-# define ONE SIGUSR2
+# define ZERO_SIG SIGUSR1
+# define ONE_SIG SIGUSR2
 
 #endif

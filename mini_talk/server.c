@@ -6,13 +6,11 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 18:32:02 by heson             #+#    #+#             */
-/*   Updated: 2023/01/29 14:50:23 by heson            ###   ########.fr       */
+/*   Updated: 2023/01/30 11:49:46 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minitalk.h"
-
-int	g_signal = 0;
 
 void	signal_handler(int sig)
 {
@@ -20,7 +18,7 @@ void	signal_handler(int sig)
 	static char	ch;
 	int			bit;
 
-	bit = (sig == ONE);
+	bit = (sig == ONE_SIG);
 	ch = (ch << 1) | bit;
 	recv_cnt++;
 	if (recv_cnt == 8)
@@ -53,8 +51,8 @@ int	main(void)
 	ft_printf("%d\n", pid);
 	while (1)
 	{
-		sigaction(SIGUSR1, &sa, 0);
-		sigaction(SIGUSR2, &sa, 0);
+		sigaction(ZERO_SIG, &sa, 0);
+		sigaction(ONE_SIG, &sa, 0);
 		pause();
 	}
 	return (0);

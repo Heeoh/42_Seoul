@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 18:31:36 by heson             #+#    #+#             */
-/*   Updated: 2023/01/29 13:26:30 by heson            ###   ########.fr       */
+/*   Updated: 2023/01/29 15:09:58 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 void	send_bit(int server_pid, int bit)
 {
 	if (bit == 0)
-		kill(server_pid, ZERO);
+		kill(server_pid, ZERO_SIG);
 	else
-		kill(server_pid, ONE);
+		kill(server_pid, ONE_SIG);
 	usleep(100);
 }
 
@@ -45,10 +45,10 @@ int	main(int ac, char *av[])
 
 	if (ac == 3)
 	{
-		server_pid = atoi(av[1]);
+		server_pid = ft_atoi(av[1]);
 		if (server_pid <= 0)
 			return (0);
-		ft_printf("client(%d) is connecting to %d ...\n", getpid(), server_pid);
+		ft_printf("client is connecting to server(%d) ...\n", server_pid);
 		send_str(server_pid, av[2]);
 	}
 	return (0);
