@@ -6,12 +6,12 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:34:11 by heson             #+#    #+#             */
-/*   Updated: 2023/01/29 20:58:41 by heson            ###   ########.fr       */
+/*   Updated: 2023/01/30 13:19:36 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "header/operations.h"
-#include <stdlib.h>
+#include "../header/operations.h"
+#include <stdlib.h>  // malloc
 
 void swap(t_stack *stk)
 {
@@ -61,7 +61,7 @@ void reverse(t_stack *stk)
     int i;
     int prev_top;
 
-     if (get_stk_size(*stk) < 2)
+    if (get_stk_size(*stk) < 2)
         return ;
     tmp = (int *)malloc(sizeof(int) * stk->top);
     i = 0;
@@ -71,7 +71,7 @@ void reverse(t_stack *stk)
         pop_top(stk);
     }
     prev_top = tmp[--i];
-    while (--i > 0)
+    while (i--)
         push_top(stk, tmp[i]);
     push_top(stk, prev_top);
 }
