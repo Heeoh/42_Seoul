@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 13:17:17 by heson             #+#    #+#             */
-/*   Updated: 2023/01/30 19:58:36 by heson            ###   ########.fr       */
+/*   Updated: 2023/01/31 03:32:15 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "../header/operations.h"
 #include <stdio.h> // printf
 
-void print_state(t_stack stk_a, t_stack stk_b)
+void	print_state(t_stack stk_a, t_stack stk_b)
 {
 	int ia = 0, ib = 0;
 
@@ -28,7 +28,6 @@ void print_state(t_stack stk_a, t_stack stk_b)
 	printf("\n");
 }
 
-
 unsigned int	ft_abs(int x)
 {
 	if (x < 0)
@@ -36,35 +35,48 @@ unsigned int	ft_abs(int x)
 	return (x);
 }
 
-void 	find_pos(t_stack **stk_b, int x)
+void	get_top_after_op(void op(t_stack *), t_stack **stk, int *prev, int *cur)
 {
+	*prev = *cur;
+	op(*stk);
+	*cur = get_top(**stk);
+}
+
+// more than 25 lines
+void	find_pos(t_stack **stk_b, int x)
+{
+	int	first_top;
 	int	prev_top;
-	int	prev_diff;
+	int	cur_top;
 
 	prev_top = get_top(**stk_b);
-	prev_diff = prev_top - x;
-	rb(*stk_b);
-	if (prev_diff > 0)
+	rrb(*stk_b);
+	cur_top = get_top(**stk_b);
+	first_top = prev_top;
+	if (cur_top == prev_top)
+		return ;
+	if (cur_top < prev_top)
 	{
-		while (prev_diff > 0 && prev_diff > get_top(**stk_b) - x)
+		if (prev_top < x || x < cur_top)
 		{
-			prev_top = get_top(**stk_b);
-			prev_diff =  prev_top - x;
 			rb(*stk_b);
+			return ;
 		}
-		if (prev_diff < 0)
-			rrb(*stk_b);
+		get_top_after_op(rb, stk_b, &prev_top, &cur_top);
+		while (x < cur_top)
+			get_top_after_op(rb, stk_b, &prev_top, &cur_top);
 	}
 	else
 	{
-		while (prev_diff < 0 && prev_diff < get_top(**stk_b) - x)
+		if (x < prev_top)
 		{
-			prev_top = get_top(**stk_b);
-			prev_diff =  prev_top - x;
-			rrb(*stk_b);
+			while (x < prev_top && cur_top < prev_top && cur_top != first_top)
+				get_top_after_op(rb, stk_b, &prev_top, &cur_top);
+			return ;
 		}
-		if (prev_diff < 0)
-			rb(*stk_b);
+		while (cur_top < x && prev_top < cur_top && cur_top != first_top)
+			get_top_after_op(rrb, stk_b, &prev_top, &cur_top);
+		rb(*stk_b);
 	}
 }
 
@@ -84,7 +96,7 @@ void	insertion_sort(t_stack *stk_a, t_stack *stk_b)
 		pb(stk_a, stk_b);
 		if (get_stk_size(*stk_b) == 2 && get_top(*stk_b) < b_top)
 			sb(stk_b);
-		print_state(*stk_a, *stk_b);
+		// print_state(*stk_a, *stk_b);
 	}
 	b_top = get_top(*stk_b);
 	rrb(stk_b);
@@ -158,4 +170,3 @@ Exec pb
 A 
 B
 */
-
