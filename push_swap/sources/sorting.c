@@ -6,12 +6,12 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 13:17:17 by heson             #+#    #+#             */
-/*   Updated: 2023/01/31 03:32:15 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/01 19:27:30 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../header/stack.h"
-#include "../header/operations.h"
+#include "../headers/stack.h"
+#include "../headers/operations.h"
 #include <stdio.h> // printf
 
 void	print_state(t_stack stk_a, t_stack stk_b)

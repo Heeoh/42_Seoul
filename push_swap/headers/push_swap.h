@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 19:32:53 by heson             #+#    #+#             */
-/*   Updated: 2023/01/30 16:04:08 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/01 17:46:26 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define PUSH_SWAP_H
 
 void	insertion_sort(t_stack *stk_a, t_stack *stk_b);
+
 
 
 #endif

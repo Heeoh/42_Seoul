@@ -6,13 +6,13 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:53:48 by heson             #+#    #+#             */
-/*   Updated: 2023/01/30 16:09:54 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/01 19:27:21 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../header/stack.h"
-#include "../header/operations.h"
-#include "../header/push_swap.h"
+#include "../headers/stack.h"
+#include "../headers/operations.h"
+#include "../headers/push_swap.h"
 
 #include <stdio.h>  // printf
 #include <stdlib.h> // atoi
@@ -25,7 +25,6 @@ void    init(int ac, char *av[], t_stack *stk_a, t_stack *stk_b)
 	while (--ac)
 		push_top(stk_a, atoi(av[ac]));
 }
-
 
 
 int main(int ac, char *av[])

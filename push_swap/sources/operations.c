@@ -6,11 +6,11 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:30:12 by heson             #+#    #+#             */
-/*   Updated: 2023/01/30 16:03:45 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/01 19:27:12 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../header/operations.h"
+#include "../headers/operations.h"
 #include <stdio.h> // printf
 
 void    sa(t_stack *stk)

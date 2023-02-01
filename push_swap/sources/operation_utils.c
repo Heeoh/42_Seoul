@@ -6,11 +6,11 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:34:11 by heson             #+#    #+#             */
-/*   Updated: 2023/01/30 13:19:36 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/01 19:27:08 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../header/operations.h"
+#include "../headers/operations.h"
 #include <stdlib.h>  // malloc
 
 void swap(t_stack *stk)

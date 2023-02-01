@@ -6,14 +6,14 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 19:29:19 by heson             #+#    #+#             */
-/*   Updated: 2023/01/30 15:49:07 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/01 18:44:48 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef OPERATIONS_H
 # define OPERATIONS_H
 
-#include "stack.h"
+# include "stack.h"
 
 // typedef enum e_op
 // {
