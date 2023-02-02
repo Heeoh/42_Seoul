@@ -1,31 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.h                                        :+:      :+:    :+:   */
+/*   ft_strlcpy_man.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/29 19:32:53 by heson             #+#    #+#             */
-/*   Updated: 2023/02/02 21:04:08 by heson            ###   ########.fr       */
+/*   Created: 2022/07/07 13:18:19 by heson             #+#    #+#             */
+/*   Updated: 2022/07/27 16:20:35 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PUSH_SWAP_H
-# define PUSH_SWAP_H
+#include "libft.h"
 
-# define TRUE 1
-# define FALSE 0
-# define ERROR_P 0
-# define ERROR_I -1
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
+{
+	unsigned int	i;
+	unsigned int	src_len;
 
-#include "../headers/stack.h"
-#include "../library/libft/libft.h"
-
-
-t_list	*check_argv(int ac, char *av[]);
-void	insertion_sort(t_stack *stk_a, t_stack *stk_b);
-
-
-
-
-#endif
+	src_len = ft_strlen(src);
+	i = 0;
+	while (i < src_len && i + 1 < dstsize)
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	if (i + 1 <= dstsize)
+		dst[i] = '\0';
+	return (src_len);
+}

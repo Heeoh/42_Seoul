@@ -1,31 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.h                                        :+:      :+:    :+:   */
+/*   ft_strdup_man.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/29 19:32:53 by heson             #+#    #+#             */
-/*   Updated: 2023/02/02 21:04:08 by heson            ###   ########.fr       */
+/*   Created: 2022/07/13 15:11:00 by heson             #+#    #+#             */
+/*   Updated: 2022/07/27 16:20:16 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PUSH_SWAP_H
-# define PUSH_SWAP_H
+#include "libft.h"
 
-# define TRUE 1
-# define FALSE 0
-# define ERROR_P 0
-# define ERROR_I -1
+char	*ft_strdup(const char *s1)
+{
+	char			*res;
+	unsigned int	i;
+	unsigned int	size;
 
-#include "../headers/stack.h"
-#include "../library/libft/libft.h"
-
-
-t_list	*check_argv(int ac, char *av[]);
-void	insertion_sort(t_stack *stk_a, t_stack *stk_b);
-
-
-
-
-#endif
+	size = ft_strlen(s1);
+	res = (char *)malloc(size + 1);
+	if (!res)
+		return (NULL);
+	i = 0;
+	while (((char *)s1)[i])
+	{
+		res[i] = s1[i];
+		i++;
+	}
+	res[i] = '\0';
+	return (res);
+}

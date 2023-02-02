@@ -1,31 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.h                                        :+:      :+:    :+:   */
+/*   ft_bzero_man.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/29 19:32:53 by heson             #+#    #+#             */
-/*   Updated: 2023/02/02 21:04:08 by heson            ###   ########.fr       */
+/*   Created: 2022/07/27 16:15:14 by heson             #+#    #+#             */
+/*   Updated: 2023/01/19 01:04:52 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PUSH_SWAP_H
-# define PUSH_SWAP_H
+#include "libft.h"
 
-# define TRUE 1
-# define FALSE 0
-# define ERROR_P 0
-# define ERROR_I -1
+void	*ft_bzero(void *b, size_t len)
+{
+	unsigned char	*p;
 
-#include "../headers/stack.h"
-#include "../library/libft/libft.h"
-
-
-t_list	*check_argv(int ac, char *av[]);
-void	insertion_sort(t_stack *stk_a, t_stack *stk_b);
-
-
-
-
-#endif
+	p = b;
+	while (len--)
+		*p++ = 0;
+	return (b);
+}

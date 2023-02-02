@@ -1,31 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.h                                        :+:      :+:    :+:   */
+/*   ft_lstnew_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/29 19:32:53 by heson             #+#    #+#             */
-/*   Updated: 2023/02/02 21:04:08 by heson            ###   ########.fr       */
+/*   Created: 2022/07/22 17:28:34 by heson             #+#    #+#             */
+/*   Updated: 2022/07/27 16:19:21 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PUSH_SWAP_H
-# define PUSH_SWAP_H
+#include "libft.h"
 
-# define TRUE 1
-# define FALSE 0
-# define ERROR_P 0
-# define ERROR_I -1
+t_list	*ft_lstnew(void *content)
+{
+	t_list	*new_node;
 
-#include "../headers/stack.h"
-#include "../library/libft/libft.h"
-
-
-t_list	*check_argv(int ac, char *av[]);
-void	insertion_sort(t_stack *stk_a, t_stack *stk_b);
-
-
-
-
-#endif
+	new_node = (t_list *)malloc(sizeof(t_list));
+	if (!new_node)
+		return (NULL);
+	new_node->content = content;
+	new_node->next = NULL;
+	return (new_node);
+}

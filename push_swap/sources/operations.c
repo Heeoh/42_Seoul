@@ -1,83 +1,113 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   operations.c                                       :+:      :+:    :+:   */
+/*   operations1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:30:12 by heson             #+#    #+#             */
-/*   Updated: 2023/02/01 19:27:12 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/02 15:48:27 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/operations.h"
 #include <stdio.h> // printf
+#include <string.h> // strlcpy
 
-void    sa(t_stack *stk)
+void	print_op(t_op op)
 {
-    printf("sa\n");
-    swap(stk);
+	char	op_str[34];
+
+	strlcpy(op_str, "sa sb ss pa pb ra rb rr rrarrbrrr", 33);
+	printf("%.3s\n", op_str + (op * 3));
 }
 
-void    sb(t_stack *stk)
+void	do_operation(t_op op, t_stack *stk_a, t_stack *stk_b)
 {
-    printf("sb\n");
-    swap(stk);
+	print_op(op);
+	if (op == SA || op == SS)
+		swap(stk_a);
+	if (op == SB || op == SS)
+		swap(stk_b);
+	if (op == PA)
+		push(stk_b, stk_a);
+	else if (op == PB)
+		push(stk_a, stk_b);
+	if (op == RA || op == RR)
+		rotate(stk_a);
+	if (op == RB || op == RR)
+		rotate(stk_b);
+	if (op == RRA || op == RRR)
+		reverse(stk_a);
+	if (op == RRB || op == RRR)
+		reverse(stk_b);
 }
 
-void    ss(t_stack *stk_a, t_stack *stk_b)
-{
-    printf("ss\n");
-    swap(stk_a);
-    swap(stk_b);
-}
+// void	sa(t_stack *stk)
+// {
+// 	printf("sa\n");
+// 	swap(stk);
+// }
 
-void    pa(t_stack *stk_a, t_stack *stk_b)
-{
-    printf("pa\n");
-    push(stk_b, stk_a);
-}
+// void	sb(t_stack *stk)
+// {
+// 	printf("sb\n");
+// 	swap(stk);
+// }
 
-void    pb(t_stack *stk_a, t_stack *stk_b)
-{
-    printf("pb\n");
-    push(stk_a, stk_b);
-}
+// void	ss(t_stack *stk_a, t_stack *stk_b)
+// {
+// 	printf("ss\n");
+// 	swap(stk_a);
+// 	swap(stk_b);
+// }
 
-void    ra(t_stack *stk)
-{
-    printf("ra\n");
-    rotate(stk);
-}
+// void	pa(t_stack *stk_a, t_stack *stk_b)
+// {
+// 	printf("pa\n");
+// 	push(stk_b, stk_a);
+// }
 
-void    rb(t_stack *stk)
-{
-    printf("rb\n");
-    rotate(stk);
-}
+// void	pb(t_stack *stk_a, t_stack *stk_b)
+// {
+// 	printf("pb\n");
+// 	push(stk_a, stk_b);
+// }
 
-void    rr(t_stack *stk_a, t_stack *stk_b)
-{
-    printf("rr\n");
-    rotate(stk_a);
-    rotate(stk_b);
-}
+// void	ra(t_stack *stk)
+// {
+// 	printf("ra\n");
+// 	rotate(stk);
+// }
 
-void    rra(t_stack *stk)
-{
-    printf("rra\n");
-    reverse(stk);
-}
+// void	rb(t_stack *stk)
+// {
+// 	printf("rb\n");
+// 	rotate(stk);
+// }
 
-void    rrb(t_stack *stk)
-{
-    printf("rrb\n");
-    reverse(stk);
-}
+// void	rr(t_stack *stk_a, t_stack *stk_b)
+// {
+// 	printf("rr\n");
+// 	rotate(stk_a);
+// 	rotate(stk_b);
+// }
 
-void    rrr(t_stack *stk_a, t_stack *stk_b)
-{
-    printf("rrr\n");
-    reverse(stk_a);
-    reverse(stk_b);
-}
+// void	rra(t_stack *stk)
+// {
+// 	printf("rra\n");
+// 	reverse(stk);
+// }
+
+// void	rrb(t_stack *stk)
+// {
+// 	printf("rrb\n");
+// 	reverse(stk);
+// }
+
+// void	rrr(t_stack *stk_a, t_stack *stk_b)
+// {
+// 	printf("rrr\n");
+// 	reverse(stk_a);
+// 	reverse(stk_b);
+// }

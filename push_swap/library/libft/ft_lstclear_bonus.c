@@ -1,31 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.h                                        :+:      :+:    :+:   */
+/*   ft_lstclear_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/29 19:32:53 by heson             #+#    #+#             */
-/*   Updated: 2023/02/02 21:04:08 by heson            ###   ########.fr       */
+/*   Created: 2022/07/22 17:41:23 by heson             #+#    #+#             */
+/*   Updated: 2022/07/22 17:42:02 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PUSH_SWAP_H
-# define PUSH_SWAP_H
+#include "libft.h"
 
-# define TRUE 1
-# define FALSE 0
-# define ERROR_P 0
-# define ERROR_I -1
+void	ft_lstclear(t_list **lst, void (*del)(void*))
+{
+	t_list	*next;
+	t_list	*p;
 
-#include "../headers/stack.h"
-#include "../library/libft/libft.h"
-
-
-t_list	*check_argv(int ac, char *av[]);
-void	insertion_sort(t_stack *stk_a, t_stack *stk_b);
-
-
-
-
-#endif
+	p = *lst;
+	while (p)
+	{
+		next = p->next;
+		ft_lstdelone(p, del);
+		p = next;
+	}
+	*lst = NULL;
+}
