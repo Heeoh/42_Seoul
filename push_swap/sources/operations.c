@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   operations1.c                                      :+:      :+:    :+:   */
+/*   operations.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:30:12 by heson             #+#    #+#             */
-/*   Updated: 2023/02/02 15:48:27 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/03 01:44:04 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@ void	print_op(t_op op)
 	char	op_str[34];
 
 	strlcpy(op_str, "sa sb ss pa pb ra rb rr rrarrbrrr", 33);
-	printf("%.3s\n", op_str + (op * 3));
+	if (SA <= op && op <= RR)
+		printf("%.2s\n", op_str + (op * 3));
+	else if (RRA <= op && op <= RRR)
+		printf("%.3s\n", op_str + (op * 3));
 }
 
 void	do_operation(t_op op, t_stack *stk_a, t_stack *stk_b)

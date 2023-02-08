@@ -30,7 +30,7 @@ AR		= ar -rcs
 
 $(OBJS_DIR)%.o : $(SRCS_DIR)%.c
 	$(MD) $(dir $@)
-	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDE) -c -g $< -o $@
 
 all: 
 	make bonus -C $(LIBFT_DIR)

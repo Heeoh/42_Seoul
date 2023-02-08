@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:53:48 by heson             #+#    #+#             */
-/*   Updated: 2023/02/02 21:03:42 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/08 15:31:51 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,43 @@
 #include <stdio.h>  // printf
 #include <stdlib.h> // atoi
 
+void	print_state(t_stack stk_a, t_stack stk_b)
+{
+	int ia = 0, ib = 0;
 
-void    init(int ac, char *av[], t_stack *stk_a, t_stack *stk_b)
+	printf("a | ");
+	while (ia <= stk_a.top)
+		printf("%d ", stk_a.memory[ia++]);
+	printf("\n");
+	printf("b | ");
+	while (ib <= stk_b.top)
+		printf("%d ", stk_b.memory[ib++]);
+	printf("\n");
+}
+
+int	*get_sorted_arr(t_list	*nums, int size)
+{
+	int	*sorted;
+	int	i;
+
+	sorted = (int *)malloc(sizeof(int) * size);
+	i = 0;
+	while (nums)
+	{
+		sorted[i++] = *((int *)nums->content);
+		nums = nums->next;
+	}
+	ft_quick_sort(sorted, 0, size - 1);
+	return (sorted);
+}
+
+void    init(int ac, char *av[], t_stack *stk_a, t_stack *stk_b, int **sorted)
 {
 	t_list	*nums;
 	t_list	*nums_p;
 	int		stack_size;
 
-	nums = check_argv(ac, av);
+	nums = parsing(ac, av);
 	stack_size = ft_lstsize(nums);
 	init_stack(stk_a, stack_size);
 	init_stack(stk_b, stack_size);
@@ -33,15 +62,22 @@ void    init(int ac, char *av[], t_stack *stk_a, t_stack *stk_b)
 		push_top(stk_a, *((int *)(nums_p->content)));
 		nums_p = nums_p->next;
 	}
+	*sorted = get_sorted_arr(nums, stack_size);
+}
+
+void	push_swap(t_stack *stk_a, t_stack *stk_b, int *sorted)
+{
+	a_to_b(stk_a, stk_b, 0, stk_a->top, sorted);
+	// print_state(*stk_a, *stk_b);
 }
 
 int main(int ac, char *av[])
 {
 	t_stack stk_a;
 	t_stack stk_b;
+	int		*sorted;
 
-	init(ac, av, &stk_a, &stk_b);
- 
-	insertion_sort(&stk_a, &stk_b);
-
+	sorted = NULL;
+	init(ac, av, &stk_a, &stk_b, &sorted);
+	push_swap(&stk_a, &stk_b, sorted);	
 }

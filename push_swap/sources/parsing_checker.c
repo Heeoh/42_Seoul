@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   argv_checker.c                                     :+:      :+:    :+:   */
+/*   parsing_checker.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/02 16:31:28 by heson             #+#    #+#             */
-/*   Updated: 2023/02/02 21:07:30 by heson            ###   ########.fr       */
+/*   Created: 2023/02/07 21:15:54 by heson             #+#    #+#             */
+/*   Updated: 2023/02/08 14:28:30 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,16 +64,18 @@ void	check_int_range(char *num)
 
 void	check_an_argv(char  *av, t_list **list)
 {
+	char	*av_p;
 	int		is_int;
 	int		*num;
 	t_list	*new;
 
 	is_int = TRUE;
-	while (av && *av)
+	av_p = av;
+	while (av_p && *av_p)
 	{
-		if (!isdigit(*av) && !(*av == '+' || *av == '-'))
+		if (!isdigit(*av_p) && !(*av_p == '+' || *av_p == '-'))
 			is_int = FALSE;
-		av++;
+		av_p++;
 	}
 	if (!is_int)
 		print_error();
@@ -87,13 +89,14 @@ void	check_an_argv(char  *av, t_list **list)
 	ft_lstadd_front(list, new);
 }
 
-t_list	*check_argv(int ac, char *av[])
+t_list	*parsing(int ac, char *av[])
 {
 	t_list	*list;
 	char	**str_arr;
 	int 	i;
 	int		j;
 
+	list = 0;
 	i = 0;
 	while (++i < ac)
 	{  
@@ -102,7 +105,8 @@ t_list	*check_argv(int ac, char *av[])
 			str_arr = ft_split(av[i], ' ');
 			j = 0;
 			while (str_arr[j])
-				check_an_argv(str_arr[j], &list);
+				check_an_argv(str_arr[j++], &list);
+			i++;
 		}
 	}
 	return (list);
