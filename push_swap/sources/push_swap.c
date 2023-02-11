@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:53:48 by heson             #+#    #+#             */
-/*   Updated: 2023/02/08 15:31:51 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/11 18:49:19 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,9 @@ void    init(int ac, char *av[], t_stack *stk_a, t_stack *stk_b, int **sorted)
 
 void	push_swap(t_stack *stk_a, t_stack *stk_b, int *sorted)
 {
+	print_state(*stk_a, *stk_b);
 	a_to_b(stk_a, stk_b, 0, stk_a->top, sorted);
-	// print_state(*stk_a, *stk_b);
+	print_state(*stk_a, *stk_b);
 }
 
 int main(int ac, char *av[])
