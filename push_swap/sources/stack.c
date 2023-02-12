@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:56:07 by heson             #+#    #+#             */
-/*   Updated: 2023/02/01 19:27:03 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/12 15:29:42 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int get_top(t_stack stack)
 {
     if (isEmpty(stack))
     {
-        printf("ERROR - stack is empty\n");
+        printf("error - stack is empty\n");
         return (-1);
     }
     return (stack.memory[stack.top]);

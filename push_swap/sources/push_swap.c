@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:53:48 by heson             #+#    #+#             */
-/*   Updated: 2023/02/11 18:49:19 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/12 16:10:22 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,21 @@ void    init(int ac, char *av[], t_stack *stk_a, t_stack *stk_b, int **sorted)
 
 void	push_swap(t_stack *stk_a, t_stack *stk_b, int *sorted)
 {
-	print_state(*stk_a, *stk_b);
-	a_to_b(stk_a, stk_b, 0, stk_a->top, sorted);
-	print_state(*stk_a, *stk_b);
+	int	i;
+
+	i = 0;
+	while (i <= stk_a->top && stk_a->memory[i] == sorted[stk_a->top - i])
+		i++;
+	if (i == get_stk_size(*stk_a))
+		return ;
+	// print_state(*stk_a, *stk_b);
+	if (get_stk_size(*stk_a) > 3)
+		a_to_b(stk_a, stk_b, 0, stk_a->top, sorted);
+	else if (get_stk_size(*stk_a) == 3)
+		sort_3nums(stk_a, stk_b, sorted[2], sorted[0]);
+	else if (get_stk_size(*stk_a) == 2)
+		sort_2nums(stk_a, stk_b, sorted[0]);
+	// print_state(*stk_a, *stk_b);
 }
 
 int main(int ac, char *av[])

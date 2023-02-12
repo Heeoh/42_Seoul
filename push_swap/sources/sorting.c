@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 13:17:17 by heson             #+#    #+#             */
-/*   Updated: 2023/02/11 21:36:24 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/12 16:11:12 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,35 @@
 
 //----------------------- dual quick sorting --------------------------//
 
+void	sort_2nums(t_stack *stk_a, t_stack *stk_b, int top)
+{
+	if (get_top(*stk_a) != top)
+		do_operation(SA, stk_a, stk_b);
+}
+
+void	sort_3nums(t_stack *stk_a, t_stack *stk_b, int bottom, int top)
+{
+
+	if (stk_a->memory[stk_a->top - 2] == bottom && get_top(*stk_a) == top) // 321
+		return ;
+	else if (stk_a->memory[stk_a->top - 2] == bottom && get_top(*stk_a) != top) // 312
+		do_operation(SA, stk_a, stk_b);
+	else if (stk_a->memory[stk_a->top - 2] == top && get_top(*stk_a) == bottom) // 123
+	{
+		do_operation(SA, stk_a, stk_b);
+		do_operation(RRA, stk_a, stk_b);
+	}
+	else if (stk_a->memory[stk_a->top - 2] == top && get_top(*stk_a) != bottom)
+		do_operation(RRA, stk_a, stk_b);
+	else if (get_top(*stk_a) == bottom)
+		do_operation(RA, stk_a, stk_b);
+	else if (get_top(*stk_a) == top)
+	{
+		do_operation(SA, stk_a, stk_b);
+		do_operation(RA, stk_a, stk_b);
+	}
+}
+
 void	partition_a(t_stack *stk_a, t_stack *stk_b, int pivot1, int pivot2)
 {
 	int	cnt;
@@ -93,10 +122,12 @@ void	partition_a(t_stack *stk_a, t_stack *stk_b, int pivot1, int pivot2)
 		else
 		{
 			do_operation(PB, stk_a, stk_b);
-			if (get_top(*stk_b) < pivot1)
+			if (get_top(*stk_b) >= pivot1)
 				do_operation(RB, stk_a, stk_b);	
 		}
 	}
+	while (stk_b->memory[0] >= pivot1)
+		do_operation(RRB, stk_a, stk_b);
 }
 
 void	a_to_b(t_stack *stk_a, t_stack *stk_b, int s, int e, int *sorted)
@@ -106,6 +137,9 @@ void	a_to_b(t_stack *stk_a, t_stack *stk_b, int s, int e, int *sorted)
 
 	if (e - s == 2)
 	{
+		// == 3 -> pb ra pa sa rra & top != 1 -> sa
+		// == 2 -> prev == 3 -> pb sa pa & sa
+		// == 1 -> prev == 3 -> ra sa rra
 		if (get_top(*stk_a) == sorted[e])
 		{
 			do_operation(PB, stk_a, stk_b);
@@ -114,7 +148,7 @@ void	a_to_b(t_stack *stk_a, t_stack *stk_b, int s, int e, int *sorted)
 			do_operation(SA, stk_a, stk_b);
 			do_operation(RRA, stk_a, stk_b);
 			if (get_top(*stk_a) != sorted[s])
-				do_operation(PB, stk_a, stk_b);
+				do_operation(SA, stk_a, stk_b);
 		}
 		else if (get_top(*stk_a) == sorted[s] 
 				&& stk_a->memory[stk_a->top - 1] == sorted[e])
@@ -137,8 +171,8 @@ void	a_to_b(t_stack *stk_a, t_stack *stk_b, int s, int e, int *sorted)
 	}
 	else if (e - s < 2)
 	{
-		if (get_top(*stk_a) != sorted[s])
-			do_operation(SA, stk_a, stk_b);
+		if (e != s)
+			sort_2nums(stk_a, stk_b, sorted[s]);
 		return;
 	}
 	pivot1 = s + ((e - s) / 3);
@@ -161,36 +195,68 @@ void	partition_b(t_stack *stk_a, t_stack *stk_b, int pivot1, int pivot2)
 		else
 		{
 			do_operation(PA, stk_a, stk_b);
-			if (get_top(*stk_a) >= pivot2)
+			if (get_top(*stk_a) < pivot2)
 				do_operation(RA, stk_a, stk_b);	
 		}
 	}
+	while (stk_a->memory[0] < pivot2)
+		do_operation(RRA, stk_a, stk_b);
 }
 
 void	b_to_a(t_stack *stk_a, t_stack *stk_b, int s, int e, int *sorted)
 {
+	int cnt;
 	int	pivot1;
 	int pivot2;
 
 	if (e - s == 2)
 	{
-		
+		// == 3 -> pa pa pa & top_a != 1 -> sa
+		// == 2 -> pa & top_b != 3 -> sb & pa sa pa
+		// == 1 -> rb pa pa & top_a == 3 -> sa & rrb pa
+		if (get_top(*stk_b) == sorted[e])
+		{
+			do_operation(PA, stk_a, stk_b);
+			do_operation(PA, stk_a, stk_b);
+			do_operation(PA, stk_a, stk_b);
+			if (get_top(*stk_a) != sorted[s])
+				do_operation(SA, stk_a, stk_b);
+		}
+		else if (get_top(*stk_b) == sorted[s])
+		{
+			do_operation(RB, stk_a, stk_b);
+			do_operation(PA, stk_a, stk_b);
+			do_operation(PA, stk_a, stk_b);
+			if (get_top(*stk_a) == sorted[e])
+				do_operation(SA, stk_a, stk_b);
+			do_operation(RRB, stk_a, stk_b);
+			do_operation(PA, stk_a, stk_b);
+		}
+		else
+		{
+			do_operation(PA, stk_a, stk_b);
+			if (get_top(*stk_b) != sorted[e])
+				do_operation(SB, stk_a, stk_b);
+			do_operation(PA, stk_a, stk_b);
+			do_operation(SA, stk_a, stk_b);
+			do_operation(PA, stk_a, stk_b);
+		}
+		return ;
 	}
 	else if (e - s < 2)
 	{
-		if (get_top(*stk_b) != sorted[e])
-			do_operation(SB, stk_a, stk_b);
-		if (get_top(*stk_b) != sorted[s])
+		cnt = e - s + 1;
+		while (cnt--)
 			do_operation(PA, stk_a, stk_b);
-		do_operation(PA, stk_a, stk_b);
-		return;
+		a_to_b(stk_a, stk_b, s, e, sorted);
+		return ;
 	}
 	pivot1 = s + (e - s) / 3;
 	pivot2 = e - (e - s) / 3;
 	partition_b(stk_a, stk_b, sorted[pivot1], sorted[pivot2]);
 	a_to_b(stk_a, stk_b, pivot1, pivot2 - 1, sorted);
 	a_to_b(stk_a, stk_b, pivot2, e, sorted);
-	b_to_a(stk_a, stk_b, s, pivot1 - 1, sorted);	
+	b_to_a(stk_a, stk_b, s, pivot1 - 1, sorted);
 }
 
 /* 
@@ -215,22 +281,6 @@ a to b (m, p1)
 a to b (l, p2)
 b to a (s)
 
-// b to a 3 nums
-1 2 3 -> pa pa pa
-1 3 2 -> pa pa sa pa
-2 1 3 -> pa pa pa sa
-2 3 1 -> rrb pa pa rb pa
-3 1 2 -> pa sb pa sa pa
-3 2 1 -> rrb pa pa sa rb pa
-
-
-
-// b to a 2 nums
-top == e -> pa pa
-top == s -> sb pa pa
-
-// b to a 1 nums 
-pa
 
 // a to b 3 nums
 1 2 3 -> pb ra pa sa rra sa
@@ -242,8 +292,7 @@ pa
 
 top
 == 3 -> pb ra pa sa rra & top != 1 -> sa
-== 2 -> prev == 3 -> pb sa pa
-		sa
+== 2 -> prev == 3 -> pb sa pa & sa
 == 1 -> prev == 3 -> ra sa rra
 
 
@@ -251,9 +300,9 @@ top
 1 2 3 -> pa pa pa
 1 3 2 -> pa pa sa pa
 2 1 3 -> pa pa pa sa
-2 3 1 -> rrb pa pa rb pa
+2 3 1 -> rb pa pa rb pa
 3 1 2 -> pa sb pa sa pa
-3 2 1 -> rrb pa pa sa rb pa
+3 2 1 -> rb pa pa sa rb pa
 
 top
 == 3 -> pa pa pa & top_a != 1 -> sa
