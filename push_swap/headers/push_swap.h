@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 19:32:53 by heson             #+#    #+#             */
-/*   Updated: 2023/02/12 17:32:06 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/13 19:54:07 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,18 @@
 
 # define TRUE 1
 # define FALSE 0
-# define ERROR_P 0
+# define ERROR_P NULL
 # define ERROR_I -1
 
 #include "../headers/stack.h"
 #include "../library/libft/libft.h"
+#include "../library/printf/headers/ft_printf.h"
 
-
-t_list	*parsing(int ac, char *av[]);
-void	ft_quick_sort(int *nums, int s, int e);
+void	check_an_argv(char *av, t_list **list);
+void	get_sorted_arr(int *nums, int s, int e);
+void	do_free(t_list **lst, t_stack *stk_a, t_stack *stk_b, int *sorted);
+void	sort_less_5nums(t_stack *stk_a, t_stack *stk_b, int *sorted);
 void	a_to_b(t_stack *stk_a, t_stack *stk_b, int s, int e, int *sorted);
 void	b_to_a(t_stack *stk_a, t_stack *stk_b, int s, int e, int *sorted);
-void	sort_2nums(t_stack *stk_a, t_stack *stk_b, int top);
-void	sort_3nums(t_stack *stk_a, t_stack *stk_b, int bottom, int top);
-// void	insertion_sort(t_stack *stk_a, t_stack *stk_b);
-
-
-
 
 #endif

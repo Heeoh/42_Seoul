@@ -6,15 +6,15 @@ NAME = push_swap
 # ------------------------------- DIRECTORIES -------------------------------- #
 
 LIBFT_DIR	= library/libft/
-#PRINTF_DIR
+PRINTF_DIR	= library/printf/
 HDRS_DIR	= headers/
 SRCS_DIR	= sources/
 OBJS_DIR	= objects/
 
 # ---------------------------------- FILES ----------------------------------- #
 
-LIBS = $(LIBFT_DIR)libft.a
-INCLUDE = -I $(HDRS_DIR) -I $(LIBFT_DIR)
+LIBS = $(LIBFT_DIR)libft.a $(PRINTF_DIR)libftprintf.a
+INCLUDE = -I $(HDRS_DIR) -I $(LIBFT_DIR) -I $(PRINTF_DIR)
 SRCS = $(wildcard $(SRCS_DIR)*.c)
 OBJS += $(addprefix $(OBJS_DIR), $(notdir $(SRCS:.c=.o)))
 
@@ -34,6 +34,7 @@ $(OBJS_DIR)%.o : $(SRCS_DIR)%.c
 
 all: 
 	make bonus -C $(LIBFT_DIR)
+	make bonus -C $(PRINTF_DIR)
 	make $(NAME)
 
 $(NAME): $(OBJS)
@@ -41,6 +42,7 @@ $(NAME): $(OBJS)
 
 clean:
 	make clean -C $(LIBFT_DIR)
+	make clean -C $(PRINTF_DIR)
 	$(RM) $(OBJS_DIR)
 
 fclean:

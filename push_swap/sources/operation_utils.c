@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:34:11 by heson             #+#    #+#             */
-/*   Updated: 2023/02/02 15:10:13 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/13 18:26:09 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void	rotate(t_stack *stk)
 	push_top(stk, tmp[0]);
 	while (--i > 0)
 		push_top(stk, tmp[i]);
+	free(tmp);
 }
 
 void	reverse(t_stack *stk)
@@ -74,4 +75,5 @@ void	reverse(t_stack *stk)
 	while (i--)
 		push_top(stk, tmp[i]);
 	push_top(stk, prev_top);
+	free(tmp);
 }

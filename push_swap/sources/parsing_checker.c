@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 21:15:54 by heson             #+#    #+#             */
-/*   Updated: 2023/02/08 14:28:30 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/13 19:56:29 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,14 @@
 #include <stdlib.h> // malloc, free
 #include <ctype.h>
 
-void	print_error()
+void	print_error(t_list **lst)
 {
 	write(1, "Error\n", 6);
+	do_free(lst, 0, 0, 0);
 	exit(0);
 }
 
-void	check_dup(t_list *list, int num)
+void	check_dup_num(t_list *list, int num)
 {
 	t_list	*p;
 
@@ -29,7 +30,7 @@ void	check_dup(t_list *list, int num)
 	while (p)
 	{
 		if (*((int *)(p->content)) == num)
-			print_error();
+			print_error(&list);
 		p = p->next;
 	}
 }
@@ -38,7 +39,7 @@ void	check_int_range(char *num)
 {
 	int	sign;
 	int	ret;
-	int len;
+	int	len;
 
 	sign = 1;
 	ret = 0;
@@ -59,10 +60,10 @@ void	check_int_range(char *num)
 	if (len < 10 || ret <= 0)
 		return ;
 	else if (len > 10 || ret > 0)
-		print_error();
+		print_error(0);
 }
 
-void	check_an_argv(char  *av, t_list **list)
+void	check_an_argv(char *av, t_list **list)
 {
 	char	*av_p;
 	int		is_int;
@@ -78,37 +79,13 @@ void	check_an_argv(char  *av, t_list **list)
 		av_p++;
 	}
 	if (!is_int)
-		print_error();
+		print_error(list);
 	check_int_range(av);
 	num = (int *)malloc(sizeof(int));
 	if (!num)
 		return ;
 	*num = atoi(av);
-	check_dup(*list, *num);
+	check_dup_num(*list, *num);
 	new = ft_lstnew(num);
 	ft_lstadd_front(list, new);
 }
-
-t_list	*parsing(int ac, char *av[])
-{
-	t_list	*list;
-	char	**str_arr;
-	int 	i;
-	int		j;
-
-	list = 0;
-	i = 0;
-	while (++i < ac)
-	{  
-		while (av[i] && *av[i])
-		{
-			str_arr = ft_split(av[i], ' ');
-			j = 0;
-			while (str_arr[j])
-				check_an_argv(str_arr[j++], &list);
-			i++;
-		}
-	}
-	return (list);
-}
- 

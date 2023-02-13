@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:56:07 by heson             #+#    #+#             */
-/*   Updated: 2023/02/12 15:29:42 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/13 18:28:07 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,54 +14,54 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-void init_stack(t_stack *stack, int size)
+void	init_stack(t_stack *stack, int size)
 {
-    stack->top = -1;
-    stack->mem_size = size;
-    stack->memory = (int *)malloc(sizeof(int) * stack->mem_size);
+	stack->top = -1;
+	stack->mem_size = size;
+	stack->memory = (int *)malloc(sizeof(int) * stack->mem_size);
 }
 
-void push_top(t_stack *stack, int x)
+int	isFull(t_stack stack)
 {
-    if (isFull(*stack))
-    {
-        printf("ERROR - stack is full\n");
-        return ;
-    }
-    stack->memory[++(stack->top)] = x;
+	return (stack.top + 1 == stack.mem_size);
 }
 
-void pop_top(t_stack *stack)
+int	isEmpty(t_stack stack)
 {
-    if (isEmpty(*stack))
-    {
-        printf("ERROR - stack is empty\n");
-        return ;
-    }
-    stack->memory[(stack->top)--] = 0;
+	return (stack.top == -1);
 }
 
-int get_top(t_stack stack)
+void	push_top(t_stack *stack, int x)
 {
-    if (isEmpty(stack))
-    {
-        printf("error - stack is empty\n");
-        return (-1);
-    }
-    return (stack.memory[stack.top]);
+	if (isFull(*stack))
+	{
+		printf("Error - stack is full\n");
+		return ;
+	}
+	stack->memory[++(stack->top)] = x;
 }
 
-int isFull(t_stack stack)
+void	pop_top(t_stack *stack)
 {
-    return (stack.top + 1 == stack.mem_size);
+	if (isEmpty(*stack))
+	{
+		printf("Error - stack is empty\n");
+		return ;
+	}
+	stack->memory[(stack->top)--] = 0;
 }
 
-int isEmpty(t_stack stack)
+int	get_top(t_stack stack)
 {
-    return (stack.top == -1);
+	if (isEmpty(stack))
+	{
+		printf("Error - stack is empty\n");
+		return (-1);
+	}
+	return (stack.memory[stack.top]);
 }
 
-int get_stk_size(t_stack stack)
+int	get_stk_size(t_stack stack)
 {
-    return (stack.top + 1);
+	return (stack.top + 1);
 }
