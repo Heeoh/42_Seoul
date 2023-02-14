@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:53:48 by heson             #+#    #+#             */
-/*   Updated: 2023/02/13 19:57:37 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/14 19:21:54 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,12 @@ t_list	*parsing(int ac, char *av[])
 			str_arr = ft_split(av[i], ' ');
 			j = 0;
 			while (str_arr[j])
-				check_an_argv(str_arr[j++], &list);
+			{
+				check_an_argv(str_arr[j], &list);
+				free(str_arr[j]);
+				j++;
+			}
+			free(str_arr);
 			i++;
 		}
 	}
@@ -47,6 +52,8 @@ void	init(t_list *nums, t_stack *stk_a, t_stack *stk_b, int **sorted)
 	init_stack(stk_b, stack_size);
 	*sorted = NULL;
 	*sorted = (int *)malloc(sizeof(int) * stack_size);
+	if (!*sorted)
+		return ;
 	nums_p = nums;
 	i = 0;
 	while (nums_p)
@@ -60,18 +67,20 @@ void	init(t_list *nums, t_stack *stk_a, t_stack *stk_b, int **sorted)
 
 void	push_swap(t_stack *stk_a, t_stack *stk_b, int *sorted)
 {
+	int	top_idx;
 	int	i;
 
+	top_idx = stk_a->top;
 	i = 0;
-	while (i < get_stk_size(*stk_a)
-		&& stk_a->memory[i] == sorted[stk_a->top - i])
+	while (i <= top_idx
+		&& stk_a->memory[i] == sorted[top_idx - i])
 		i++;
 	if (i == get_stk_size(*stk_a))
 		return ;
 	if (get_stk_size(*stk_a) <= 5)
 		sort_less_5nums(stk_a, stk_b, sorted);
 	else
-		a_to_b(stk_a, stk_b, 0, stk_a->top, sorted);
+		a_to_b(stk_a, stk_b, 0, top_idx, sorted);
 }
 
 int	main(int ac, char *av[])
@@ -84,7 +93,7 @@ int	main(int ac, char *av[])
 	parsing_lst = parsing(ac, av);
 	init(parsing_lst, &stk_a, &stk_b, &sorted);
 	push_swap(&stk_a, &stk_b, sorted);
-	do_free(&parsing_lst, &stk_a, &stk_b, sorted);
-	system("leaks push_swap");
-	// print_state(*stk_a, *stk_b);
+	// print_state(stk_a, stk_b);
+	do_free(&parsing_lst, &stk_a, &stk_b, &sorted);
+	// system("leaks push_swap");
 }

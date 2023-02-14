@@ -6,14 +6,14 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 21:15:54 by heson             #+#    #+#             */
-/*   Updated: 2023/02/13 19:56:29 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/14 19:21:29 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/push_swap.h"
 
 #include <stdlib.h> // malloc, free
-#include <ctype.h>
+#include <stdbool.h>
 
 void	print_error(t_list **lst)
 {
@@ -65,18 +65,18 @@ void	check_int_range(char *num)
 
 void	check_an_argv(char *av, t_list **list)
 {
-	char	*av_p;
+	char	*ch_p;
 	int		is_int;
 	int		*num;
 	t_list	*new;
 
-	is_int = TRUE;
-	av_p = av;
-	while (av_p && *av_p)
+	is_int = true;
+	ch_p = av;
+	while (ch_p && *ch_p)
 	{
-		if (!isdigit(*av_p) && !(*av_p == '+' || *av_p == '-'))
-			is_int = FALSE;
-		av_p++;
+		if (!ft_isdigit(*ch_p) && !(*ch_p == '+' || *ch_p == '-'))
+			is_int = false;
+		ch_p++;
 	}
 	if (!is_int)
 		print_error(list);

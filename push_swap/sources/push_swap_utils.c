@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 14:23:45 by heson             #+#    #+#             */
-/*   Updated: 2023/02/13 19:43:03 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/14 19:22:11 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	print_state(t_stack stk_a, t_stack stk_b)
 	ft_printf("\n");
 }
 
-void	do_free(t_list **lst, t_stack *stk_a, t_stack *stk_b, int *sorted)
+void	do_free(t_list **lst, t_stack *stk_a, t_stack *stk_b, int **sorted)
 {
 	if (lst)
 		ft_lstclear(lst, free);
@@ -71,6 +71,6 @@ void	do_free(t_list **lst, t_stack *stk_a, t_stack *stk_b, int *sorted)
 		free(stk_a->memory);
 	if (stk_b)
 		free(stk_b->memory);
-	if (sorted)
-		free(sorted);
+	if (*sorted)
+		free(*sorted);
 }

@@ -6,36 +6,28 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:56:07 by heson             #+#    #+#             */
-/*   Updated: 2023/02/13 18:28:07 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/14 18:17:10 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/stack.h"
+#include "../library/printf/headers/ft_printf.h"
 #include <stdlib.h>
-#include <stdio.h>
 
 void	init_stack(t_stack *stack, int size)
 {
 	stack->top = -1;
 	stack->mem_size = size;
 	stack->memory = (int *)malloc(sizeof(int) * stack->mem_size);
-}
-
-int	isFull(t_stack stack)
-{
-	return (stack.top + 1 == stack.mem_size);
-}
-
-int	isEmpty(t_stack stack)
-{
-	return (stack.top == -1);
+	if (!stack->memory)
+		return ;
 }
 
 void	push_top(t_stack *stack, int x)
 {
-	if (isFull(*stack))
+	if (full(*stack))
 	{
-		printf("Error - stack is full\n");
+		ft_printf("Error - stack is full\n");
 		return ;
 	}
 	stack->memory[++(stack->top)] = x;
@@ -43,25 +35,20 @@ void	push_top(t_stack *stack, int x)
 
 void	pop_top(t_stack *stack)
 {
-	if (isEmpty(*stack))
+	if (empty(*stack))
 	{
-		printf("Error - stack is empty\n");
+		ft_printf("Error - stack is empty\n");
 		return ;
 	}
 	stack->memory[(stack->top)--] = 0;
 }
 
-int	get_top(t_stack stack)
+int	peek_top(t_stack stack)
 {
-	if (isEmpty(stack))
+	if (empty(stack))
 	{
-		printf("Error - stack is empty\n");
+		ft_printf("Error - stack is empty\n");
 		return (-1);
 	}
 	return (stack.memory[stack.top]);
-}
-
-int	get_stk_size(t_stack stack)
-{
-	return (stack.top + 1);
 }

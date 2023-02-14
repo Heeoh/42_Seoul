@@ -6,13 +6,14 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:30:12 by heson             #+#    #+#             */
-/*   Updated: 2023/02/13 19:53:22 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/14 18:14:31 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/operations.h"
 #include "../library/libft/libft.h"
 #include "../library/printf/headers/ft_printf.h"
+#include <stdio.h>
 
 void	print_op(t_op op)
 {
@@ -20,9 +21,9 @@ void	print_op(t_op op)
 
 	ft_strlcpy(op_str, "sa  sb  ss  pa  pb  ra  rb  rr  rra rrb rrr", 44);
 	if (SA <= op && op <= RR)
-		ft_printf("%.2s\n", op_str + (op * 4));
+		printf("%.2s\n", op_str + (op * 4));
 	else if (RRA <= op && op <= RRR)
-		ft_printf("%.3s\n", op_str + (op * 4));
+		printf("%.3s\n", op_str + (op * 4));
 }
 
 void	do_operation(t_op op, t_stack *stk_a, t_stack *stk_b)
