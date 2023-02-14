@@ -6,29 +6,23 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:30:12 by heson             #+#    #+#             */
-/*   Updated: 2023/02/14 18:14:31 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/15 01:47:43 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/operations.h"
 #include "../library/libft/libft.h"
 #include "../library/printf/headers/ft_printf.h"
-#include <stdio.h>
 
-void	print_op(t_op op)
+void	do_operation(t_op op, t_stack *stk_a, t_stack *stk_b)
 {
 	char	op_str[45];
 
 	ft_strlcpy(op_str, "sa  sb  ss  pa  pb  ra  rb  rr  rra rrb rrr", 44);
 	if (SA <= op && op <= RR)
-		printf("%.2s\n", op_str + (op * 4));
+		ft_printf("%.2s\n", op_str + (op * 4));
 	else if (RRA <= op && op <= RRR)
-		printf("%.3s\n", op_str + (op * 4));
-}
-
-void	do_operation(t_op op, t_stack *stk_a, t_stack *stk_b)
-{
-	print_op(op);
+		ft_printf("%.3s\n", op_str + (op * 4));
 	if (op == SA || op == SS)
 		swap(stk_a);
 	if (op == SB || op == SS)
@@ -47,71 +41,81 @@ void	do_operation(t_op op, t_stack *stk_a, t_stack *stk_b)
 		reverse(stk_b);
 }
 
-// void	sa(t_stack *stk)
-// {
-// 	printf("sa\n");
-// 	swap(stk);
-// }
+void	swap(t_stack *stk)
+{
+	int	top1;
+	int	top2;
 
-// void	sb(t_stack *stk)
-// {
-// 	printf("sb\n");
-// 	swap(stk);
-// }
+	if (get_stk_size(*stk) < 2)
+		return ;
+	top1 = peek_top(*stk);
+	pop_top(stk);
+	top2 = peek_top(*stk);
+	pop_top(stk);
+	push_top(stk, top1);
+	push_top(stk, top2);
+}
 
-// void	ss(t_stack *stk_a, t_stack *stk_b)
-// {
-// 	printf("ss\n");
-// 	swap(stk_a);
-// 	swap(stk_b);
-// }
+void	push(t_stack *from_stk, t_stack *to_stk)
+{
+	if (empty(*from_stk))
+		return ;
+	push_top(to_stk, peek_top(*from_stk));
+	pop_top(from_stk);
+}
 
-// void	pa(t_stack *stk_a, t_stack *stk_b)
-// {
-// 	printf("pa\n");
-// 	push(stk_b, stk_a);
-// }
+void	rotate(t_stack *stk)
+{
+	int	*tmp;
+	int	i;
 
-// void	pb(t_stack *stk_a, t_stack *stk_b)
-// {
-// 	printf("pb\n");
-// 	push(stk_a, stk_b);
-// }
+	if (get_stk_size(*stk) < 2)
+		return ;
+	else if (get_stk_size(*stk) == 2)
+		swap(stk);
+	else
+	{
+		tmp = (int *)malloc(sizeof(int) * stk->top + 1);
+		if (!tmp)
+			return ;
+		i = 0;
+		while (!empty(*stk))
+		{
+			tmp[i++] = peek_top(*stk);
+			pop_top(stk);
+		}
+		push_top(stk, tmp[0]);
+		while (--i > 0)
+			push_top(stk, tmp[i]);
+		free(tmp);
+	}
+}
 
-// void	ra(t_stack *stk)
-// {
-// 	printf("ra\n");
-// 	rotate(stk);
-// }
+void	reverse(t_stack *stk)
+{
+	int	*tmp;
+	int	i;
+	int	prev_top;
 
-// void	rb(t_stack *stk)
-// {
-// 	printf("rb\n");
-// 	rotate(stk);
-// }
-
-// void	rr(t_stack *stk_a, t_stack *stk_b)
-// {
-// 	printf("rr\n");
-// 	rotate(stk_a);
-// 	rotate(stk_b);
-// }
-
-// void	rra(t_stack *stk)
-// {
-// 	printf("rra\n");
-// 	reverse(stk);
-// }
-
-// void	rrb(t_stack *stk)
-// {
-// 	printf("rrb\n");
-// 	reverse(stk);
-// }
-
-// void	rrr(t_stack *stk_a, t_stack *stk_b)
-// {
-// 	printf("rrr\n");
-// 	reverse(stk_a);
-// 	reverse(stk_b);
-// }
+	if (get_stk_size(*stk) < 2)
+		return ;
+	else if (get_stk_size(*stk) == 2)
+		swap(stk);
+	else
+	{
+		tmp = (int *)malloc(sizeof(int) * stk->top + 1);
+		if (!tmp)
+			return ;
+		i = 0;
+		while (!empty(*stk))
+		{
+			tmp[i++] = peek_top(*stk);
+			pop_top(stk);
+		}
+		prev_top = tmp[--i];
+		while (i--)
+			push_top(stk, tmp[i]);
+		push_top(stk, prev_top);
+		free(tmp);
+	}
+}

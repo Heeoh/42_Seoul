@@ -6,13 +6,12 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 21:15:54 by heson             #+#    #+#             */
-/*   Updated: 2023/02/14 19:21:29 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/15 01:47:57 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/push_swap.h"
-
-#include <stdlib.h> // malloc, free
+#include <stdlib.h>
 #include <stdbool.h>
 
 void	print_error(t_list **lst)
