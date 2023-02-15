@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 21:15:54 by heson             #+#    #+#             */
-/*   Updated: 2023/02/15 01:47:57 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/15 02:46:43 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 void	print_error(t_list **lst)
 {
 	write(1, "Error\n", 6);
-	do_free(lst, 0, 0, 0);
+	do_free(lst, 0, 0);
 	exit(0);
 }
 

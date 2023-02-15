@@ -6,11 +6,12 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:53:48 by heson             #+#    #+#             */
-/*   Updated: 2023/02/15 02:20:39 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/15 09:54:56 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/operations.h"
+#include "../headers/sorting.h"
 #include "../headers/push_swap.h"
 
 t_list	*parsing(int ac, char *av[])
@@ -41,15 +42,15 @@ t_list	*parsing(int ac, char *av[])
 	return (list);
 }
 
-void	init(t_list *nums, t_stack *stk_a, t_stack *stk_b, int **sorted)
+void	init(t_list *nums, t_two_stks *stk, int **sorted)
 {
 	int		stack_size;
 	int		i;
 	t_list	*nums_p;
 
 	stack_size = ft_lstsize(nums);
-	init_stack(stk_a, stack_size);
-	init_stack(stk_b, stack_size);
+	init_stack(&stk->a, stack_size);
+	init_stack(&stk->b, stack_size);
 	*sorted = NULL;
 	*sorted = (int *)malloc(sizeof(int) * stack_size);
 	if (!*sorted)
@@ -58,42 +59,41 @@ void	init(t_list *nums, t_stack *stk_a, t_stack *stk_b, int **sorted)
 	i = 0;
 	while (nums_p)
 	{
-		push_top(stk_a, *((int *)(nums_p->content)));
+		push_top(&stk->a, *((int *)(nums_p->content)));
 		(*sorted)[i++] = *((int *)(nums_p->content));
 		nums_p = nums_p->next;
 	}
 	get_sorted_arr(*sorted, 0, stack_size - 1);
 }
 
-void	push_swap(t_stack *stk_a, t_stack *stk_b, int *sorted)
+void	push_swap(t_two_stks *stk, int *sorted)
 {
 	int	top_idx;
 	int	i;
 
-	top_idx = stk_a->top;
+	top_idx = stk->a.top;
 	i = 0;
 	while (i <= top_idx
-		&& stk_a->memory[i] == sorted[top_idx - i])
+		&& stk->a.memory[i] == sorted[top_idx - i])
 		i++;
-	if (i == get_stk_size(*stk_a))
+	if (i == get_stk_size(stk->a))
 		return ;
-	if (get_stk_size(*stk_a) <= 5)
-		sort_less_5nums(stk_a, stk_b, sorted);
+	if (get_stk_size(stk->a) <= 5)
+		sort_less_5nums(stk, sorted);
 	else
-		a_to_b(stk_a, stk_b, 0, top_idx, sorted);
+		a_to_b(stk, 0, top_idx, sorted);
 }
 
 int	main(int ac, char *av[])
 {
-	t_list	*parsing_lst;
-	t_stack	stk_a;
-	t_stack	stk_b;
-	int		*sorted;
+	t_list		*parsing_lst;
+	t_two_stks	stks;
+	int			*sorted;
 
 	parsing_lst = parsing(ac, av);
-	init(parsing_lst, &stk_a, &stk_b, &sorted);
-	push_swap(&stk_a, &stk_b, sorted);
-	// print_state(stk_a, stk_b);
-	do_free(&parsing_lst, &stk_a, &stk_b, &sorted);
+	init(parsing_lst, &stks, &sorted);
+	push_swap(&stks, sorted);
+	// print_state(stks);
+	do_free(&parsing_lst, &stks, &sorted);
 	// system("leaks push_swap");
 }

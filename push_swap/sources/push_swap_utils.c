@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 14:23:45 by heson             #+#    #+#             */
-/*   Updated: 2023/02/14 19:22:11 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/15 02:36:30 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	get_sorted_arr(int *nums, int s, int e)
 		get_sorted_arr(nums, right + 1, e);
 }
 
-void	print_state(t_stack stk_a, t_stack stk_b)
+void	print_state(t_two_stks stk)
 {
 	int	ia;
 	int	ib;
@@ -54,23 +54,24 @@ void	print_state(t_stack stk_a, t_stack stk_b)
 	ia = 0;
 	ib = 0;
 	ft_printf("a | ");
-	while (ia <= stk_a.top)
-		ft_printf("%d ", stk_a.memory[ia++]);
+	while (ia <= stk.a.top)
+		ft_printf("%d ", stk.a.memory[ia++]);
 	ft_printf("\n");
 	ft_printf("b | ");
-	while (ib <= stk_b.top)
-		ft_printf("%d ", stk_b.memory[ib++]);
+	while (ib <= stk.b.top)
+		ft_printf("%d ", stk.b.memory[ib++]);
 	ft_printf("\n");
 }
 
-void	do_free(t_list **lst, t_stack *stk_a, t_stack *stk_b, int **sorted)
+void	do_free(t_list **lst, t_two_stks *stk, int **sorted)
 {
 	if (lst)
 		ft_lstclear(lst, free);
-	if (stk_a)
-		free(stk_a->memory);
-	if (stk_b)
-		free(stk_b->memory);
+	if (stk)
+	{
+		free(stk->a.memory);
+		free(stk->b.memory);
+	}
 	if (*sorted)
 		free(*sorted);
 }
