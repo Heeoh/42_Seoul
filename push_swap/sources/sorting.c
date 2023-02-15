@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 13:17:17 by heson             #+#    #+#             */
-/*   Updated: 2023/02/15 17:15:13 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/15 17:37:59 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	a_to_b(t_two_stks *stk, int s, int e, int *sorted)
 	int	pivot1;
 	int	pivot2;
 
-	if (e - s < 2)
+	if (e - s <= 2)
 	{
 		if (e - s == 2)
 		{
@@ -101,7 +101,7 @@ void	b_to_a(t_two_stks *stk, int s, int e, int *sorted)
 	int	pivot1;
 	int	pivot2;
 
-	if (e - s < 2)
+	if (e - s <= 2)
 	{
 		if (e - s == 2 && !(peek_top(stk->b) == sorted[e]))
 			sort_3top_b(stk, sorted[e], sorted[s]);
