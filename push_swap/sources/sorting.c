@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 13:17:17 by heson             #+#    #+#             */
-/*   Updated: 2023/02/15 09:54:05 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/15 15:49:15 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,12 @@ void	sort_less_5nums(t_two_stks *stk, int *sorted)
 		i = 0;
 		while (i < cnt)
 		{
-			if (peek_top(stk->a) < sorted[cnt] && i++)
+			if (peek_top(stk->a) < sorted[cnt] && ++i)
 				do_operation(PB, &stk->a, &stk->b);
 			else
 				do_operation(RA, &stk->a, &stk->b);
 		}
-		sort_3nums(stk, sorted[get_stk_size(stk->a) - 1], sorted[cnt]);
+		sort_3nums(stk, sorted[cnt + 2], sorted[cnt]);
 		while (cnt--)
 			do_operation(PA, &stk->a, &stk->b);
 		sort_2nums(stk, sorted[0]);
@@ -79,7 +79,7 @@ void	a_to_b(t_two_stks *stk, int s, int e, int *sorted)
 		if (e - s == 2)
 		{
 			if (!(peek_top(stk->a) == sorted[s]
-				&& stk->a.memory[stk->a.top - 2] == sorted[e]))
+					&& stk->a.memory[stk->a.top - 2] == sorted[e]))
 				sort_3top_a(stk, sorted[e], sorted[s]);
 		}
 		else if (e - s == 1)

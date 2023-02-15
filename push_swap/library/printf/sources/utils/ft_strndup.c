@@ -1,40 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   operations.h                                       :+:      :+:    :+:   */
+/*   ft_strndup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/29 19:29:19 by heson             #+#    #+#             */
-/*   Updated: 2023/02/15 15:08:11 by heson            ###   ########.fr       */
+/*   Created: 2022/11/23 18:18:56 by heson             #+#    #+#             */
+/*   Updated: 2023/02/15 15:23:11 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef OPERATIONS_H
-# define OPERATIONS_H
+#include "../../headers/ft_printf_utils.h"
+#include <stdlib.h>
 
-# include "stack.h"
-
-typedef enum e_op
+char	*ft_strndup(const char *s1, size_t *size)
 {
-	SA = 0,
-	SB,
-	SS,
-	PA,
-	PB,
-	RA,
-	RB,
-	RR,
-	RRA,
-	RRB,
-	RRR,
-	OP_CNT
-}	t_op;
+	char	*res;
+	size_t	i;
 
-void	do_operation(t_op op, t_stack *stk_a, t_stack *stk_b);
-void	swap(t_stack *stk);
-void	push(t_stack *from_stk, t_stack *to_stk);
-void	rotate(t_stack *stk);
-void	reverse(t_stack *stk);
-
-#endif
+	if (!*size)
+		*size = my_strlen(s1);
+	res = (char *)malloc(*size + 1);
+	if (!res)
+		return (ERROR_P);
+	i = 0;
+	while (i < *size)
+	{
+		res[i] = s1[i];
+		i++;
+	}
+	res[i] = '\0';
+	return (res);
+}

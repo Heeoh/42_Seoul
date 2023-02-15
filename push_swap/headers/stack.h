@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:07:35 by heson             #+#    #+#             */
-/*   Updated: 2023/02/14 16:18:24 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/15 15:10:22 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@
 # include <stdbool.h>
 
 typedef struct s_stack {
-	int *memory;
-	int top;
-	int mem_size;
-}   t_stack;
+	int	*memory;
+	int	top;
+	int	mem_size;
+}	t_stack;
 
 void	init_stack(t_stack *stack, int size);
 void	push_top(t_stack *stack, int x);

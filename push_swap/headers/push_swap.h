@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 19:32:53 by heson             #+#    #+#             */
-/*   Updated: 2023/02/15 03:18:09 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/15 15:09:07 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@
 # define ERROR_P NULL
 # define ERROR_I -1
 
-typedef	struct s_two_stks {
-	t_stack a;
-	t_stack b;
+typedef struct s_two_stks{
+	t_stack	a;
+	t_stack	b;
 }	t_two_stks;
 
 void	check_an_argv(char *av, t_list **list);
