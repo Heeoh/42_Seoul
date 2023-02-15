@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:53:48 by heson             #+#    #+#             */
-/*   Updated: 2023/02/15 17:38:48 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/16 00:30:51 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,5 +94,5 @@ int	main(int ac, char *av[])
 	init(parsing_lst, &stks, &sorted);
 	push_swap(&stks, sorted);
 	do_free(&parsing_lst, &stks, &sorted);
-	print_state(stks);
+	// print_state(stks);
 }

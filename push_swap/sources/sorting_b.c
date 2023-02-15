@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 19:28:51 by heson             #+#    #+#             */
-/*   Updated: 2023/02/15 17:14:58 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/16 00:27:29 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	partition_b(t_two_stks *stk, int s, int e, int *sorted)
 	pivot2 = e - (e - s) / 3;
 	rb_cnt = 0;
 	pa_cnt = 0;
-	while (pa_cnt < e - pivot2)
+	while (pa_cnt < e - pivot1)
 	{
 		if (peek_top(stk->b) <= sorted[pivot1] && ++rb_cnt)
 			do_operation(RB, &stk->a, &stk->b);
