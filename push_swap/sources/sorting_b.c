@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 19:28:51 by heson             #+#    #+#             */
-/*   Updated: 2023/02/15 03:14:33 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/15 17:14:58 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,52 +38,52 @@ void	sort_3top_b(t_two_stks *stk, int bottom, int top)
 	}
 }
 
-void	relocation_b(t_two_stks *stk, int s, int e)
+void	relocation_b(t_two_stks *stk, int s_size, int m_size)
 {
 	int	cnt;
-	int	pivot1;
-	int	pivot2;
 
-	pivot1 = s + (e - s) / 3;
-	pivot2 = e - (e - s) / 3;
-	if (pivot1 - s <= pivot2 - pivot1)
+	if (s_size <= m_size)
 	{
-		cnt = pivot1 - s;
+		cnt = s_size;
 		while (cnt--)
 			do_operation(RRR, &stk->a, &stk->b);
-		cnt = (pivot2 - pivot1) - (pivot1 - s);
+		cnt = (m_size) - (s_size);
 		while (cnt--)
 			do_operation(RRA, &stk->a, &stk->b);
 	}
 	else
 	{
-		cnt = pivot2 - pivot1;
+		cnt = m_size;
 		while (cnt--)
 			do_operation(RRR, &stk->a, &stk->b);
-		cnt = (pivot1 - s) - (pivot2 - pivot1);
+		cnt = (s_size) - (m_size);
 		while (cnt--)
 			do_operation(RRB, &stk->a, &stk->b);
 	}
 }
 
-void	partition_b(t_two_stks *stk, int s, int e, int *sorted)
+int	partition_b(t_two_stks *stk, int s, int e, int *sorted)
 {
-	int	cnt;
+	int rb_cnt;
+	int pa_cnt;
 	int	pivot1;
 	int	pivot2;
 
 	pivot1 = s + (e - s) / 3;
 	pivot2 = e - (e - s) / 3;
-	cnt = e - s + 1;
-	while (cnt--)
+	rb_cnt = 0;
+	pa_cnt = 0;
+	while (pa_cnt < e - pivot2)
 	{
-		if (peek_top(stk->b) < sorted[pivot1])
+		if (peek_top(stk->b) <= sorted[pivot1] && ++rb_cnt)
 			do_operation(RB, &stk->a, &stk->b);
 		else
 		{
 			do_operation(PA, &stk->a, &stk->b);
+			pa_cnt++;
 			if (peek_top(stk->a) < sorted[pivot2])
 				do_operation(RA, &stk->a, &stk->b);
 		}
 	}
+	return (rb_cnt);
 }

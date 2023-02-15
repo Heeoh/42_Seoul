@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 19:28:04 by heson             #+#    #+#             */
-/*   Updated: 2023/02/15 03:15:59 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/15 17:14:46 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,29 +44,25 @@ void	sort_3top_a(t_two_stks *stk, int bottom, int top)
 	}
 }
 
-void	relocation_a(t_two_stks *stk, int s, int e)
+void	relocation_a(t_two_stks *stk, int m_size, int l_size)
 {
 	int	cnt;
-	int	pivot1;
-	int	pivot2;
 
-	pivot1 = s + (e - s) / 3;
-	pivot2 = e - (e - s) / 3;
-	if (pivot2 - pivot1 <= e - pivot2 + 1)
+	if (m_size <= l_size)
 	{
-		cnt = pivot2 - pivot1;
+		cnt = m_size;
 		while (cnt--)
 			do_operation(RRR, &stk->a, &stk->b);
-		cnt = (e - pivot2 + 1) - (pivot2 - pivot1);
+		cnt = (l_size) - (m_size);
 		while (cnt--)
 			do_operation(RRA, &stk->a, &stk->b);
 	}
 	else
 	{
-		cnt = e - pivot2 + 1;
+		cnt = l_size;
 		while (cnt--)
 			do_operation(RRR, &stk->a, &stk->b);
-		cnt = (pivot2 - pivot1) - (e - pivot2 + 1);
+		cnt = m_size - (l_size);
 		while (cnt--)
 			do_operation(RRB, &stk->a, &stk->b);
 	}
@@ -74,23 +70,28 @@ void	relocation_a(t_two_stks *stk, int s, int e)
 
 void	partition_a(t_two_stks *stk, int s, int e, int *sorted)
 {
-	int	cnt;
 	int	pivot1;
 	int	pivot2;
+	int	ra_cnt;
+	int	pb_cnt;
+	int	rb_cnt;
 
 	pivot1 = s + (e - s) / 3;
 	pivot2 = e - (e - s) / 3;
-	cnt = e - s + 1;
-	while (cnt--)
+	ra_cnt = 0;
+	pb_cnt = 0;
+	rb_cnt = 0;
+	while (pb_cnt < pivot2 - s)
 	{
-		if (peek_top(stk->a) >= sorted[pivot2])
+		if (peek_top(stk->a) >= sorted[pivot2] && ++ra_cnt)
 			do_operation(RA, &stk->a, &stk->b);
 		else
 		{
 			do_operation(PB, &stk->a, &stk->b);
-			if (peek_top(stk->b) >= sorted[pivot1])
+			pb_cnt++;
+			if (peek_top(stk->b) > sorted[pivot1] && ++rb_cnt)
 				do_operation(RB, &stk->a, &stk->b);
 		}
 	}
-	relocation_a(stk, s, e);
+	relocation_a(stk, rb_cnt, ra_cnt);
 }
