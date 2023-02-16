@@ -6,11 +6,12 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:56:07 by heson             #+#    #+#             */
-/*   Updated: 2023/02/14 18:17:10 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/16 02:51:35 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/stack.h"
+#include "../headers/push_swap.h"
 #include "../library/printf/headers/ft_printf.h"
 #include <stdlib.h>
 
@@ -20,7 +21,7 @@ void	init_stack(t_stack *stack, int size)
 	stack->mem_size = size;
 	stack->memory = (int *)malloc(sizeof(int) * stack->mem_size);
 	if (!stack->memory)
-		return ;
+		print_error();
 }
 
 void	push_top(t_stack *stack, int x)

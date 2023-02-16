@@ -6,10 +6,11 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:30:12 by heson             #+#    #+#             */
-/*   Updated: 2023/02/15 01:47:43 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/16 02:49:49 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../headers/push_swap.h"
 #include "../headers/operations.h"
 #include "../library/libft/libft.h"
 #include "../library/printf/headers/ft_printf.h"
@@ -77,7 +78,7 @@ void	rotate(t_stack *stk)
 	{
 		tmp = (int *)malloc(sizeof(int) * stk->top + 1);
 		if (!tmp)
-			return ;
+			print_error();
 		i = 0;
 		while (!empty(*stk))
 		{
@@ -105,7 +106,7 @@ void	reverse(t_stack *stk)
 	{
 		tmp = (int *)malloc(sizeof(int) * stk->top + 1);
 		if (!tmp)
-			return ;
+			print_error();
 		i = 0;
 		while (!empty(*stk))
 		{

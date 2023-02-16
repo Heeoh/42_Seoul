@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 19:28:51 by heson             #+#    #+#             */
-/*   Updated: 2023/02/16 00:27:29 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/16 01:40:48 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,8 @@ void	relocation_b(t_two_stks *stk, int s_size, int m_size)
 
 int	partition_b(t_two_stks *stk, int s, int e, int *sorted)
 {
-	int rb_cnt;
-	int pa_cnt;
+	int	rb_cnt;
+	int	pa_cnt;
 	int	pivot1;
 	int	pivot2;
 

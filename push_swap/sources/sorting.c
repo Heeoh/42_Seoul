@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 13:17:17 by heson             #+#    #+#             */
-/*   Updated: 2023/02/16 00:20:22 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/16 01:39:52 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,6 @@ void	a_to_b(t_two_stks *stk, int s, int e, int *sorted)
 	int	pivot1;
 	int	pivot2;
 
-	if (e < s)
-		return ;
 	if (e - s <= 2)
 	{
 		if (e - s == 2)
@@ -99,17 +97,14 @@ void	a_to_b(t_two_stks *stk, int s, int e, int *sorted)
 void	b_to_a(t_two_stks *stk, int s, int e, int *sorted)
 {
 	int	cnt;
-	int rb_cnt;
 	int	pivot1;
 	int	pivot2;
 
-	if (e < s)
-		return ;
 	if (e - s <= 2)
 	{
 		if (e - s == 2 && !(peek_top(stk->b) == sorted[e]))
 			sort_3top_b(stk, sorted[e], sorted[s]);
-		else
+		else if (s <= e)
 		{
 			cnt = e - s + 1;
 			while (cnt--)
@@ -120,9 +115,9 @@ void	b_to_a(t_two_stks *stk, int s, int e, int *sorted)
 	}
 	pivot1 = s + (e - s) / 3;
 	pivot2 = e - (e - s) / 3;
-	rb_cnt = partition_b(stk, s, e, sorted);
+	cnt = partition_b(stk, s, e, sorted);
 	a_to_b(stk, pivot2, e, sorted);
-	relocation_b(stk, rb_cnt, pivot2 - pivot1 - 1);
+	relocation_b(stk, cnt, pivot2 - pivot1 - 1);
 	a_to_b(stk, pivot1 + 1, pivot2 - 1, sorted);
 	b_to_a(stk, s, pivot1, sorted);
 }

@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 19:30:11 by heson             #+#    #+#             */
-/*   Updated: 2023/02/15 17:14:09 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/16 01:35:26 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,6 @@ void	partition_a(t_two_stks *stk, int s, int e, int *sorted);
 void	b_to_a(t_two_stks *stk, int s, int e, int *sorted);
 void	sort_3top_b(t_two_stks *stk, int bottom, int top);
 void	relocation_b(t_two_stks *stk, int s_size, int m_size);
-int 	partition_b(t_two_stks *stk, int s, int e, int *sorted);
+int		partition_b(t_two_stks *stk, int s, int e, int *sorted);
 
 #endif

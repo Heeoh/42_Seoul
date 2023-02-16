@@ -6,20 +6,13 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 21:15:54 by heson             #+#    #+#             */
-/*   Updated: 2023/02/15 02:46:43 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/16 02:48:24 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/push_swap.h"
 #include <stdlib.h>
 #include <stdbool.h>
-
-void	print_error(t_list **lst)
-{
-	write(1, "Error\n", 6);
-	do_free(lst, 0, 0);
-	exit(0);
-}
 
 void	check_dup_num(t_list *list, int num)
 {
@@ -29,7 +22,7 @@ void	check_dup_num(t_list *list, int num)
 	while (p)
 	{
 		if (*((int *)(p->content)) == num)
-			print_error(&list);
+			print_error();
 		p = p->next;
 	}
 }
@@ -56,10 +49,10 @@ void	check_int_range(char *num)
 		else
 			ret = ft_strncmp(num, "2147483648", 10);
 	}
-	if (len < 10 || ret <= 0)
+	if ((0 < len && len < 10) || (len == 10 && ret <= 0))
 		return ;
-	else if (len > 10 || ret > 0)
-		print_error(0);
+	else
+		print_error();
 }
 
 void	check_an_argv(char *av, t_list **list)
@@ -71,18 +64,18 @@ void	check_an_argv(char *av, t_list **list)
 
 	is_int = true;
 	ch_p = av;
-	while (ch_p && *ch_p)
+	while (ch_p && *ch_p && is_int)
 	{
 		if (!ft_isdigit(*ch_p) && !(*ch_p == '+' || *ch_p == '-'))
 			is_int = false;
 		ch_p++;
 	}
 	if (!is_int)
-		print_error(list);
+		print_error();
 	check_int_range(av);
 	num = (int *)malloc(sizeof(int));
 	if (!num)
-		return ;
+		print_error();
 	*num = atoi(av);
 	check_dup_num(*list, *num);
 	new = ft_lstnew(num);

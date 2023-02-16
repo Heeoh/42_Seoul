@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 14:23:45 by heson             #+#    #+#             */
-/*   Updated: 2023/02/15 02:36:30 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/16 02:48:30 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,11 +67,16 @@ void	do_free(t_list **lst, t_two_stks *stk, int **sorted)
 {
 	if (lst)
 		ft_lstclear(lst, free);
-	if (stk)
-	{
+	if (stk && stk->a.memory)
 		free(stk->a.memory);
+	if (stk && stk->b.memory)
 		free(stk->b.memory);
-	}
 	if (*sorted)
 		free(*sorted);
+}
+
+void	print_error(void)
+{
+	write(1, "Error\n", 6);
+	exit(0);
 }
