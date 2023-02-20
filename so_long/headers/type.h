@@ -1,37 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   so_long.h                                          :+:      :+:    :+:   */
+/*   type.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/20 17:38:57 by heson             #+#    #+#             */
-/*   Updated: 2023/02/20 21:32:13 by heson            ###   ########.fr       */
+/*   Created: 2023/02/20 21:29:18 by heson             #+#    #+#             */
+/*   Updated: 2023/02/20 21:31:36 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SO_LONG_H
-# define SO_LONG_H
+enum e_type {
+	EMPTY = '0',
+	WALL = '1',
+	ITEM = 'C',
+	EXIT = 'E',
+	PLAYER = 'P'
+}
 
-#include "../mlx/mlx.h"
-#include "../headers/type.h"
+typedef struct s_point {
+	int	x;
+	int	y;
+}	t_point;
 
-typedef struct	s_vars {
-	void	*mlx;
-	void	*win;
-}				t_vars;
+typedef struct s_map {
+	int	**map;
+	int	width;
+	int	hegiht;
+}		t_map;
 
-enum {
-	ON_KEYDOWN = 2,
-	ON_KEYUP = 3,
-	ON_MOUSEDOWN = 4,
-	ON_MOUSEUP = 5,
-	ON_MOUSEMOVE = 6,
-	ON_EXPOSE = 12,
-	ON_DESTROY = 17
-};
-
-
-
-
-#endif
+typedef struct s_game
+{
+	t_map	map;
+	t_point	player;
+	int		item_cnt;
+}	t_game;
