@@ -18,7 +18,9 @@ LIBS = $(LIBFT_DIR)libft.a $(PRINTF_DIR)libftprintf.a
 MLX = $(MLX_DIR)libmlx.a 
 INCLUDE = -I $(HDRS_DIR) -I $(MLX_DIR) -I $(LIBFT_DIR) -I $(PRINTF_DIR)
 SRCS = $(wildcard $(SRCS_DIR)*.c)
+# GNL_SRCS = $(wildcard $(SRCS_DIR)get_next_line/*.c) 
 OBJS += $(addprefix $(OBJS_DIR), $(notdir $(SRCS:.c=.o)))
+# OBJS += $(addprefix $(OBJS_DIR), $(notdir $(GNL_SRCS:.c=.o)))
 
 # -------------------------------- COMPILATE --------------------------------- #
 
@@ -32,11 +34,11 @@ AR		= ar -rcs
 
 $(OBJS_DIR)%.o : $(SRCS_DIR)%.c
 	$(MD) $(dir $@)
-	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDE) -g -c $< -o $@
 
 all:
 	make -C $(MLX_DIR)
-	make -C $(LIBFT_DIR)
+	make bonus -C $(LIBFT_DIR)
 	make -C $(PRINTF_DIR)
 	make $(NAME)
 

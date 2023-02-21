@@ -6,49 +6,67 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 19:00:31 by heson             #+#    #+#             */
-/*   Updated: 2023/02/20 21:51:44 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/21 17:41:47 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/type.h"
+#include "../headers/so_long_type.h"
 #include "../headers/get_next_line.h"
 #include "../library/libft/libft.h"
-#include <stdbool.h>
+#include <fcntl.h> // open
 
-
-
-
-// void	print_map_error()
-// {
-// 	ft_printf("Error\n");
-	
-// }
-bool	check_point(char ch, bool is_mid)
+bool	check_line(char *line, int width, bool is_mid, int **pei_cnt)
 {
-	if (!is_mid)
-		return (ch == WALL);
-	if (ch == WALL || ch == EMPTY)
-		return (true);
-	if (ch == PLAYER || ch == EXIT || ch == COLLECTIBLE)
-		return (true);
-	return (false);
-}
-
-bool	check_line(char *line, int width, bool is_mid)
-{
-	bool	is_right;
 	int		i;
 
-	is_right = true;
 	i = -1;
-	while (++i < width && is_right)
-		is_right = check_point(line[i]);
-	if (!is_right)
-		return (false);
-	if (line[width] != '\0')
-		return (false);
-	if (!(line[0] == WALL && line[width - 1] == WALL))
-		return (false);
+	while (++i < width)
+	{
+		if (!is_mid)
+		{
+			if (line[i] != WALL)
+				return (ERROR_B);
+			continue ;
+		}
+		if (!(line[i] == WALL || line[i] == EMPTY
+			|| line[i] == PLAYER || line[i] == EXIT || line[i] == ITEM))
+			return (ERROR_B);
+		if (line[i] == PLAYER)
+			(*pei_cnt)[0]++;
+		else if (line[i] == EXIT)
+			(*pei_cnt)[1]++;
+		else if (line[i] == ITEM)
+			(*pei_cnt)[2]++;
+	}
+	if (!(line[0] == WALL && line[width - 1] == WALL)
+		|| !(line[width] == '\0' || line[width] == '\n'))
+		return (ERROR_B);
+	return (true);
+}
+
+int	init_map(t_list *lines, t_map *m, int *item_cnt)
+{
+	int *pei_cnt;
+	int	y;
+	bool is_mid;
+
+	m->height = ft_lstsize(lines);
+	m->width = ft_strlen(lines->content) - 1;
+	m->map = (char **)malloc(sizeof(char *) * m->height);
+	pei_cnt = (int *)ft_calloc(3, sizeof(int));
+	y = 0;
+	while (lines)
+	{
+		is_mid = !(y == 0 || y == m->width - 1);
+		if (!check_line(lines->content, m->width, is_mid, &pei_cnt))
+			return (ERROR_B);
+		if (pei_cnt[0] > 1 || pei_cnt[1] > 1)
+			return (ERROR_B);
+		((char *)lines->content)[m->width] = '\0';
+		m->map[y++] = ft_strdup(lines->content);
+		lines = lines->next;
+	}
+	*item_cnt = pei_cnt[2];
 	return (true);
 }
 
@@ -59,7 +77,7 @@ t_list	*read_map(int fd)
 	char	*line;
 
 	if (fd <= 2)
-		return (NULL);
+		return (ERROR_P);
 	line_lst = NULL;
 	while (1)
 	{
@@ -72,29 +90,20 @@ t_list	*read_map(int fd)
 	return (line_lst);
 }
 
-int	map_parsing(int ac, char *av[], t_game *game)
+bool map_parsing(char *file, t_map *map, int *item_cnt)
 {
+	int fd;
 	t_list	*line_lst;
-	t_list	*lst_p;
-	t_map	map;
-	int		h;
 
-	if (ac != 1)
-		return (-1);
-	line_lst = read_map(open(av[1], O_RDONLY));
+	file = 0;
+	fd = open("/Users/hio/hio/git/42_Seoul/so_long/test.txt", O_RDONLY);
+	line_lst = read_map(fd);
 	if (!line_lst)
-		return (-1);
-	map.hegiht = ft_lstsize(line_lst);
-	map.width = ft_strlen(line_lst->content);
-	map.map = (char **)malloc(sizeof(char *) * height);
-	lst_p = line_lst;
-	while (lst_p)
+		return (ERROR_B);
+	if (!init_map(line_lst, map, item_cnt))
 	{
-		if (check_line(map.width))
+		// do_free(line_lst, map);
+		return (ERROR_B);
 	}
-	
-	width = ft_strlen(line);
-	while (line) {
-		
-	}
+	return (true);
 }

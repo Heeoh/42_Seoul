@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 15:52:42 by heson             #+#    #+#             */
-/*   Updated: 2023/02/20 19:14:51 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/21 17:09:23 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,19 @@ int	key_hook(int keycode, t_vars *vars)
 	return (0);
 }
 
+void	init(char *file, t_game *game)
+{
+	if (!map_parsing(file, &(game->map), &(game->item_cnt)))
+		printf("Error\n");
+	for (int i=0; i < game->map.height; i++) {
+		for (int j=0; j < game->map.width; j++)
+			printf("%c ", game->map.map[i][j]);
+		printf("\n");
+	}
+
+
+}
+
 int	main(int ac, char *av[])
 {
 	// t_vars	vars;
@@ -60,5 +73,10 @@ int	main(int ac, char *av[])
 	// mlx_hook(vars.win, 25, 1L<<18, resize, &vars);
 	// mlx_loop(vars.mlx);
 
-	map_parsing(int ac, char *av[]);
+	t_game	game;
+
+	if (ac != 2)
+		return (0);
+	
+	init(av[1], &game);
 }
