@@ -17,6 +17,7 @@ OBJS_DIR	= objects/
 LIBS = $(LIBFT_DIR)libft.a $(PRINTF_DIR)libftprintf.a
 MLX = $(MLX_DIR)libmlx.a 
 INCLUDE = -I $(HDRS_DIR) -I $(MLX_DIR) -I $(LIBFT_DIR) -I $(PRINTF_DIR)
+# INCLUDE = -I $(HDRS_DIR) -I $(LIBFT_DIR) -I $(PRINTF_DIR)
 SRCS = $(wildcard $(SRCS_DIR)*.c)
 # GNL_SRCS = $(wildcard $(SRCS_DIR)get_next_line/*.c) 
 OBJS += $(addprefix $(OBJS_DIR), $(notdir $(SRCS:.c=.o)))
@@ -44,6 +45,8 @@ all:
 
 $(NAME): $(OBJS)
 	cc -L./$(MLX_DIR) -lmlx -framework OpenGL -framework AppKit $(OBJS) $(LIBS) -o $(NAME)
+# cc -Lmlx -lmlx -framework OpenGL -framework AppKit $(OBJS) $(LIBS) -o $(NAME)
+
 
 clean:
 	make clean -C $(LIBFT_DIR)

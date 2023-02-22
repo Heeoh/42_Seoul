@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 15:52:42 by heson             #+#    #+#             */
-/*   Updated: 2023/02/21 17:09:23 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/22 17:37:15 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,12 @@ void	init(char *file, t_game *game)
 {
 	if (!map_parsing(file, &(game->map), &(game->item_cnt)))
 		printf("Error\n");
-	for (int i=0; i < game->map.height; i++) {
-		for (int j=0; j < game->map.width; j++)
-			printf("%c ", game->map.map[i][j]);
-		printf("\n");
+	else {
+		for (int i=0; i < game->map.height; i++) {
+			for (int j=0; j < game->map.width; j++)
+				printf("%c ", game->map.map[i][j]);
+			printf("\n");
+		}
 	}
 
 
@@ -77,6 +79,5 @@ int	main(int ac, char *av[])
 
 	if (ac != 2)
 		return (0);
-	
 	init(av[1], &game);
 }

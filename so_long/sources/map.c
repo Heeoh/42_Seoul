@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 19:00:31 by heson             #+#    #+#             */
-/*   Updated: 2023/02/21 17:41:47 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/22 17:46:36 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "../headers/get_next_line.h"
 #include "../library/libft/libft.h"
 #include <fcntl.h> // open
+#include "../library/printf/headers/ft_printf.h"
 
 bool	check_line(char *line, int width, bool is_mid, int **pei_cnt)
 {
@@ -57,15 +58,16 @@ int	init_map(t_list *lines, t_map *m, int *item_cnt)
 	y = 0;
 	while (lines)
 	{
-		is_mid = !(y == 0 || y == m->width - 1);
+		is_mid = !(y == 0 || y == m->height - 1);
 		if (!check_line(lines->content, m->width, is_mid, &pei_cnt))
-			return (ERROR_B);
-		if (pei_cnt[0] > 1 || pei_cnt[1] > 1)
 			return (ERROR_B);
 		((char *)lines->content)[m->width] = '\0';
 		m->map[y++] = ft_strdup(lines->content);
 		lines = lines->next;
 	}
+	if (!pei_cnt[0] || !pei_cnt[1] || !pei_cnt[2]
+		|| pei_cnt[0] > 1 || pei_cnt[1] > 1)
+		return (ERROR_B);
 	*item_cnt = pei_cnt[2];
 	return (true);
 }
@@ -95,8 +97,7 @@ bool map_parsing(char *file, t_map *map, int *item_cnt)
 	int fd;
 	t_list	*line_lst;
 
-	file = 0;
-	fd = open("/Users/hio/hio/git/42_Seoul/so_long/test.txt", O_RDONLY);
+	fd = open(ft_strjoin("map/", file), O_RDONLY);
 	line_lst = read_map(fd);
 	if (!line_lst)
 		return (ERROR_B);
