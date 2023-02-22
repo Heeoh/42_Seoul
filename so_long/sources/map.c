@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 19:00:31 by heson             #+#    #+#             */
-/*   Updated: 2023/02/22 17:46:36 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/22 20:49:36 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,11 @@
 #include "../library/libft/libft.h"
 #include <fcntl.h> // open
 #include "../library/printf/headers/ft_printf.h"
+
+// void	check_path(t_map *m, char **ch)
+// {
+	
+// }
 
 bool	check_line(char *line, int width, bool is_mid, int **pei_cnt)
 {
