@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 17:38:57 by heson             #+#    #+#             */
-/*   Updated: 2023/02/21 17:10:02 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/23 20:42:08 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define SO_LONG_H
 
 # include "../mlx/mlx.h"
+// # include <mlx.h>
 # include "../headers/so_long_type.h"
 
 typedef struct	s_vars {
