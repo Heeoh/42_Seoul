@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 15:52:42 by heson             #+#    #+#             */
-/*   Updated: 2023/02/25 21:00:54 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/25 21:21:15 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,11 +98,11 @@ void	set_imgs(void *mlx, t_img *img)
 	int	img_height;
 	char	path[4] = "./";
 
-	img->ground = mlx_xpm_file_to_image(mlx, ft_strjoin(path, "imgs/ground.xpm"), &img_width, &img_height);
+	img->ground = mlx_xpm_file_to_image(mlx, ft_strjoin(path, "imgs/ground64.xpm"), &img_width, &img_height);
 	img->wall = mlx_xpm_file_to_image(mlx, ft_strjoin(path, "imgs/wall.xpm"), &img_width, &img_height);
 	img->item = mlx_xpm_file_to_image(mlx, ft_strjoin(path, "imgs/item.xpm"), &img_width, &img_height);
 	img->exit = mlx_xpm_file_to_image(mlx, ft_strjoin(path, "imgs/exit.xpm"), &img_width, &img_height);
-	img->player = mlx_xpm_file_to_image(mlx, ft_strjoin(path, "imgs/player.xpm"), &img_width, &img_height);
+	img->player = mlx_xpm_file_to_image(mlx, ft_strjoin(path, "imgs/red_hood.xpm"), &img_width, &img_height);
 }
 
 void	init(t_game *game)
@@ -111,7 +111,7 @@ void	init(t_game *game)
 	int	w;
 
 	game->mlx = mlx_init();
-	game->win = mlx_new_window(game->mlx, game->map.width * 32, game->map.height * 32, "Hello world!");
+	game->win = mlx_new_window(game->mlx, game->map.width * tile_size, game->map.height * tile_size, "Hello world!");
 	set_imgs(game->mlx, &(game->img));
 	h = 0;
 	while (h < game->map.height)

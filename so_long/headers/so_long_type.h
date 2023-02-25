@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 21:29:18 by heson             #+#    #+#             */
-/*   Updated: 2023/02/25 18:30:56 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/25 21:20:57 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # define ERROR_I -1
 # define ERROR_P NULL
 
-# define tile_size 32
+# define tile_size 64
 
 enum e_type {
 	EMPTY = '0',
