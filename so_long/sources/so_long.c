@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 15:52:42 by heson             #+#    #+#             */
-/*   Updated: 2023/02/25 21:21:15 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/26 04:01:03 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "../library/libft/libft.h"
-// #include <fcntl.h> // open
 
 
 int close_mlx_win(void *mlx, void *win)
@@ -25,16 +24,33 @@ int close_mlx_win(void *mlx, void *win)
 	exit(0);
 }
 
+void	change_img(t_game *game, t_point from, t_point to, int dir)
+{
+
+	mlx_put_image_to_window(game->mlx, game->win, game->img.ground, from.x * tile_size, from.y * tile_size);
+	if (dir == UP)
+		mlx_put_image_to_window(game->mlx, game->win, game->img.back, to.x * tile_size, to.y * tile_size);
+	else if (dir == DOWN)
+		mlx_put_image_to_window(game->mlx, game->win, game->img.front, to.x * tile_size, to.y * tile_size);
+	else if (dir == RIGHT)
+		mlx_put_image_to_window(game->mlx, game->win, game->img.right, to.x * tile_size, to.y * tile_size);
+	else if (dir == LEFT)
+		mlx_put_image_to_window(game->mlx, game->win, game->img.left, to.x * tile_size, to.y * tile_size);
+}
+
 void	move(t_game *game, int dir)
 {
 	int yy[4] = {-1, 0, 1, 0};
 	int xx[4] = {0, 1, 0, -1};
+	t_point cur;
 	t_point next;
 
-	next.y = game->player.y + yy[dir];
-	next.x = game->player.x + xx[dir];
+	cur.y = game->player.y;
+	cur.x = game->player.x;
+	next.y = cur.y + yy[dir];
+	next.x = cur.x + xx[dir];
 	if (game->map.board[next.y][next.x] == WALL) {
-		ft_printf("WALL, cannot move\n");
+		// ft_printf("WALL, cannot move\n");
 		return ;
 	}
 	else if (game->map.board[next.y][next.x] == ITEM)
@@ -45,24 +61,23 @@ void	move(t_game *game, int dir)
 			close_mlx_win(game->mlx, game->win);
 		else
 		{
-			ft_printf("Collectible items are left.\n");
+			// ft_printf("Collectible items are left.\n");
 			return ;
 		}
 	}
-	game->map.board[game->player.y][game->player.x] = EMPTY;
-	mlx_put_image_to_window(game->mlx, game->win, game->img.ground, game->player.x * tile_size, game->player.y * tile_size);
+	game->map.board[cur.y][cur.x] = EMPTY;
 	game->map.board[next.y][next.x] = PLAYER;
 	game->player.y = next.y;
 	game->player.x = next.x;
-	mlx_put_image_to_window(game->mlx, game->win, game->img.player, game->player.x * tile_size, game->player.y * tile_size);
+	change_img(game, cur, next, dir);
 	game->move_cnt++;
-	ft_printf("move to (%d, %d)\n", game->player.y, game->player.x);
+	ft_printf("%d\n", game->move_cnt);
+	// ft_printf("%d. move to (%d, %d)\n", game->move_cnt, game->player.y, game->player.x);
 	mlx_loop(game->mlx);
 }
 
 int	key_hook(int keycode, t_game *g)
 {
-	// printf("%d\n", keycode);
 	if (keycode == KEY_UP)
 		move(g, UP);
 	else if (keycode == KEY_DOWN)
@@ -72,7 +87,7 @@ int	key_hook(int keycode, t_game *g)
 	else if (keycode == KEY_RIGHT)
 		move(g, RIGHT);
 	else if (keycode == KEY_ESC) {
-		ft_printf("ESC\n");
+		// ft_printf("ESC\n");
 		close_mlx_win(g->mlx, g->win);
 	}
 	return (0);
@@ -96,13 +111,16 @@ void	set_imgs(void *mlx, t_img *img)
 {
 	int img_width;
 	int	img_height;
-	char	path[4] = "./";
+	char	path[4] = "../";
 
 	img->ground = mlx_xpm_file_to_image(mlx, ft_strjoin(path, "imgs/ground64.xpm"), &img_width, &img_height);
 	img->wall = mlx_xpm_file_to_image(mlx, ft_strjoin(path, "imgs/wall.xpm"), &img_width, &img_height);
-	img->item = mlx_xpm_file_to_image(mlx, ft_strjoin(path, "imgs/item.xpm"), &img_width, &img_height);
+	img->item = mlx_xpm_file_to_image(mlx, ft_strjoin(path, "imgs/apple.xpm"), &img_width, &img_height);
 	img->exit = mlx_xpm_file_to_image(mlx, ft_strjoin(path, "imgs/exit.xpm"), &img_width, &img_height);
-	img->player = mlx_xpm_file_to_image(mlx, ft_strjoin(path, "imgs/red_hood.xpm"), &img_width, &img_height);
+	img->front = mlx_xpm_file_to_image(mlx, ft_strjoin(path, "imgs/front.xpm"), &img_width, &img_height);
+	img->back = mlx_xpm_file_to_image(mlx, ft_strjoin(path, "imgs/back.xpm"), &img_width, &img_height);
+	img->right = mlx_xpm_file_to_image(mlx, ft_strjoin(path, "imgs/right.xpm"), &img_width, &img_height);
+	img->left = mlx_xpm_file_to_image(mlx, ft_strjoin(path, "imgs/left.xpm"), &img_width, &img_height);
 }
 
 void	init(t_game *game)
@@ -113,13 +131,13 @@ void	init(t_game *game)
 	game->mlx = mlx_init();
 	game->win = mlx_new_window(game->mlx, game->map.width * tile_size, game->map.height * tile_size, "Hello world!");
 	set_imgs(game->mlx, &(game->img));
+	game->item_cnt = 0;
 	h = 0;
 	while (h < game->map.height)
 	{
 		w = 0;
 		while (w < game->map.width)
 		{
-			// if (game->map.board[h][w] == EMPTY)
 			mlx_put_image_to_window(game->mlx, game->win, game->img.ground, w * tile_size, h * tile_size);
 			if (game->map.board[h][w] == WALL)
 				mlx_put_image_to_window(game->mlx, game->win, game->img.wall, w * tile_size, h * tile_size);
@@ -132,7 +150,7 @@ void	init(t_game *game)
 				mlx_put_image_to_window(game->mlx, game->win, game->img.exit, w * tile_size, h * tile_size);
 			else if (game->map.board[h][w] == PLAYER)
 			{
-				mlx_put_image_to_window(game->mlx, game->win, game->img.player, w * tile_size, h * tile_size);
+				mlx_put_image_to_window(game->mlx, game->win, game->img.front, w * tile_size, h * tile_size);
 				game->player.y = h;
 				game->player.x = w;
 			}
@@ -140,8 +158,6 @@ void	init(t_game *game)
 		}
 		h++;
 	}
-	// find_player(&(game->map), &(game->player));
-	// game->map.map[game->player->y][game->player->x] = EMPTY;
 	game->move_cnt = 0;
 
 }

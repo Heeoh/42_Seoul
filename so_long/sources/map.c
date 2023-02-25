@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 19:00:31 by heson             #+#    #+#             */
-/*   Updated: 2023/02/25 19:54:59 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/26 00:49:56 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,22 @@
 #include "../library/libft/libft.h"
 #include <fcntl.h> // open
 #include "../library/printf/headers/ft_printf.h"
+
+// void	move(t_game *game, int dir);
+
+// bool	check_path(t_point cur, int item_cnt, char **ch)
+// {
+// 	int	d;
+
+// 	if (m->map[cur.y][cur.x] == EXIT)
+// 		return (item_cnt == 0);
+	
+// 	d = 0;
+// 	while (d < DIR_CNT)
+// 	{
+// 		if (move(m, ))
+// 	}
+// }
 
 bool	check_line(char *line, int width, bool is_mid, int **pei_cnt)
 {

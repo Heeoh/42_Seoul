@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 21:29:18 by heson             #+#    #+#             */
-/*   Updated: 2023/02/25 21:20:57 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/26 03:52:42 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ typedef struct s_point {
 
 typedef struct s_map {
 	char	**board;
-	int	width;
-	int	height;
+	int		width;
+	int		height;
 }		t_map;
 
 typedef struct s_img {
@@ -60,7 +60,10 @@ typedef struct s_img {
 	void	*wall;
 	void	*item;
 	void	*exit;
-	void	*player;
+	void	*front;
+	void	*back;
+	void	*right;
+	void	*left;
 }	t_img;
 
 typedef struct s_game
