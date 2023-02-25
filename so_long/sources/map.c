@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 19:00:31 by heson             #+#    #+#             */
-/*   Updated: 2023/02/23 20:24:24 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/25 19:54:59 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,6 @@
 #include "../library/libft/libft.h"
 #include <fcntl.h> // open
 #include "../library/printf/headers/ft_printf.h"
-
-// void	check_path(t_map *m, char **ch)
-// {
-	
-// }
 
 bool	check_line(char *line, int width, bool is_mid, int **pei_cnt)
 {
@@ -35,7 +30,7 @@ bool	check_line(char *line, int width, bool is_mid, int **pei_cnt)
 			continue ;
 		}
 		if (!(line[i] == WALL || line[i] == EMPTY
-			|| line[i] == PLAYER || line[i] == EXIT || line[i] == ITEM))
+				|| line[i] == PLAYER || line[i] == EXIT || line[i] == ITEM))
 			return (ERROR_B);
 		if (line[i] == PLAYER)
 			(*pei_cnt)[0]++;
@@ -50,30 +45,34 @@ bool	check_line(char *line, int width, bool is_mid, int **pei_cnt)
 	return (true);
 }
 
-int	init_map(t_list *lines, t_map *m, int *item_cnt)
+char	*strndup_without_newline(char* str, int size)
 {
-	int *pei_cnt;
-	int	y;
-	bool is_mid;
+	str[size] = '\0';
+	return (ft_strdup(str));
+}
 
-	m->height = ft_lstsize(lines);
-	m->width = ft_strlen(lines->content) - 1;
-	m->map = (char **)malloc(sizeof(char *) * m->height);
+int	check_format_n_init_map(t_list *lines, t_map *map)
+{
+	int		*pei_cnt;
+	int		h;
+	bool	is_mid;
+
+	map->height = ft_lstsize(lines);
+	map->width = ft_strlen(lines->content) - 1;
+	map->board = (char **)malloc(sizeof(char *) * map->height);
 	pei_cnt = (int *)ft_calloc(3, sizeof(int));
-	y = 0;
+	h = 0;
 	while (lines)
 	{
-		is_mid = !(y == 0 || y == m->height - 1);
-		if (!check_line(lines->content, m->width, is_mid, &pei_cnt))
+		is_mid = !(h == 0 || h == map->height - 1);
+		if (!check_line(lines->content, map->width, is_mid, &pei_cnt))
 			return (ERROR_B);
-		((char *)lines->content)[m->width] = '\0';
-		m->map[y++] = ft_strdup(lines->content);
+		map->board[h++] = strndup_without_newline((char *)lines->content, map->width);
 		lines = lines->next;
 	}
 	if (!pei_cnt[0] || !pei_cnt[1] || !pei_cnt[2]
 		|| pei_cnt[0] > 1 || pei_cnt[1] > 1)
 		return (ERROR_B);
-	*item_cnt = pei_cnt[2];
 	return (true);
 }
 
@@ -94,22 +93,25 @@ t_list	*read_map(int fd)
 		new = ft_lstnew(line);
 		ft_lstadd_back(&line_lst, new);
 	}
+	close(fd);
 	return (line_lst);
 }
 
-bool map_parsing(char *file, t_map *map, int *item_cnt)
+bool	map_parsing(char *file, t_map *map)
 {
-	int fd;
+	int		fd;
 	t_list	*line_lst;
 
-	fd = open(ft_strjoin("map/", file), O_RDONLY);
+	// 파일 확장자 검사 .ber 인지
+	fd = open(file, O_RDONLY);
 	line_lst = read_map(fd);
 	if (!line_lst)
 		return (ERROR_B);
-	if (!init_map(line_lst, map, item_cnt))
+	if (!check_format_n_init_map(line_lst, map))
 	{
-		// do_free(line_lst, map);
+		ft_lstclear(&line_lst, free);
 		return (ERROR_B);
 	}
+	ft_lstclear(&line_lst, free);
 	return (true);
 }

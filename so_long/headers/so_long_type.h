@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 21:29:18 by heson             #+#    #+#             */
-/*   Updated: 2023/02/22 19:38:27 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/25 18:30:56 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # define ERROR_B false
 # define ERROR_I -1
 # define ERROR_P NULL
+
+# define tile_size 32
 
 enum e_type {
 	EMPTY = '0',
@@ -48,20 +50,24 @@ typedef struct s_point {
 }	t_point;
 
 typedef struct s_map {
-	char	**map;
+	char	**board;
 	int	width;
 	int	height;
 }		t_map;
 
-typedef struct s_mlx_vars {
-	void	*mlx;
-	void	*win;
-}	t_mlx_vars;
-
+typedef struct s_img {
+	void	*ground;
+	void	*wall;
+	void	*item;
+	void	*exit;
+	void	*player;
+}	t_img;
 
 typedef struct s_game
 {
-	t_mlx_vars	vars;
+	void		*mlx;
+	void		*win;
+	t_img		img;
 	t_map		map;
 	t_point		player;
 	int			item_cnt;

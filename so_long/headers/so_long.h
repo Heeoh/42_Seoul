@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 17:38:57 by heson             #+#    #+#             */
-/*   Updated: 2023/02/23 20:42:08 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/25 17:33:22 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,7 @@
 # define SO_LONG_H
 
 # include "../mlx/mlx.h"
-// # include <mlx.h>
 # include "../headers/so_long_type.h"
-
-typedef struct	s_vars {
-	void	*mlx;
-	void	*win;
-}				t_vars;
 
 enum {
 	ON_KEYDOWN = 2,
@@ -32,7 +26,7 @@ enum {
 	ON_DESTROY = 17
 };
 
-bool map_parsing(char *file, t_map *map, int *item_cnt);
+bool	map_parsing(char *file, t_map *map);
 
 
 #endif
