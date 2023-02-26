@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 15:52:42 by heson             #+#    #+#             */
-/*   Updated: 2023/02/26 04:01:03 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/26 21:28:30 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,15 @@
 #include <stdio.h>
 #include "../library/libft/libft.h"
 
-
-int close_mlx_win(void *mlx, void *win)
+int	close_mlx_win(void *mlx, void *win)
 {
-	ft_printf("close\n");
 	mlx_destroy_window(mlx, win);
+	ft_printf("the end\n");
 	exit(0);
 }
 
 void	change_img(t_game *game, t_point from, t_point to, int dir)
 {
-
 	mlx_put_image_to_window(game->mlx, game->win, game->img.ground, from.x * tile_size, from.y * tile_size);
 	if (dir == UP)
 		mlx_put_image_to_window(game->mlx, game->win, game->img.back, to.x * tile_size, to.y * tile_size);
@@ -38,58 +36,51 @@ void	change_img(t_game *game, t_point from, t_point to, int dir)
 		mlx_put_image_to_window(game->mlx, game->win, game->img.left, to.x * tile_size, to.y * tile_size);
 }
 
+
+
 void	move(t_game *game, int dir)
 {
-	int yy[4] = {-1, 0, 1, 0};
-	int xx[4] = {0, 1, 0, -1};
-	t_point cur;
-	t_point next;
+	int		yy[4] = {-1, 0, 1, 0};
+	int		xx[4] = {0, 1, 0, -1};
+	t_point	cur;
+	t_point	next;
 
-	cur.y = game->player.y;
-	cur.x = game->player.x;
+	cur = game->player;
 	next.y = cur.y + yy[dir];
 	next.x = cur.x + xx[dir];
-	if (game->map.board[next.y][next.x] == WALL) {
-		// ft_printf("WALL, cannot move\n");
-		return ;
+	if (game->map.board[next.y][next.x] == EXIT && game->item_cnt == 0)
+	{
+		ft_printf("*-------------------*\n");
+		ft_printf("|    !! CLEAR !!    |\n");
+		ft_printf("*-------------------*\n");
+		ft_printf("Total number of moves is %d\n", game->move_cnt);
+		close_mlx_win(game->mlx, game->win);
 	}
+	else if (game->map.board[next.y][next.x] == WALL || game->map.board[next.y][next.x] == EXIT)
+		return ;
 	else if (game->map.board[next.y][next.x] == ITEM)
 		game->item_cnt--;
-	else if (game->map.board[next.y][next.x] == EXIT)
-	{
-		if (game->item_cnt == 0)
-			close_mlx_win(game->mlx, game->win);
-		else
-		{
-			// ft_printf("Collectible items are left.\n");
-			return ;
-		}
-	}
 	game->map.board[cur.y][cur.x] = EMPTY;
 	game->map.board[next.y][next.x] = PLAYER;
-	game->player.y = next.y;
-	game->player.x = next.x;
+	game->player = next;
 	change_img(game, cur, next, dir);
 	game->move_cnt++;
 	ft_printf("%d\n", game->move_cnt);
-	// ft_printf("%d. move to (%d, %d)\n", game->move_cnt, game->player.y, game->player.x);
 	mlx_loop(game->mlx);
 }
 
 int	key_hook(int keycode, t_game *g)
 {
-	if (keycode == KEY_UP)
+	if (keycode == KEY_W)
 		move(g, UP);
-	else if (keycode == KEY_DOWN)
+	else if (keycode == KEY_S)
 		move(g, DOWN);
-	else if (keycode == KEY_LEFT)
+	else if (keycode == KEY_A)
 		move(g, LEFT);
-	else if (keycode == KEY_RIGHT)
+	else if (keycode == KEY_D)
 		move(g, RIGHT);
-	else if (keycode == KEY_ESC) {
-		// ft_printf("ESC\n");
+	else if (keycode == KEY_ESC)
 		close_mlx_win(g->mlx, g->win);
-	}
 	return (0);
 }
 
@@ -109,9 +100,9 @@ void	find_player(t_map *m, t_point *p)
 
 void	set_imgs(void *mlx, t_img *img)
 {
-	int img_width;
-	int	img_height;
-	char	path[4] = "../";
+	int		img_width;
+	int		img_height;
+	char	path[4] = "./";
 
 	img->ground = mlx_xpm_file_to_image(mlx, ft_strjoin(path, "imgs/ground64.xpm"), &img_width, &img_height);
 	img->wall = mlx_xpm_file_to_image(mlx, ft_strjoin(path, "imgs/wall.xpm"), &img_width, &img_height);
@@ -159,7 +150,6 @@ void	init(t_game *game)
 		h++;
 	}
 	game->move_cnt = 0;
-
 }
 
 
@@ -174,13 +164,6 @@ int	main(int ac, char *av[])
 		printf("Error\n");
 		return (0);
 	}
-	for (int i=0; i<game.map.height; i++) {
-		for (int j = 0; j< game.map.width; j++) {
-			ft_printf("%c", game.map.board[i][j]);
-		}
-		ft_printf("\n");
-	}
-	
 	init(&game);
 	mlx_hook(game.win, ON_KEYDOWN, 1L<<0, key_hook, &game);
 	mlx_hook(game.win, ON_DESTROY, 0, close, &game);

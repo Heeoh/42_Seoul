@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 21:29:18 by heson             #+#    #+#             */
-/*   Updated: 2023/02/26 03:52:42 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/26 21:26:57 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,10 @@ enum e_type {
 };
 
 enum e_keycode {
-	KEY_UP = 13,
-	KEY_DOWN = 1,
-	KEY_LEFT = 0,
-	KEY_RIGHT = 2,
+	KEY_W = 13,
+	KEY_S = 1,
+	KEY_A = 0,
+	KEY_D = 2,
 	KEY_ESC = 53
 };
 
@@ -41,7 +41,8 @@ enum e_direction {
 	UP = 0,
 	RIGHT,
 	DOWN,
-	LEFT
+	LEFT,
+	DIR_CNT
 };
 
 typedef struct s_point {
