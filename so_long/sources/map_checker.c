@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 15:57:43 by heson             #+#    #+#             */
-/*   Updated: 2023/02/27 16:09:58 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/28 02:22:13 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,15 +45,15 @@ bool	check_path(char **ch, t_point cur, int item_cnt)
 	while (++d < DIR_CNT && !is_found)
 	{
 		next = get_next_point(cur, d);
-		if (ch[next.y][next.x] == WALL)
+		if (ch[next.row][next.col] == WALL)
 			continue ;
-		if (ch[next.y][next.x] == EXIT)
+		if (ch[next.row][next.col] == EXIT)
 			return (item_cnt == 0);
-		if (ch[next.y][next.x] == ITEM)
+		if (ch[next.row][next.col] == ITEM)
 			item_cnt--;
-		ch[next.y][next.x] = WALL;
+		ch[next.row][next.col] = WALL;
 		is_found = check_path(ch, next, item_cnt);
-		ch[next.y][next.x] = EMPTY;
+		ch[next.row][next.col] = EMPTY;
 	}
 	return (is_found);
 }
@@ -107,5 +107,5 @@ bool	check_map_format(t_list *lines, int height, int width)
 	if (!pei_cnt[0] || !pei_cnt[1] || !pei_cnt[2]
 		|| pei_cnt[0] > 1 || pei_cnt[1] > 1)
 		return (ERROR_B);
-    return (true);
+	return (true);
 }

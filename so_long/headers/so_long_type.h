@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 21:29:18 by heson             #+#    #+#             */
-/*   Updated: 2023/02/27 14:15:25 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/28 02:12:33 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ enum e_direction {
 };
 
 typedef struct s_point {
-	int	x;
-	int	y;
+	int	col;
+	int	row;
 }	t_point;
 
 typedef struct s_map {

@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 19:00:31 by heson             #+#    #+#             */
-/*   Updated: 2023/02/27 16:13:30 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/28 02:27:09 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ bool	read_map(int fd, t_list **line_lst)
 	return (true);
 }
 
-void	map_parsing(char *file, t_map *map, char **ch)
+void	init_map(char *file, t_map *map, char ***ch)
 {
 	t_list	*line_lst;
 	t_list	*lst_p;
@@ -52,13 +52,13 @@ void	map_parsing(char *file, t_map *map, char **ch)
 	if (!check_map_format(line_lst, map->height, map->width))
 		print_error_n_exit("invalid map format");
 	map->board = (char **)malloc(sizeof(char *) * map->height);
-	ch = (char **)malloc(sizeof(char *) * map->height);
+	*ch = (char **)malloc(sizeof(char *) * map->height);
 	lst_p = line_lst;
 	h = -1;
 	while (++h < map->height && lst_p)
 	{
 		map->board[h] = ft_strdup((char *)lst_p->content);
-		ch[h] = ft_strdup((char *)lst_p->content);
+		(*ch)[h] = ft_strdup((char *)lst_p->content);
 		lst_p = lst_p->next;
 	}
 	ft_lstclear(&line_lst, free);
