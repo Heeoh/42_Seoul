@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 21:29:18 by heson             #+#    #+#             */
-/*   Updated: 2023/02/26 21:26:57 by heson            ###   ########.fr       */
+/*   Updated: 2023/02/27 14:15:25 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 
 # define tile_size 64
 
-enum e_type {
+enum e_tile_type {
 	EMPTY = '0',
 	WALL = '1',
 	ITEM = 'C',
@@ -67,8 +67,7 @@ typedef struct s_img {
 	void	*left;
 }	t_img;
 
-typedef struct s_game
-{
+typedef struct s_game {
 	void		*mlx;
 	void		*win;
 	t_img		img;
