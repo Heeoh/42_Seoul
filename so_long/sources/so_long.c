@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 15:52:42 by heson             #+#    #+#             */
-/*   Updated: 2023/02/28 02:31:49 by heson            ###   ########.fr       */
+/*   Updated: 2023/03/01 15:40:09 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	key_hook(int keycode, t_game *g)
 void	init(t_game *game, char *file)
 {
 	char	**ch;
-	t_point	idx;
+	t_point	i;
 
 	init_map(file, &(game->map), &ch);
 	game->mlx = mlx_init();
@@ -79,21 +79,22 @@ void	init(t_game *game, char *file)
 	set_imgs(game->mlx, &(game->img));
 	game->item_cnt = 0;
 	game->move_cnt = 0;
-	idx.row = -1;
-	while (++idx.row < game->map.height)
+	i.row = -1;
+	while (++i.row < game->map.height)
 	{
-		idx.col = -1;
-		while (++idx.col < game->map.width)
+		i.col = -1;
+		while (++i.col < game->map.width)
 		{
-			put_img(game, game->map.board[idx.row][idx.col],
-				idx.col * tile_size, idx.row * tile_size);
-			if (game->map.board[idx.row][idx.col] == ITEM)
+			put_img(game, game->map.board[i.row][i.col], 
+				i.col * tile_size, i.row * tile_size);
+			if (game->map.board[i.row][i.col] == ITEM)
 				game->item_cnt++;
-			else if (game->map.board[idx.row][idx.col] == PLAYER)
-				game->player = idx;
+			else if (game->map.board[i.row][i.col] == PLAYER)
+				game->player = i;
 		}
 	}
-	check_path(ch, game->player, game->item_cnt);
+	if (!check_path(ch, game->player, game->item_cnt))
+		print_error_n_exit("no path to clear");
 }
 
 int	main(int ac, char *av[])
