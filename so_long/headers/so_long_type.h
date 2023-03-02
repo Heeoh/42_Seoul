@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 21:29:18 by heson             #+#    #+#             */
-/*   Updated: 2023/03/01 13:53:21 by heson            ###   ########.fr       */
+/*   Updated: 2023/03/02 12:19:00 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # define ERROR_I -1
 # define ERROR_P NULL
 
-# define tile_size 64
+# define tilesize 64
 
 enum e_tile_type {
 	EMPTY = '0',
@@ -46,8 +46,8 @@ enum e_direction {
 };
 
 typedef struct s_point {
-	int	col;
-	int	row;
+	int	c;
+	int	r;
 }	t_point;
 
 typedef struct s_map {

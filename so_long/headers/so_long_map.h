@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 16:03:53 by heson             #+#    #+#             */
-/*   Updated: 2023/02/28 02:24:48 by heson            ###   ########.fr       */
+/*   Updated: 2023/03/02 13:37:32 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@
 # include "../headers/so_long_type.h"
 # include "../library/libft/libft.h"
 
-void	init_map(char *file, t_map *map, char ***ch);
+void	init_map(char *file, t_map *map, t_point *player);
 bool	check_file_type(char *file);
+bool	check_map_format(t_list *lines, int height, int width, int **pec);
 bool	check_path(char **ch, t_point cur, int item_cnt);
-bool	check_line(char *line, int width, bool is_mid, int **pei_cnt);
-bool	check_map_format(t_list *lines, int height, int width);
+
 
 #endif

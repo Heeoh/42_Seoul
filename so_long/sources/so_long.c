@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 15:52:42 by heson             #+#    #+#             */
-/*   Updated: 2023/03/01 15:40:09 by heson            ###   ########.fr       */
+/*   Updated: 2023/03/02 13:38:01 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	move(t_game *game, int dir)
 
 	cur = game->player;
 	next = get_next_point(cur, dir);
-	if (game->map.board[next.row][next.col] == EXIT && game->item_cnt == 0)
+	if (game->map.board[next.r][next.c] == EXIT && game->item_cnt == 0)
 	{
 		ft_printf("*-------------------*\n");
 		ft_printf("|    !! CLEAR !!    |\n");
@@ -38,13 +38,13 @@ void	move(t_game *game, int dir)
 		ft_printf("Total number of moves is %d\n", game->move_cnt);
 		close_mlx_win(game->mlx, game->win);
 	}
-	else if (game->map.board[next.row][next.col] == WALL
-				|| game->map.board[next.row][next.col] == EXIT)
+	else if (game->map.board[next.r][next.c] == WALL
+				|| game->map.board[next.r][next.c] == EXIT)
 		return ;
-	else if (game->map.board[next.row][next.col] == ITEM)
+	else if (game->map.board[next.r][next.c] == ITEM)
 		game->item_cnt--;
-	game->map.board[cur.row][cur.col] = EMPTY;
-	game->map.board[next.row][next.col] = PLAYER;
+	game->map.board[cur.r][cur.c] = EMPTY;
+	game->map.board[next.r][next.c] = PLAYER;
 	game->player = next;
 	change_img(game, cur, next, dir);
 	game->move_cnt++;
@@ -67,34 +67,33 @@ int	key_hook(int keycode, t_game *g)
 	return (0);
 }
 
-void	init(t_game *game, char *file)
+void	init_game(t_game *g, char *file)
 {
-	char	**ch;
-	t_point	i;
+	t_point	p;
 
-	init_map(file, &(game->map), &ch);
-	game->mlx = mlx_init();
-	game->win = mlx_new_window(game->mlx,
-			game->map.width * tile_size, game->map.height * tile_size, "game");
-	set_imgs(game->mlx, &(game->img));
-	game->item_cnt = 0;
-	game->move_cnt = 0;
-	i.row = -1;
-	while (++i.row < game->map.height)
+	init_map(file, &(g->map), &(g->player));
+	g->mlx = mlx_init();
+	g->win = mlx_new_window(g->mlx,
+			g->map.width * tilesize, g->map.height * tilesize, "game");
+	set_imgs(g->mlx, &(g->img));
+	g->item_cnt = 0;
+	g->move_cnt = 0;
+	p.r = -1;
+	while (++p.r < g->map.height)
 	{
-		i.col = -1;
-		while (++i.col < game->map.width)
+		p.c = -1;
+		while (++p.c < g->map.width)
 		{
-			put_img(game, game->map.board[i.row][i.col], 
-				i.col * tile_size, i.row * tile_size);
-			if (game->map.board[i.row][i.col] == ITEM)
-				game->item_cnt++;
-			else if (game->map.board[i.row][i.col] == PLAYER)
-				game->player = i;
+			put_img(g, g->map.board[p.r][p.c], p.c * tilesize, p.r * tilesize);
+			if (g->map.board[p.r][p.c] == ITEM)
+				g->item_cnt++;
+			else if (g->map.board[p.r][p.c] == PLAYER)
+				g->player = p;
 		}
 	}
-	if (!check_path(ch, game->player, game->item_cnt))
-		print_error_n_exit("no path to clear");
+	// if (!check_path(ch, g->player, g->item_cnt))
+	// 	print_error_n_exit("no path available");
+	// free_arr2(ch);
 }
 
 int	main(int ac, char *av[])
@@ -103,7 +102,7 @@ int	main(int ac, char *av[])
 
 	if (ac != 2)
 		return (0);
-	init(&game, av[1]);
+	init_game(&game, av[1]);
 	mlx_hook(game.win, ON_KEYDOWN, 1L << 0, key_hook, &game);
 	mlx_hook(game.win, ON_DESTROY, 0, close_mlx_win, &game);
 	mlx_loop(game.mlx);

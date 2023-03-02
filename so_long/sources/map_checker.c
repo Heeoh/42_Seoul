@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 15:57:43 by heson             #+#    #+#             */
-/*   Updated: 2023/02/28 02:22:13 by heson            ###   ########.fr       */
+/*   Updated: 2023/03/02 13:34:43 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,38 +27,22 @@ bool	check_file_type(char *file)
 		return (ERROR_B);
 	file_name_split = ft_split(file_dir_split[i - 1], '.');
 	i = 0;
+	while (file_dir_split[i])
+		free(file_dir_split[i++]);
+	free(file_dir_split);
+	i = 0;
 	while (file_name_split[i])
 		i++;
 	if (i != 2 || ft_strncmp(file_name_split[i - 1], "ber", 4) != 0)
 		return (ERROR_B);
+	i = 0;
+	while (file_name_split[i])
+		free(file_name_split[i++]);
+	free(file_name_split);
 	return (true);
 }
 
-bool	check_path(char **ch, t_point cur, int item_cnt)
-{	
-	int		d;
-	t_point	next;
-	bool	is_found;
-
-	is_found = false;
-	d = -1;
-	while (++d < DIR_CNT && !is_found)
-	{
-		next = get_next_point(cur, d);
-		if (ch[next.row][next.col] == WALL)
-			continue ;
-		if (ch[next.row][next.col] == EXIT)
-			return (item_cnt == 0);
-		if (ch[next.row][next.col] == ITEM)
-			item_cnt--;
-		ch[next.row][next.col] = WALL;
-		is_found = check_path(ch, next, item_cnt);
-		ch[next.row][next.col] = EMPTY;
-	}
-	return (is_found);
-}
-
-bool	check_line(char *line, int width, bool is_mid, int **pei_cnt)
+bool	check_line(char *line, int width, bool is_mid, int **pec)
 {
 	int		i;
 
@@ -75,11 +59,14 @@ bool	check_line(char *line, int width, bool is_mid, int **pei_cnt)
 				|| line[i] == PLAYER || line[i] == EXIT || line[i] == ITEM))
 			return (ERROR_B);
 		if (line[i] == PLAYER)
-			(*pei_cnt)[0]++;
+		{
+			(*pec)[0]++;
+			(*pec)[4] = i;
+		}
 		else if (line[i] == EXIT)
-			(*pei_cnt)[1]++;
+			(*pec)[1]++;
 		else if (line[i] == ITEM)
-			(*pei_cnt)[2]++;
+			(*pec)[2]++;
 	}
 	if (!(line[0] == WALL && line[width - 1] == WALL)
 		|| !(line[width] == '\0' || line[width] == '\n'))
@@ -87,25 +74,50 @@ bool	check_line(char *line, int width, bool is_mid, int **pei_cnt)
 	return (true);
 }
 
-bool	check_map_format(t_list *lines, int height, int width)
+bool	check_map_format(t_list *lines, int height, int width, int **pec)
 {
-	int		*pei_cnt;
 	int		h;
 	bool	is_mid;
 
-	pei_cnt = (int *)ft_calloc(3, sizeof(int));
+	*pec = (int *)ft_calloc(5, sizeof(int));
 	h = 0;
 	while (lines)
 	{
 		is_mid = !(h == 0 || h == height - 1);
-		if (!check_line(lines->content, width, is_mid, &pei_cnt))
+		if (!check_line(lines->content, width, is_mid, pec))
 			return (ERROR_B);
+		if ((*pec)[4])
+			(*pec)[3] = h;
 		((char *)lines->content)[width] = '\0';
 		h++;
 		lines = lines->next;
 	}
-	if (!pei_cnt[0] || !pei_cnt[1] || !pei_cnt[2]
-		|| pei_cnt[0] > 1 || pei_cnt[1] > 1)
+	if (!(*pec)[0] || !(*pec)[1] || !(*pec)[2]
+		|| (*pec)[0] > 1 || (*pec)[1] > 1)
 		return (ERROR_B);
 	return (true);
+}
+
+bool	check_path(char **ch, t_point cur, int item_cnt)
+{	
+	int		d;
+	t_point	next;
+	bool	is_found;
+
+	is_found = false;
+	d = -1;
+	while (++d < DIR_CNT && !is_found)
+	{
+		next = get_next_point(cur, d);
+		if (ch[next.r][next.c] == WALL)
+			continue ;
+		if (ch[next.r][next.c] == EXIT)
+			return (item_cnt == 0);
+		if (ch[next.r][next.c] == ITEM)
+			item_cnt--;
+		ch[next.r][next.c] = WALL;
+		is_found = check_path(ch, next, item_cnt);
+		ch[next.r][next.c] = EMPTY;
+	}
+	return (is_found);
 }

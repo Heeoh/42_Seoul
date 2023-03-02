@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 19:00:31 by heson             #+#    #+#             */
-/*   Updated: 2023/02/28 02:27:09 by heson            ###   ########.fr       */
+/*   Updated: 2023/03/02 13:37:08 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,12 @@ bool	read_map(int fd, t_list **line_lst)
 	return (true);
 }
 
-void	init_map(char *file, t_map *map, char ***ch)
+void	init_map(char *file, t_map *map, t_point *player)
 {
 	t_list	*line_lst;
 	t_list	*lst_p;
+	int		*pec_info;
+	char	**ch;
 	int		h;
 
 	if (!check_file_type(file))
@@ -49,17 +51,23 @@ void	init_map(char *file, t_map *map, char ***ch)
 		print_error_n_exit("file read error");
 	map->height = ft_lstsize(line_lst);
 	map->width = ft_strlen(line_lst->content) - 1;
-	if (!check_map_format(line_lst, map->height, map->width))
+	if (!check_map_format(line_lst, map->height, map->width, &pec_info))
 		print_error_n_exit("invalid map format");
 	map->board = (char **)malloc(sizeof(char *) * map->height);
-	*ch = (char **)malloc(sizeof(char *) * map->height);
+	ch = (char **)malloc(sizeof(char *) * map->height);
 	lst_p = line_lst;
 	h = -1;
 	while (++h < map->height && lst_p)
 	{
 		map->board[h] = ft_strdup((char *)lst_p->content);
-		(*ch)[h] = ft_strdup((char *)lst_p->content);
+		(ch)[h] = ft_strdup((char *)lst_p->content);
 		lst_p = lst_p->next;
 	}
+	player->r = pec_info[3];
+	player->c = pec_info[4];
+	if (!check_path(ch, *player, pec_info[2]))
+		print_error_n_exit("no path available");
+	free(pec_info);
+	free_arr2(ch);
 	ft_lstclear(&line_lst, free);
 }
