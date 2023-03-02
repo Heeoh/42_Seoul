@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 15:57:43 by heson             #+#    #+#             */
-/*   Updated: 2023/03/02 18:57:19 by heson            ###   ########.fr       */
+/*   Updated: 2023/03/02 21:14:48 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,21 +24,21 @@ bool	check_file_type(char *file)
 	while (file_dir_split[i])
 		i++;
 	if (i < 1)
+	{
+		free_2d_arr(&file_dir_split);
 		return (ERROR_B);
+	}
 	file_name_split = ft_split(file_dir_split[i - 1], '.');
-	i = 0;
-	while (file_dir_split[i])
-		free(file_dir_split[i++]);
-	free(file_dir_split);
+	free_2d_arr(&file_dir_split);
 	i = 0;
 	while (file_name_split[i])
 		i++;
 	if (i != 2 || ft_strncmp(file_name_split[i - 1], "ber", 4) != 0)
+	{
+		free_2d_arr(&file_name_split);
 		return (ERROR_B);
-	i = 0;
-	while (file_name_split[i])
-		free(file_name_split[i++]);
-	free(file_name_split);
+	}
+	free_2d_arr(&file_name_split);
 	return (true);
 }
 
@@ -59,10 +59,7 @@ bool	check_line(char *line, int width, bool is_mid, int **pec)
 				|| line[i] == PLAYER || line[i] == EXIT || line[i] == ITEM))
 			return (ERROR_B);
 		if (line[i] == PLAYER)
-		{
 			(*pec)[0]++;
-			(*pec)[4] = i;
-		}
 		else if (line[i] == EXIT)
 			(*pec)[1]++;
 		else if (line[i] == ITEM)
@@ -74,28 +71,30 @@ bool	check_line(char *line, int width, bool is_mid, int **pec)
 	return (true);
 }
 
-bool	check_map_format(t_list *lines, int height, int width, int **pec)
+bool	check_map_format(t_list *lines, int height, int width, int *item_cnt)
 {
 	int		h;
 	bool	is_mid;
+	int		*pec;
+	bool	is_succesful;
 
-	*pec = (int *)ft_calloc(5, sizeof(int));
+	is_succesful = true;
+	pec = (int *)ft_calloc(3, sizeof(int));
 	h = 0;
-	while (lines)
+	while (lines && is_succesful)
 	{
 		is_mid = !(h == 0 || h == height - 1);
-		if (!check_line(lines->content, width, is_mid, pec))
-			return (ERROR_B);
-		if ((*pec)[4])
-			(*pec)[3] = h;
+		is_succesful = check_line(lines->content, width, is_mid, &pec);
 		((char *)lines->content)[width] = '\0';
 		h++;
 		lines = lines->next;
 	}
-	if (!(*pec)[0] || !(*pec)[1] || !(*pec)[2]
-		|| (*pec)[0] > 1 || (*pec)[1] > 1)
-		return (ERROR_B);
-	return (true);
+	if (is_succesful && (!pec[0] || !pec[1] || !pec[2]
+		|| pec[0] > 1 || pec[1] > 1))
+		is_succesful = ERROR_B;
+	*item_cnt = pec[2];
+	free(pec);
+	return (is_succesful);
 }
 
 bool	check_path(char **ch, t_point cur, int item_cnt)

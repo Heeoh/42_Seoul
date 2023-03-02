@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 15:52:42 by heson             #+#    #+#             */
-/*   Updated: 2023/03/02 13:38:01 by heson            ###   ########.fr       */
+/*   Updated: 2023/03/02 20:58:30 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,10 @@ void	move(t_game *game, int dir)
 	mlx_loop(game->mlx);
 }
 
+void leaks() {
+	system("leaks so_long");
+}
+
 int	key_hook(int keycode, t_game *g)
 {
 	if (keycode == KEY_W)
@@ -70,13 +74,13 @@ int	key_hook(int keycode, t_game *g)
 void	init_game(t_game *g, char *file)
 {
 	t_point	p;
+	char	**ch;
 
-	init_map(file, &(g->map), &(g->player));
+	init_map(file, g, &ch);
 	g->mlx = mlx_init();
 	g->win = mlx_new_window(g->mlx,
 			g->map.width * tilesize, g->map.height * tilesize, "game");
 	set_imgs(g->mlx, &(g->img));
-	g->item_cnt = 0;
 	g->move_cnt = 0;
 	p.r = -1;
 	while (++p.r < g->map.height)
@@ -85,21 +89,23 @@ void	init_game(t_game *g, char *file)
 		while (++p.c < g->map.width)
 		{
 			put_img(g, g->map.board[p.r][p.c], p.c * tilesize, p.r * tilesize);
-			if (g->map.board[p.r][p.c] == ITEM)
-				g->item_cnt++;
-			else if (g->map.board[p.r][p.c] == PLAYER)
+			if (g->map.board[p.r][p.c] == PLAYER)
 				g->player = p;
 		}
 	}
-	// if (!check_path(ch, g->player, g->item_cnt))
-	// 	print_error_n_exit("no path available");
-	// free_arr2(ch);
+	if (!check_path(ch, g->player, g->item_cnt))
+	{
+		print_error_n_exit("no path available");
+		free_2d_arr(&ch);
+	}
+	free_2d_arr(&ch);
 }
 
 int	main(int ac, char *av[])
 {
 	t_game	game;
 
+	atexit(leaks);
 	if (ac != 2)
 		return (0);
 	init_game(&game, av[1]);

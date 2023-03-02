@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 19:00:31 by heson             #+#    #+#             */
-/*   Updated: 2023/03/02 19:03:41 by heson            ###   ########.fr       */
+/*   Updated: 2023/03/02 21:14:58 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,15 @@
 #include "../headers/so_long_map.h"
 #include "../headers/get_next_line.h"
 #include <fcntl.h>
+#include <stdio.h>
 
-void	free_arr2(char **arr)
+void	free_2d_arr(char ***arr)
 {
 	int	i;
 
 	i = 0;
-	while ((*arr)[i])
-		free(&(*arr)[i++]);
+	while ((*arr)[i] && *(*arr)[i])
+		free((*arr)[i++]);
 	free(*arr);
 }
 
@@ -47,37 +48,29 @@ bool	read_map(int fd, t_list **line_lst)
 	return (true);
 }
 
-void	init_map(char *file, t_map *map, t_point *player)
+void	init_map(char *file, t_game *g, char ***ch)
 {
 	t_list	*line_lst;
 	t_list	*lst_p;
-	int		*pec_info;
-	char	**ch;
 	int		h;
 
 	if (!check_file_type(file))
 		print_error_n_exit("wrong filename or directory");
 	if (!read_map(open(file, O_RDONLY), &line_lst))
 		print_error_n_exit("file read error");
-	map->height = ft_lstsize(line_lst);
-	map->width = ft_strlen(line_lst->content) - 1;
-	if (!check_map_format(line_lst, map->height, map->width, &pec_info))
+	g->map.height = ft_lstsize(line_lst);
+	g->map.width = ft_strlen(line_lst->content) - 1;
+	if (!check_map_format(line_lst, g->map.height, g->map.width, &g->item_cnt))
 		print_error_n_exit("invalid map format");
-	map->board = (char **)malloc(sizeof(char *) * map->height);
-	ch = (char **)malloc(sizeof(char *) * map->height);
+	g->map.board = (char **)calloc(g->map.height, sizeof(char *));
+	*ch = (char **)calloc(g->map.height, sizeof(char *));
 	lst_p = line_lst;
 	h = -1;
-	while (++h < map->height && lst_p)
+	while (++h < g->map.height && lst_p)
 	{
-		map->board[h] = ft_strdup((char *)lst_p->content);
-		(ch)[h] = ft_strdup((char *)lst_p->content);
+		g->map.board[h] = ft_strdup((char *)lst_p->content);
+		(*ch)[h] = ft_strdup((char *)lst_p->content);
 		lst_p = lst_p->next;
 	}
-	player->r = pec_info[3];
-	player->c = pec_info[4];
-	if (!check_path(ch, *player, pec_info[2]))
-		print_error_n_exit("no path available");
-	free(pec_info);
-	free_arr2(ch);
 	ft_lstclear(&line_lst, free);
 }
