@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 19:00:31 by heson             #+#    #+#             */
-/*   Updated: 2023/03/02 13:37:08 by heson            ###   ########.fr       */
+/*   Updated: 2023/03/02 19:03:41 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,16 @@
 #include "../headers/so_long_map.h"
 #include "../headers/get_next_line.h"
 #include <fcntl.h>
+
+void	free_arr2(char **arr)
+{
+	int	i;
+
+	i = 0;
+	while ((*arr)[i])
+		free(&(*arr)[i++]);
+	free(*arr);
+}
 
 bool	read_map(int fd, t_list **line_lst)
 {
