@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 15:57:43 by heson             #+#    #+#             */
-/*   Updated: 2023/03/02 21:14:48 by heson            ###   ########.fr       */
+/*   Updated: 2023/03/03 16:50:25 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,21 +24,18 @@ bool	check_file_type(char *file)
 	while (file_dir_split[i])
 		i++;
 	if (i < 1)
-	{
-		free_2d_arr(&file_dir_split);
 		return (ERROR_B);
-	}
 	file_name_split = ft_split(file_dir_split[i - 1], '.');
-	free_2d_arr(&file_dir_split);
+	free_2d_arr(file_dir_split, i);
 	i = 0;
 	while (file_name_split[i])
 		i++;
 	if (i != 2 || ft_strncmp(file_name_split[i - 1], "ber", 4) != 0)
 	{
-		free_2d_arr(&file_name_split);
+		free_2d_arr(file_name_split, i);
 		return (ERROR_B);
 	}
-	free_2d_arr(&file_name_split);
+	free_2d_arr(file_name_split, i);
 	return (true);
 }
 
@@ -90,7 +87,7 @@ bool	check_map_format(t_list *lines, int height, int width, int *item_cnt)
 		lines = lines->next;
 	}
 	if (is_succesful && (!pec[0] || !pec[1] || !pec[2]
-		|| pec[0] > 1 || pec[1] > 1))
+			|| pec[0] > 1 || pec[1] > 1))
 		is_succesful = ERROR_B;
 	*item_cnt = pec[2];
 	free(pec);
@@ -99,24 +96,27 @@ bool	check_map_format(t_list *lines, int height, int width, int *item_cnt)
 
 bool	check_path(char **ch, t_point cur, int item_cnt)
 {	
-	int		d;
-	t_point	next;
-	bool	is_found;
+	int			d;
+	t_point		next;
+	static bool	is_found;
+	static int	cnt;
 
-	is_found = false;
+	if (cnt == item_cnt + 1)
+		return (true);
+	if (ch[cur.r][cur.c] == EXIT && cnt == item_cnt)
+		return (true);
+	else if (ch[cur.r][cur.c] == EXIT)
+		return (is_found);
+	ch[cur.r][cur.c] = 'V';
 	d = -1;
 	while (++d < DIR_CNT && !is_found)
 	{
 		next = get_next_point(cur, d);
-		if (ch[next.r][next.c] == WALL)
+		if (ch[next.r][next.c] == WALL || ch[next.r][next.c] == 'V')
 			continue ;
-		if (ch[next.r][next.c] == EXIT)
-			return (item_cnt == 0);
 		if (ch[next.r][next.c] == ITEM)
-			item_cnt--;
-		ch[next.r][next.c] = WALL;
+			cnt++;
 		is_found = check_path(ch, next, item_cnt);
-		ch[next.r][next.c] = EMPTY;
 	}
 	return (is_found);
 }

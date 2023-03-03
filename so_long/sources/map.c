@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 19:00:31 by heson             #+#    #+#             */
-/*   Updated: 2023/03/02 21:14:58 by heson            ###   ########.fr       */
+/*   Updated: 2023/03/03 15:44:51 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,14 @@
 #include <fcntl.h>
 #include <stdio.h>
 
-void	free_2d_arr(char ***arr)
+void	free_2d_arr(char **arr, int size)
 {
 	int	i;
 
 	i = 0;
-	while ((*arr)[i] && *(*arr)[i])
-		free((*arr)[i++]);
-	free(*arr);
+	while (i < size)
+		free(arr[i++]);
+	free(arr);
 }
 
 bool	read_map(int fd, t_list **line_lst)

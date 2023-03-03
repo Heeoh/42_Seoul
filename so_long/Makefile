@@ -19,9 +19,7 @@ MLX = $(MLX_DIR)libmlx.a
 INCLUDE = -I $(HDRS_DIR) -I $(MLX_DIR) -I $(LIBFT_DIR) -I $(PRINTF_DIR)
 # INCLUDE = -I $(HDRS_DIR) -I $(LIBFT_DIR) -I $(PRINTF_DIR)
 SRCS = $(wildcard $(SRCS_DIR)*.c)
-# GNL_SRCS = $(wildcard $(SRCS_DIR)get_next_line/*.c) 
 OBJS += $(addprefix $(OBJS_DIR), $(notdir $(SRCS:.c=.o)))
-# OBJS += $(addprefix $(OBJS_DIR), $(notdir $(GNL_SRCS:.c=.o)))
 
 # -------------------------------- COMPILATE --------------------------------- #
 

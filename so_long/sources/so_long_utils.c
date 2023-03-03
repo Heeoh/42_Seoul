@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 16:00:13 by heson             #+#    #+#             */
-/*   Updated: 2023/03/02 12:18:53 by heson            ###   ########.fr       */
+/*   Updated: 2023/03/03 17:09:27 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,11 @@ void	change_img(t_game *game, t_point from, t_point to, int dir)
 	int	y;
 	int	x;
 
-	y = from.r * tilesize;
-	x = from.c * tilesize;
+	y = from.r * TILESIZE;
+	x = from.c * TILESIZE;
 	mlx_put_image_to_window(game->mlx, game->win, game->img.ground, x, y);
-	y = to.r * tilesize;
-	x = to.c * tilesize;
+	y = to.r * TILESIZE;
+	x = to.c * TILESIZE;
 	if (dir == UP)
 		mlx_put_image_to_window(game->mlx, game->win, game->img.back, x, y);
 	else if (dir == DOWN)

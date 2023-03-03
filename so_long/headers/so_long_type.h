@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 21:29:18 by heson             #+#    #+#             */
-/*   Updated: 2023/03/02 12:19:00 by heson            ###   ########.fr       */
+/*   Updated: 2023/03/03 17:09:33 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 
 # include <stdbool.h> // bool
 
-# define ERROR_B false
+# define ERROR_B 0
 # define ERROR_I -1
 # define ERROR_P NULL
 
-# define tilesize 64
+# define TILESIZE 64
 
 enum e_tile_type {
 	EMPTY = '0',
