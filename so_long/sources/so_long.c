@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 15:52:42 by heson             #+#    #+#             */
-/*   Updated: 2023/03/03 17:09:27 by heson            ###   ########.fr       */
+/*   Updated: 2023/03/05 17:07:08 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 int	close_mlx_win(t_game *game)
 {
 	mlx_destroy_window(game->mlx, game->win);
-	free_2d_arr(game->map.board, game->map.height);
 	exit(0);
 }
 
@@ -45,7 +44,6 @@ void	move(t_game *game, int dir)
 	else if (game->map.board[next.r][next.c] == ITEM)
 		game->item_cnt--;
 	game->map.board[cur.r][cur.c] = EMPTY;
-	game->map.board[next.r][next.c] = PLAYER;
 	game->player = next;
 	change_img(game, cur, next, dir);
 	game->move_cnt++;
@@ -77,7 +75,7 @@ void	init_game(t_game *g, char *file)
 	init_map(file, g, &ch);
 	g->mlx = mlx_init();
 	g->win = mlx_new_window(g->mlx,
-			g->map.width * TILESIZE, g->map.height * TILESIZE, "game");
+			g->map.width * TILESIZE, g->map.height * TILESIZE, "so_long");
 	set_imgs(g->mlx, &(g->img));
 	g->move_cnt = 0;
 	p.r = -1;

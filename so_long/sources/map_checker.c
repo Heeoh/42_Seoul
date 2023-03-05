@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 15:57:43 by heson             #+#    #+#             */
-/*   Updated: 2023/03/03 16:50:25 by heson            ###   ########.fr       */
+/*   Updated: 2023/03/05 16:56:36 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,10 +103,11 @@ bool	check_path(char **ch, t_point cur, int item_cnt)
 
 	if (cnt == item_cnt + 1)
 		return (true);
-	if (ch[cur.r][cur.c] == EXIT && cnt == item_cnt)
-		return (true);
-	else if (ch[cur.r][cur.c] == EXIT)
+	if (ch[cur.r][cur.c] == EXIT)
+	{
+		ch[cur.r][cur.c] = 'V';
 		return (is_found);
+	}
 	ch[cur.r][cur.c] = 'V';
 	d = -1;
 	while (++d < DIR_CNT && !is_found)
@@ -114,7 +115,7 @@ bool	check_path(char **ch, t_point cur, int item_cnt)
 		next = get_next_point(cur, d);
 		if (ch[next.r][next.c] == WALL || ch[next.r][next.c] == 'V')
 			continue ;
-		if (ch[next.r][next.c] == ITEM)
+		if (ch[next.r][next.c] == ITEM || ch[next.r][next.c] == EXIT)
 			cnt++;
 		is_found = check_path(ch, next, item_cnt);
 	}

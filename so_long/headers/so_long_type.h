@@ -6,14 +6,14 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 21:29:18 by heson             #+#    #+#             */
-/*   Updated: 2023/03/03 17:09:33 by heson            ###   ########.fr       */
+/*   Updated: 2023/03/05 16:58:56 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SO_LONG_TYPE_H
 # define SO_LONG_TYPE_H
 
-# include <stdbool.h> // bool
+# include <stdbool.h>
 
 # define ERROR_B 0
 # define ERROR_I -1
@@ -21,13 +21,8 @@
 
 # define TILESIZE 64
 
-enum e_tile_type {
-	EMPTY = '0',
-	WALL = '1',
-	ITEM = 'C',
-	EXIT = 'E',
-	PLAYER = 'P'
-};
+# define ON_KEYDOWN 2
+# define ON_DESTROY 17
 
 enum e_keycode {
 	KEY_W = 13,
@@ -35,6 +30,14 @@ enum e_keycode {
 	KEY_A = 0,
 	KEY_D = 2,
 	KEY_ESC = 53
+};
+
+enum e_tile_type {
+	EMPTY = '0',
+	WALL = '1',
+	ITEM = 'C',
+	EXIT = 'E',
+	PLAYER = 'P'
 };
 
 enum e_direction {

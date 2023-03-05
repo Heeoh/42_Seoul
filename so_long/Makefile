@@ -27,7 +27,7 @@ CC		= cc
 CFLAGS	= -Wall -Werror -Wextra
 RM		= rm -rf
 MD		= mkdir -p 
-AR		= ar -rcs
+#AR		= ar -rcs
 
 # --------------------------------- RULES ------------------------------------ #
 
