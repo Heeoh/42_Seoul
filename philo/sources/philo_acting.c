@@ -6,7 +6,7 @@
 /*   By: heson <heson@Student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 17:35:36 by heson             #+#    #+#             */
-/*   Updated: 2023/04/27 18:47:57 by heson            ###   ########.fr       */
+/*   Updated: 2023/04/27 22:21:50 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int get_timestamp(struct timeval start)
     return (msec);
 }
 
-int	check_die(t_dining_table *table)
+int	check_die(t_dining_table *table, t_monitoring moni)
 {
 	int	i;
     int hungry_time;
@@ -31,8 +31,8 @@ int	check_die(t_dining_table *table)
 	pthread_mutex_lock(&table->lock);
 	while (--i >= 0)
 	{
-		hungry_time = get_timestamp(table->last_eat_times[i]);
-		if (table->states[i] != EATING && hungry_time >= table->time_info[TIME_2_DIE])
+		hungry_time = get_timestamp(moni.last_eats[i]);
+		if (moni.states[i] != EATING && hungry_time >= table->time_2_die)
 		{
 			printf("%d %d is died\n", get_timestamp(table->start_time), i + 1);
 			return (1);
@@ -42,18 +42,13 @@ int	check_die(t_dining_table *table)
     return (0);
 }
 
-void	pickup(int id, int *state, t_dining_table *table)
+void	pickup(int id, int *state, int **sides, t_dining_table *table)
 {
-	int	left;
-	int right;
-
-	left = (id + table->philo_num - 1) % table->philo_num;
-	right = (id + 1) % table->philo_num;
-	if (id == right && id == left)
+	if (state == sides[LEFT] && state == sides[RIGHT])
 		return ;
 	pthread_mutex_lock(&table->lock);
 	if (*state == THINKING
-		&& table->states[left] != EATING && table->states[right] != EATING)
+		&& *(sides[LEFT]) != EATING && *(sides[RIGHT]) != EATING)
 	{
 		printf("%d %d has taken a fork\n", get_timestamp(table->start_time), id + 1);
 		printf("%d %d has taken a fork\n", get_timestamp(table->start_time), id + 1);
@@ -63,9 +58,9 @@ void	pickup(int id, int *state, t_dining_table *table)
 	pthread_mutex_unlock(&table->lock);
 }
 
-void	eating(int id, int eating_time, t_dining_table *table)
+void	eating(int id, int eating_time, t_timestamp *last_eat, t_dining_table *table)
 {
-	gettimeofday(&(table->last_eat_times[id]), NULL);
+	gettimeofday(last_eat, NULL);
 	printf("%d %d is eating\n", get_timestamp(table->start_time), id + 1);
 	pthread_mutex_unlock(&table->lock);
 	usleep(eating_time * 1000);
@@ -84,4 +79,20 @@ void	thinking(int id, int *state, t_timestamp start)
 {
 	*state = THINKING;
 	printf("%d %d is thinking\n", get_timestamp(start), id + 1);
+}
+
+void custom_usleep(int wait_time, t_timestamp start)
+{
+	int	ts;
+
+	ts = get_timestamp(start);
+	usleep(wait_time * 1000 * 0.8);
+	while (true)
+	{
+		ts = get_timestamp(start);
+		if (ts > wait_time)
+			break;
+		usleep(200);
+	}
+
 }
