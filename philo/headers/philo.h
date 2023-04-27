@@ -6,7 +6,7 @@
 /*   By: heson <heson@Student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 14:57:08 by heson             #+#    #+#             */
-/*   Updated: 2023/04/26 17:56:40 by heson            ###   ########.fr       */
+/*   Updated: 2023/04/27 18:52:12 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,12 @@
 #include <unistd.h>
 #include <sys/time.h>
 
-enum e_argu {
-	PHILO_N = 0,
-	TIME_2_DIE,
+typedef struct timeval t_timestamp;
+
+enum e_time_argu {
+	TIME_2_DIE = 0,
 	TIME_2_EAT,
 	TIME_2_SLEEP,
-	EAT_MIN,
 };
 
 enum e_state {
@@ -34,19 +34,31 @@ enum e_state {
 	DIED
 };
 
-typedef struct s_thread_info {
+typedef struct s_dining_table {
+	int				philo_num;
+	int				time_2_die;
+	int				time_2_eat;
+	int				time_2_sleep;
+	int				minimum_eat;
+	
+	int				*states;
+	
+	struct timeval	start_time;
+	t_timestamp		*last_eat_times;
+	pthread_mutex_t	lock;
+	int				eof;
+}	t_dining_table;
+
+typedef struct s_philo {
 	int				id;
 	int				*state;
-	int				*philo_info;
-	pthread_mutex_t	*lock;
-	struct timeval	start_time;
-}	t_thread_info;
+	t_dining_table	*table;
+}	t_philo;
 
-void    check_die(int id, int *state, int time, struct timeval start);
-void	pickup(pthread_mutex_t *lock, int id, int *state, int philo_n, struct timeval start);
-void	eating(int id, int time, struct timeval start);
-void	sleeping(int id, int *state, int time, struct timeval start);
-void	thinking(int id, int *state, struct timeval start);
-
+int		check_die(t_dining_table *table);
+void	pickup(int id, int *state, t_dining_table *table);
+void	eating(int id, int eating_time,  t_dining_table *table);
+void	sleeping(int id, int *state, int sleeping_time, t_dining_table *table);
+void	thinking(int id, int *state, t_timestamp start);
 
 #endif
