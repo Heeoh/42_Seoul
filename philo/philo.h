@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: heson <heson@Student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 03:14:16 by heson             #+#    #+#             */
-/*   Updated: 2023/04/28 17:34:13 by heson            ###   ########.fr       */
+/*   Updated: 2023/04/28 18:56:31 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct	s_table {
 	pthread_mutex_t	*forks;
 	int				*eat_counts;
 	t_timestamp		*last_eats;
+	pthread_mutex_t	*monitor_lock;
 }	t_table;
 
 typedef struct	s_philo {
@@ -51,7 +52,7 @@ int		get_timestamp(t_timestamp prev);
 void	custom_usleep(int wait_time, t_timestamp prev);
 
 // acting
-void	pickup(t_philo *p);
+int		pickup(t_philo *p);
 void	eating(t_philo *p);
 void	putdown(t_philo	*p);
 void	sleeping(t_philo *p);

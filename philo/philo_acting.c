@@ -3,36 +3,60 @@
 /*                                                        :::      ::::::::   */
 /*   philo_acting.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: heson <heson@Student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 16:11:08 by heson             #+#    #+#             */
-/*   Updated: 2023/04/28 17:35:19 by heson            ###   ########.fr       */
+/*   Updated: 2023/04/28 19:09:11 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	pickup(t_philo *p)
+int	pickup_a_fork(t_philo *p, pthread_mutex_t *fork)
 {
-	int	is_odd;
+	if (!p->info->is_end)
+	{
+		pthread_mutex_lock(fork);
+		if (p->info->is_end)
+		{
+			pthread_mutex_unlock(fork);
+			return (0);
+		}
+		printf("%d %d has taken a fork\n", get_timestamp(p->info->start_time), p->id + 1);
+		return (1);
+	}
+	return (0);
+}
 
-	is_odd = p->id % 2;
-	if (is_odd) // odd
-		pthread_mutex_lock(p->l_fork);
+int	pickup(t_philo *p)
+{
+	pthread_mutex_t	*first;
+	pthread_mutex_t	*second;
+
+	if (p->id % 2 == 0)
+	{
+		first = p->l_fork;
+		second = p->r_fork;
+	}
 	else
-		pthread_mutex_lock(p->r_fork);
-	printf("%d %d has taken a fork\n", get_timestamp(p->info->start_time), p->id + 1);
-	if (is_odd)
-		pthread_mutex_lock(p->r_fork);
-	else
-		pthread_mutex_lock(p->l_fork);
-	printf("%d %d has taken a fork\n", get_timestamp(p->info->start_time), p->id + 1);
+	{
+		first = p->r_fork;
+		second = p->l_fork;
+	}
+	if (pickup_a_fork(p, first))
+	{ 
+		if (first != second && pickup_a_fork(p, second))
+			return (1);
+	}
+	putdown(p);
+	return (0);
 }
 
 void	eating(t_philo *p)
 {
 	gettimeofday(p->last_eat, NULL);
-	printf("%d %d is eating\n", get_timestamp(p->info->start_time), p->id);
+	*(p->eat_cnt) -= 1;
+	printf("%d %d is eating\n", get_timestamp(p->info->start_time), p->id + 1);
 	custom_usleep(p->info->time_to_eat, *(p->last_eat));
 }
 
@@ -48,7 +72,7 @@ void	sleeping(t_philo *p)
 
 	gettimeofday(&cur, NULL);
 	printf("%d %d is sleeping\n", get_timestamp(p->info->start_time), p->id + 1);
-	custom_usleep(p->info->time_to_eat, cur);
+	custom_usleep(p->info->time_to_sleep, cur);
 }
 
 void	thinking(t_philo *p)

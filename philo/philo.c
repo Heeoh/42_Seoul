@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: heson <heson@Student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 03:14:00 by heson             #+#    #+#             */
-/*   Updated: 2023/04/28 17:34:44 by heson            ###   ########.fr       */
+/*   Updated: 2023/04/28 18:56:15 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ int	init_table(t_table *table, t_info info)
 		table->eat_counts[i] = info.minimum_eat;
 		table->last_eats[i] = info.start_time;
 	}
+	pthread_mutex_init(table->monitor_lock, NULL);
 	return (0);
 }
 
@@ -81,23 +82,31 @@ void	monitoring(t_table *table, t_info *info)
 	int	hungry_time;
 	int	full_philos;
 
+
 	i = -1;
 	full_philos = 0;
+	pthread_mutex_lock(table->monitor_lock);
 	while (++i < info->number_of_philos)
 	{
-		if (table->eat_counts[i] == 0)
-		{
-			full_philos++;
+		if (table->eat_counts[i] == 0 && full_philos++)
 			continue ;
-		}
 		hungry_time = get_timestamp(table->last_eats[i]);
 		if (hungry_time >= info->time_to_die)
 		{
-			printf("%d %d is died\n", get_timestamp(info->start_time), i + 1);
+			printf("%d %d died\n", get_timestamp(info->start_time), i + 1);
 			info->is_end = 1;
+			pthread_mutex_unlock(table->monitor_lock);
 			return ;
 		}
 	}
+	if (full_philos == info->number_of_philos)
+	{
+		printf("+-----------------------------------+\n");
+		printf("|    All of philosophers are full   |\n");
+		printf("+-----------------------------------+\n");
+		info->is_end = 1;
+	}
+	pthread_mutex_unlock(table->monitor_lock);
 }
 
 void	*philosopher(void *arg)
@@ -107,11 +116,14 @@ void	*philosopher(void *arg)
 	a_philo = (t_philo *)arg;
 	while (!a_philo->info->is_end)
 	{
-		pickup(a_philo);
+		if (!pickup(a_philo))
+			continue ;
 		eating(a_philo);
 		putdown(a_philo);
-		sleeping(a_philo);
-		thinking(a_philo);
+		if (!a_philo->info->is_end)
+			sleeping(a_philo);
+		if (!a_philo->info->is_end)
+			thinking(a_philo);
 	}
 	return (0);
 }
@@ -131,9 +143,18 @@ int	main(int ac, char *av[])
 		return (1);	
 	if (init_philos(&philos, &info, &table, &tid) < 0)
 		return (1);
-	i = -1;
-	while (++i < info.number_of_philos)
+	i = 0;
+	while (i < info.number_of_philos)
+	{
 		pthread_create(&(tid[i]), NULL, philosopher, (void *)(philos + i));
+		i += 2;
+	}
+	i = 1;
+	while (i < info.number_of_philos)
+	{
+		pthread_create(&(tid[i]), NULL, philosopher, (void *)(philos + i));
+		i += 2;
+	}
 	while (!info.is_end)
 		monitoring(&table, &info);
 	i = -1;
