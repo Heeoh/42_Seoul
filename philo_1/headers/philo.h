@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: heson <heson@Student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 14:57:08 by heson             #+#    #+#             */
-/*   Updated: 2023/04/27 21:28:06 by heson            ###   ########.fr       */
+/*   Updated: 2023/04/28 03:05:34 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,25 @@
 
 typedef struct timeval t_timestamp;
 
-#define LEFT 0
-#define RIGHT 1
+#define OFF 0
+#define ON 1
 
-enum e_state {
-	THINKING = 0,
-	EATING,
-	SLEEPING,
-};
+// enum e_state {
+// 	THINKING = 0,
+// 	EATING,
+// 	SLEEPING,
+// };
 
-typedef struct s_dining_table {
+// typedef struct	s_info {
+// 	int				philo_num;
+// 	int				time_2_die;
+// 	int				time_2_eat;
+// 	int				time_2_sleep;
+// 	int				minimum_eat; // not yet
+// 	t_timestamp		start_time;
+// }	t_info;
+
+typedef struct	s_dining_table {
 	int				philo_num;
 	int				time_2_die;
 	int				time_2_eat;
@@ -38,21 +47,24 @@ typedef struct s_dining_table {
 	int				minimum_eat; // not yet
 	t_timestamp		start_time;
 	pthread_mutex_t	lock;
+	char			*forks;
 	char			eof;
 }	t_dining_table;
 
 typedef struct s_philo {
 	int				id;
-	int				*state;
-	int				*sides[2];
+	// int				state;
 	t_timestamp		*last_eat;
+	int				*eat_cnt;
+	// char			*l_fork;
+	// char			*r_fork;
 	t_dining_table	*table;
+	// t_info			info;
 }	t_philo;
 
 typedef struct s_monitoring {
-	int			*states;
 	t_timestamp	*last_eats;
-	// char		eof;
+	int			*eat_cnt;
 }	t_monitoring;
 
 int		check_die(t_dining_table *table, t_monitoring moni);

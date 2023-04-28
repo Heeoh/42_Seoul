@@ -1,17 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.c                                            :+:      :+:    :+:   */
+/*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: heson <heson@Student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/26 14:56:26 by heson             #+#    #+#             */
-/*   Updated: 2023/04/27 21:35:24 by heson            ###   ########.fr       */
+/*   Created: 2023/04/28 02:46:53 by heson             #+#    #+#             */
+/*   Updated: 2023/04/28 02:49:26 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/philo.h"
-#include <stdlib.h> //atoi 
 
 void	init_table(int ac, char *av[], t_dining_table *table)
 {
@@ -53,62 +52,4 @@ void	init_philos(t_philo **philos, int **states, t_timestamp **last_eats, t_dini
 		(*philos)[i].table = table;
 	}
 }
-
-void	*philosopher(void *arg)
-{
-	int				id;
-	int				*state;
-	t_dining_table	*table;
-	
-	id = ((t_philo *)arg)->id;
-	state = ((t_philo *)arg)->state;
-	table = ((t_philo *)arg)->table;
-	while (1)
-	{
-		if (table->eof)
-			break ;
-		pickup(id, state, ((t_philo *)arg)->sides, table);
-		if (*state!= EATING)
-			continue ;
-		if (!table->eof)
-			eating(id, table->time_2_eat, ((t_philo *)arg)->last_eat, table);
-		if (!table->eof)
-			sleeping(id, state, table->time_2_sleep, table);
-		if (!table->eof)
-			thinking(id, state, table->start_time);
-	}
-	return (0);
-}
-
-int	main(int ac, char *av[])
-{
-	if (!(ac == 5 || ac == 6))
-	{
-		printf("arguments error\n");
-		return (1);
-	}
-
-	t_dining_table	table;
-	t_monitoring	monitoring;
-	pthread_t		*tid;
-	t_philo			*philos;
-	int	i;
-	
-	init_table(ac, av, &table);
-	init_philos(&philos, &(monitoring.states), &(monitoring.last_eats), &table);
-	tid = (pthread_t *)malloc(sizeof(pthread_t) * table.philo_num);
-
-	i = -1;
-	while (++i < table.philo_num)
-		pthread_create(&(tid[i]), NULL, philosopher, (void *)(philos + i));
-	while (!check_die(&table, monitoring));
-	table.eof = 1;
-	printf("dead start\n");
-	i = -1;
-	while (++i < table.philo_num)
-	{
-		if (pthread_join(tid[i], NULL) == 0)
-			printf("%d dead!!!\n", i);
-	}
-	// do_free(&table, tid)
 }

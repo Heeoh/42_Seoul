@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_acting.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: heson <heson@Student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 17:35:36 by heson             #+#    #+#             */
-/*   Updated: 2023/04/27 22:21:50 by heson            ###   ########.fr       */
+/*   Updated: 2023/04/28 03:05:21 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	check_die(t_dining_table *table, t_monitoring moni)
 	while (--i >= 0)
 	{
 		hungry_time = get_timestamp(moni.last_eats[i]);
-		if (moni.states[i] != EATING && hungry_time >= table->time_2_die)
+		if (hungry_time >= table->time_2_die)
 		{
 			printf("%d %d is died\n", get_timestamp(table->start_time), i + 1);
 			return (1);
@@ -44,11 +44,10 @@ int	check_die(t_dining_table *table, t_monitoring moni)
 
 void	pickup(int id, int *state, int **sides, t_dining_table *table)
 {
-	if (state == sides[LEFT] && state == sides[RIGHT])
+	if (table->philo)
 		return ;
 	pthread_mutex_lock(&table->lock);
-	if (*state == THINKING
-		&& *(sides[LEFT]) != EATING && *(sides[RIGHT]) != EATING)
+	if (table->forks[id] == OFF && table->forks[(id + 1) % table->philo_num] == OFF)
 	{
 		printf("%d %d has taken a fork\n", get_timestamp(table->start_time), id + 1);
 		printf("%d %d has taken a fork\n", get_timestamp(table->start_time), id + 1);
