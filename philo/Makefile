@@ -19,7 +19,7 @@ OBJS += $(addprefix $(OBJS_DIR), $(notdir $(SRCS:.c=.o)))
 
 # -------------------------------- COMPILATE --------------------------------- #
 
-CFLAGS	= -Wall -Werror -Wextra
+CFLAGS	= -Wall -Werror -Wextra -fsanitize=thread
 RM		= rm -rf
 MD		= mkdir -p 
 
@@ -32,7 +32,7 @@ $(OBJS_DIR)%.o : %.c
 all:
 	make $(NAME)
 
-$(NAME): $(HDRS_DIR) $(OBJS)
+$(NAME): $(OBJS)
 	$(CC) $(CFLAGS) -lpthread $(OBJS) -g -o $(NAME)
 
 clean:

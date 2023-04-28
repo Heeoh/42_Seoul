@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: heson <heson@Student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 16:13:29 by heson             #+#    #+#             */
-/*   Updated: 2023/04/28 16:20:59 by heson            ###   ########.fr       */
+/*   Updated: 2023/04/28 22:01:58 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,4 +34,29 @@ void	custom_usleep(int wait_time, t_timestamp prev)
 			break ;
 		usleep(200);
 	}
+}
+
+void	do_free(t_table *table, t_philo *philos, pthread_t *tid)
+{
+	if (table->forks)
+		free(table->forks);
+	if (table->eat_counts)
+		free(table->eat_counts);
+	if (table->last_eats)
+		free(table->last_eats);
+	if (philos)
+		free(philos);
+	if (tid)
+		free(tid);
+}
+
+int	check_end(t_philo *p)
+{
+	int	ret;
+
+	ret = 0;
+	pthread_mutex_lock(&p->info->lock);
+	ret = p->info->is_end;
+	pthread_mutex_unlock(&p->info->lock);
+	return (ret);
 }

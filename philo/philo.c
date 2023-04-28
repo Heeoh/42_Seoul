@@ -6,7 +6,7 @@
 /*   By: heson <heson@Student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 03:14:00 by heson             #+#    #+#             */
-/*   Updated: 2023/04/28 18:56:15 by heson            ###   ########.fr       */
+/*   Updated: 2023/04/28 21:56:16 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int	init_info( t_info *info, int ac, char *av[])
 		info->minimum_eat = atoi(av[5]);
 	gettimeofday(&(info->start_time), NULL);
 	info->is_end = 0;
+	pthread_mutex_init(&info->lock, NULL);
 	return (is_right_argus(info));
 }
 
@@ -52,7 +53,6 @@ int	init_table(t_table *table, t_info info)
 		table->eat_counts[i] = info.minimum_eat;
 		table->last_eats[i] = info.start_time;
 	}
-	pthread_mutex_init(table->monitor_lock, NULL);
 	return (0);
 }
 
@@ -85,7 +85,7 @@ void	monitoring(t_table *table, t_info *info)
 
 	i = -1;
 	full_philos = 0;
-	pthread_mutex_lock(table->monitor_lock);
+	pthread_mutex_lock(&info->lock);
 	while (++i < info->number_of_philos)
 	{
 		if (table->eat_counts[i] == 0 && full_philos++)
@@ -95,7 +95,7 @@ void	monitoring(t_table *table, t_info *info)
 		{
 			printf("%d %d died\n", get_timestamp(info->start_time), i + 1);
 			info->is_end = 1;
-			pthread_mutex_unlock(table->monitor_lock);
+			pthread_mutex_unlock(&info->lock);
 			return ;
 		}
 	}
@@ -106,7 +106,7 @@ void	monitoring(t_table *table, t_info *info)
 		printf("+-----------------------------------+\n");
 		info->is_end = 1;
 	}
-	pthread_mutex_unlock(table->monitor_lock);
+	pthread_mutex_unlock(&info->lock);
 }
 
 void	*philosopher(void *arg)
@@ -120,10 +120,8 @@ void	*philosopher(void *arg)
 			continue ;
 		eating(a_philo);
 		putdown(a_philo);
-		if (!a_philo->info->is_end)
-			sleeping(a_philo);
-		if (!a_philo->info->is_end)
-			thinking(a_philo);
+		sleeping(a_philo);
+		thinking(a_philo);
 	}
 	return (0);
 }
@@ -136,7 +134,11 @@ int	main(int ac, char *av[])
 	pthread_t	*tid;
 	int			i;
 
-	// init & argu error checking
+	if (!(ac == 5 || ac == 6))
+	{
+		printf("Error: 5 or 6 arguments are required\n");
+		return (1);
+	}
 	if (init_info(&info, ac, av) < 0)
 		return (1);
 	if (init_table(&table, info) < 0)
@@ -160,6 +162,5 @@ int	main(int ac, char *av[])
 	i = -1;
 	while (++i < info.number_of_philos)
 		pthread_join(tid[i], NULL);
-	// free
-
+	// do_free(&table, philos, tid);
 }
