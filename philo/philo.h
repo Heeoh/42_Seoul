@@ -3,22 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: heson <heson@Student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 03:14:16 by heson             #+#    #+#             */
-/*   Updated: 2023/04/28 22:05:08 by heson            ###   ########.fr       */
+/*   Updated: 2023/04/29 02:17:28 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
 
-#include <stdio.h> //printf
-#include <string.h> // memset
-#include <stdlib.h> // malloc, free
-#include <pthread.h>
-#include <unistd.h>
-#include <sys/time.h>
+# include <stdio.h> //printf
+# include <string.h> // memset
+# include <stdlib.h> // malloc, free
+# include <pthread.h>
+# include <unistd.h>
+# include <sys/time.h>
+
+# define ERROR -1
+# define FAIL 0
+# define SUCCESS 1
 
 typedef struct timeval t_timestamp;
 
@@ -48,11 +52,17 @@ typedef struct	s_philo {
 	t_info			*info;
 }	t_philo;
 
+// init
+int		init_info( t_info *info, int ac, char *av[]);
+int		init_table(t_table *table, t_info info);
+int		init_philos(t_philo **philos, t_info *info, t_table *table, pthread_t **tid);
+
 // utils
 int		get_timestamp(t_timestamp prev);
 void	custom_usleep(int wait_time, t_timestamp prev);
 void	do_free(t_table *table, t_philo *philos, pthread_t *tid);
-int	check_end(t_philo *p);
+int		check_end(t_philo *p);
+int		ft_atoi(const char *str);
 
 // acting
 int		pickup(t_philo *p);

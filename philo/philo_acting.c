@@ -3,49 +3,42 @@
 /*                                                        :::      ::::::::   */
 /*   philo_acting.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: heson <heson@Student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 16:11:08 by heson             #+#    #+#             */
-/*   Updated: 2023/04/28 22:05:20 by heson            ###   ########.fr       */
+/*   Updated: 2023/04/29 02:12:18 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	pickup_a_fork(t_philo *p, pthread_mutex_t *fork)
-{
-	if (check_end(p))
-		return (0);
-	pthread_mutex_lock(fork);
-	if (check_end(p))
-	{
-		pthread_mutex_lock(&p->info->lock);
-		return (0);
-	}
-	printf("%d %d has taken a fork\n", get_timestamp(p->info->start_time), p->id + 1);
-	return (1);
-}
-
 int	pickup(t_philo *p)
 {
-	pthread_mutex_t	*first;
-	pthread_mutex_t	*second;
+	pthread_mutex_t	*side_forks[2];
+	int				i;
 
-	first = p->l_fork;
-	second = p->r_fork;
+	side_forks[0] = p->l_fork;
+	side_forks[1] = p->r_fork;
 	if (p->id % 2 != 0)
 	{
-		first = p->r_fork;
-		second = p->l_fork;
+		side_forks[0] = p->r_fork;
+		side_forks[1] = p->l_fork;
 	}
-	if (pickup_a_fork(p, first))
+	i = -1;
+	while (++i < 2 && !check_end(p))
 	{
-		while (first == second && !check_end(p)); // umm.....
-		if (pickup_a_fork(p, second))
-			return (1);
+		while (i == 1 && side_forks[0] == side_forks[1] && !check_end(p))
+			;
+		pthread_mutex_lock(side_forks[i]);
+		if (check_end(p))
+		{
+			putdown(p);
+			return (FAIL);
+		}
+		printf("%d %d has taken a fork\n",
+			get_timestamp(p->info->start_time), p->id + 1);
 	}
-	putdown(p);
-	return (0);
+	return (SUCCESS);
 }
 
 void	eating(t_philo *p)
@@ -81,5 +74,6 @@ void	thinking(t_philo *p)
 {
 	if (check_end(p))
 		return ;
-	printf("%d %d is thinking\n", get_timestamp(p->info->start_time), p->id + 1);	
+	printf("%d %d is thinking\n",
+		get_timestamp(p->info->start_time), p->id + 1);
 }
