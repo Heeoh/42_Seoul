@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 03:14:00 by heson             #+#    #+#             */
-/*   Updated: 2023/05/01 16:18:51 by heson            ###   ########.fr       */
+/*   Updated: 2023/05/01 16:26:10 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,11 @@ void	enjoy_meal(t_info *info, t_table *table, t_philo *philos,
 	i = -1;
 	while (++i < info->number_of_philos)
 		pthread_join(tid[i], NULL);
+	i = -1;
+	while (++i < info->number_of_philos)
+		pthread_mutex_destroy(&table->forks[i]);
+	pthread_mutex_destroy(&info->lock);
+	pthread_mutex_destroy(&info->print_lock);
 }
 
 int	main(int ac, char *av[])
