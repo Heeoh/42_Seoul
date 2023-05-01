@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: heson <heson@Student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 03:14:00 by heson             #+#    #+#             */
-/*   Updated: 2023/05/01 16:26:10 by heson            ###   ########.fr       */
+/*   Updated: 2023/05/01 17:20:27 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	*philosopher(void *arg)
 		custom_usleep(a_philo->info->time_to_eat, *a_philo->last_eat);
 	while (!check_end(a_philo->info))
 	{
-		if (!pickup(a_philo))
+		if (pickup(a_philo) == FAIL)
 			continue ;
 		eating(a_philo);
 		putdown(a_philo);
