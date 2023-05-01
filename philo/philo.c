@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 03:14:00 by heson             #+#    #+#             */
-/*   Updated: 2023/05/01 16:26:10 by heson            ###   ########.fr       */
+/*   Updated: 2023/05/01 20:37:14 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	*philosopher(void *arg)
 	t_philo	*a_philo;
 
 	a_philo = (t_philo *)arg;
-	if (a_philo->id % 2 == 0)
+	if (a_philo->id % 2 == 1)
 		custom_usleep(a_philo->info->time_to_eat, *a_philo->last_eat);
 	while (!check_end(a_philo->info))
 	{
