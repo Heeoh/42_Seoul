@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 16:11:08 by heson             #+#    #+#             */
-/*   Updated: 2023/04/29 02:12:18 by heson            ###   ########.fr       */
+/*   Updated: 2023/05/01 16:08:14 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,42 +14,31 @@
 
 int	pickup(t_philo *p)
 {
-	pthread_mutex_t	*side_forks[2];
-	int				i;
-
-	side_forks[0] = p->l_fork;
-	side_forks[1] = p->r_fork;
-	if (p->id % 2 != 0)
+	if (!check_end(p->info) && pthread_mutex_lock(p->l_fork) == 0)
 	{
-		side_forks[0] = p->r_fork;
-		side_forks[1] = p->l_fork;
-	}
-	i = -1;
-	while (++i < 2 && !check_end(p))
-	{
-		while (i == 1 && side_forks[0] == side_forks[1] && !check_end(p))
+		print_state(p->id, p->info, "has taken a fork");
+		while (p->l_fork == p->r_fork && !check_end(p->info))
 			;
-		pthread_mutex_lock(side_forks[i]);
-		if (check_end(p))
+		if (!check_end(p->info) && pthread_mutex_lock(p->r_fork) == 0)
 		{
-			putdown(p);
-			return (FAIL);
+			print_state(p->id, p->info, "has taken a fork");
+			return (SUCCESS);
 		}
-		printf("%d %d has taken a fork\n",
-			get_timestamp(p->info->start_time), p->id + 1);
 	}
-	return (SUCCESS);
+	putdown(p);
+	return (FAIL);
 }
 
 void	eating(t_philo *p)
 {
-	if (check_end(p))
+	if (check_end(p->info))
 		return ;
 	pthread_mutex_lock(&p->info->lock);
 	gettimeofday(p->last_eat, NULL);
-	*(p->eat_cnt) -= 1;
+	if (*(p->eat_cnt) > 0)
+		*(p->eat_cnt) -= 1;
 	pthread_mutex_unlock(&p->info->lock);
-	printf("%d %d is eating\n", get_timestamp(p->info->start_time), p->id + 1);
+	print_state(p->id, p->info, "is eating");
 	custom_usleep(p->info->time_to_eat, *(p->last_eat));
 }
 
@@ -63,17 +52,16 @@ void	sleeping(t_philo *p)
 {
 	t_timestamp	cur;
 
-	if (check_end(p))
+	if (check_end(p->info))
 		return ;
 	gettimeofday(&cur, NULL);
-	printf("%d %d is sleeping\n", get_timestamp(p->info->start_time), p->id + 1);
+	print_state(p->id, p->info, "is sleeping");
 	custom_usleep(p->info->time_to_sleep, cur);
 }
 
 void	thinking(t_philo *p)
 {
-	if (check_end(p))
+	if (check_end(p->info))
 		return ;
-	printf("%d %d is thinking\n",
-		get_timestamp(p->info->start_time), p->id + 1);
+	print_state(p->id, p->info, "is thinking");
 }

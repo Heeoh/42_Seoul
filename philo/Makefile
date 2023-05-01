@@ -25,7 +25,8 @@ OBJS += $(addprefix $(OBJS_DIR), $(notdir $(SRCS:.c=.o)))
 
 # -------------------------------- COMPILATE --------------------------------- #
 
-CFLAGS	= -Wall -Werror -Wextra -fsanitize=address
+CFLAGS	= -Wall -Werror -Wextra 
+# -fsanitize=thread
 RM		= rm -rf
 MD		= mkdir -p 
 

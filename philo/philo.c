@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 03:14:00 by heson             #+#    #+#             */
-/*   Updated: 2023/04/29 12:10:54 by heson            ###   ########.fr       */
+/*   Updated: 2023/05/01 16:18:51 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,31 +14,31 @@
 
 void	monitoring(t_table *table, t_info *info)
 {
-	int	i;
-	int	hungry_time;
-	int	full_philos;
+	int			i;
+	int			hungry_time;
+	int			full_philos;
+	t_timestamp	cur;
 
 	i = -1;
 	full_philos = 0;
-	pthread_mutex_lock(&info->lock);
 	while (++i < info->number_of_philos)
 	{
-		if (table->eat_counts[i] == 0 && full_philos++)
+		if (get_eat_cnt_of(i, table, info) == 0 && full_philos++)
 			continue ;
-		hungry_time = get_timestamp(table->last_eats[i]);
+		gettimeofday(&cur, NULL);
+		hungry_time = get_timestamp(cur, get_last_eat_of(i, table, info));
 		if (hungry_time >= info->time_to_die)
 		{
-			printf("%d %d died\n", get_timestamp(info->start_time), i + 1);
-			info->is_end = 1;
+			print_state(i, info, "died");
+			set_end(info, 1);
 			break ;
 		}
 	}
 	if (full_philos == info->number_of_philos)
 	{
 		printf("All of philosophers are full\n");
-		info->is_end = 1;
+		set_end(info, 1);
 	}
-	pthread_mutex_unlock(&info->lock);
 }
 
 void	*philosopher(void *arg)
@@ -46,7 +46,9 @@ void	*philosopher(void *arg)
 	t_philo	*a_philo;
 
 	a_philo = (t_philo *)arg;
-	while (!a_philo->info->is_end)
+	if (a_philo->id % 2 == 0)
+		custom_usleep(a_philo->info->time_to_eat, *a_philo->last_eat);
+	while (!check_end(a_philo->info))
 	{
 		if (!pickup(a_philo))
 			continue ;
@@ -58,26 +60,23 @@ void	*philosopher(void *arg)
 	return (0);
 }
 
-void	enjoy_meal(t_info info, t_table table, t_philo *philos, pthread_t *tid)
+void	enjoy_meal(t_info *info, t_table *table, t_philo *philos,
+			pthread_t *tid)
 {
 	int	i;
 
 	i = 0;
-	while (i < info.number_of_philos)
+	gettimeofday(&info->start_time, NULL);
+	while (i < info->number_of_philos)
 	{
+		*(philos[i].last_eat) = info->start_time;
 		pthread_create(&(tid[i]), NULL, philosopher, (void *)(philos + i));
-		i += 2;
+		i++;
 	}
-	i = 1;
-	while (i < info.number_of_philos)
-	{
-		pthread_create(&(tid[i]), NULL, philosopher, (void *)(philos + i));
-		i += 2;
-	}
-	while (!info.is_end)
-		monitoring(&table, &info);
+	while (!check_end(info))
+		monitoring(table, info);
 	i = -1;
-	while (++i < info.number_of_philos)
+	while (++i < info->number_of_philos)
 		pthread_join(tid[i], NULL);
 }
 
@@ -99,7 +98,7 @@ int	main(int ac, char *av[])
 		do_free(&table, philos, tid);
 		return (1);
 	}
-	enjoy_meal(info, table, philos, tid);
+	enjoy_meal(&info, &table, philos, tid);
 	do_free(&table, philos, tid);
 	return (0);
 }

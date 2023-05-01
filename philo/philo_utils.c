@@ -6,35 +6,40 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 16:13:29 by heson             #+#    #+#             */
-/*   Updated: 2023/04/29 01:41:18 by heson            ###   ########.fr       */
+/*   Updated: 2023/05/01 16:16:47 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 #include <limits.h>
 
-int	get_timestamp(t_timestamp prev)
+static long long	time_2_ms(t_timestamp time)
 {
-	t_timestamp	cur;
-	int			msec;
+	long long	msec;
 
-	gettimeofday(&cur, NULL);
-	msec = (cur.tv_sec - prev.tv_sec) * 1000 \
-		+ (cur.tv_usec - prev.tv_usec) / 1000;
+	msec = time.tv_sec * 1000;
+	msec += time.tv_usec / 1000;
 	return (msec);
 }
 
-void	custom_usleep(int wait_time, t_timestamp prev)
+long long	get_timestamp(t_timestamp cur, t_timestamp prev)
 {
-	int	time_gap;
+	return (time_2_ms(cur) - time_2_ms(prev));
+}
+
+void	custom_usleep(long long wait_time, t_timestamp prev)
+{
+	long long	time_gap;
+	t_timestamp	cur;
 
 	usleep(wait_time * 1000 * 0.8);
 	while (1)
 	{
-		time_gap = get_timestamp(prev);
+		gettimeofday(&cur, NULL);
+		time_gap = get_timestamp(cur, prev);
 		if (time_gap >= wait_time)
 			break ;
-		usleep(200);
+		usleep(50);
 	}
 }
 
@@ -50,17 +55,6 @@ void	do_free(t_table *table, t_philo *philos, pthread_t *tid)
 		free(philos);
 	if (tid)
 		free(tid);
-}
-
-int	check_end(t_philo *p)
-{
-	int	ret;
-
-	ret = 0;
-	pthread_mutex_lock(&p->info->lock);
-	ret = p->info->is_end;
-	pthread_mutex_unlock(&p->info->lock);
-	return (ret);
 }
 
 int	ft_atoi(const char *str)
