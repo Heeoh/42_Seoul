@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_init.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: heson <heson@Student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 01:30:19 by heson             #+#    #+#             */
-/*   Updated: 2023/05/01 03:49:56 by heson            ###   ########.fr       */
+/*   Updated: 2023/05/01 17:18:41 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,10 @@ int	init_table(t_table *table, t_info info)
 	table->last_eats = (t_timestamp *)malloc(sizeof(t_timestamp)
 			* info.number_of_philos);
 	if (!table->forks || !table->eat_counts || !table->last_eats)
+	{
+		printf("Error malloc failed\n");
 		return (-1);
+	}
 	i = info.number_of_philos;
 	while (--i >= 0)
 	{
@@ -71,7 +74,10 @@ int	init_philos(t_philo **philos, t_info *info, t_table *table, pthread_t **tid)
 	*philos = (t_philo *)malloc(sizeof(t_philo) * info->number_of_philos);
 	*tid = (pthread_t *)malloc(sizeof(pthread_t) * info->number_of_philos);
 	if (!*philos || !*tid)
+	{
+		printf("Error: malloc failed\n");
 		return (-1);
+	}
 	i = info->number_of_philos;
 	while (--i >= 0)
 	{
