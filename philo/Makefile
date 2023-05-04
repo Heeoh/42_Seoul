@@ -36,11 +36,11 @@ $(OBJS_DIR)%.o : %.c
 	@$(MD) $(dir $@)
 	$(CC) $(CFLAGS) $(INCLUDE) -g -c $< -o $@
 
-all: $(NAME)
-
-$(NAME): 
+all: 
 	@echo "$(C_YELLOW)======= make philo ========$(C_END)"
-	@make $(OBJS)
+	@make $(NAME)
+
+$(NAME): $(OBJS)
 	$(CC) $(CFLAGS) -lpthread $(OBJS) -g -o $(NAME)
 	@echo "$(C_GREEN)+-------------------------+"
 	@echo "$(C_GREEN)|        COMPLETE         |"
