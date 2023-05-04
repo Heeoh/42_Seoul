@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: heson <heson@Student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 03:14:16 by heson             #+#    #+#             */
-/*   Updated: 2023/05/01 16:17:52 by heson            ###   ########.fr       */
+/*   Updated: 2023/05/04 15:43:11 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 # define ERROR -1
 # define FAIL 0
 # define SUCCESS 1
+# define SOMEONE_DEAD 1
+# define EVERYONE_FULL 2
 
 typedef struct timeval	t_timestamp;
 

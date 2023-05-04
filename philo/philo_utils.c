@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: heson <heson@Student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 16:13:29 by heson             #+#    #+#             */
-/*   Updated: 2023/05/01 16:26:19 by heson            ###   ########.fr       */
+/*   Updated: 2023/05/04 15:37:50 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,10 @@ int	ft_atoi(const char *str)
 	sign = 1;
 	while (*p && (*p == ' ' || (9 <= *p && *p <= 13)))
 		p++;
+	if (*p == '-')
+		sign = -1;
 	if (*p == '-' || *p == '+')
-	{
-		if (*p == '-')
-			sign = -1;
 		p++;
-	}
 	absolute_num = 0;
 	while (*p && '0' <= *p && *p <= '9')
 	{
@@ -83,5 +81,7 @@ int	ft_atoi(const char *str)
 			return (0);
 		p++;
 	}
+	if (*p)
+		return (ERROR);
 	return (absolute_num * sign);
 }

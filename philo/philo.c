@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: heson <heson@Student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 03:14:00 by heson             #+#    #+#             */
-/*   Updated: 2023/05/04 14:14:35 by heson            ###   ########.fr       */
+/*   Updated: 2023/05/04 16:01:12 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	monitoring(t_table *table, t_info *info)
+int	monitoring(t_table *table, t_info *info)
 {
 	int			i;
 	int			hungry_time;
@@ -29,16 +29,16 @@ void	monitoring(t_table *table, t_info *info)
 		hungry_time = get_timestamp(cur, get_last_eat_of(i, table, info));
 		if (hungry_time >= info->time_to_die)
 		{
-			print_state(i, info, "died");
 			set_end(info, 1);
-			break ;
+			printf("%lld %d died\n",
+				get_timestamp(cur, info->start_time), i + 1);
+			return (i);
 		}
 	}
-	if (full_philos == info->number_of_philos)
-	{
-		printf("All of philosophers are full\n");
-		set_end(info, 1);
-	}
+	if (full_philos != info->number_of_philos)
+		return (-1);
+	set_end(info, 1);
+	return (full_philos);
 }
 
 void	*philosopher(void *arg)
@@ -64,6 +64,7 @@ void	enjoy_meal(t_info *info, t_table *table, t_philo *philos,
 			pthread_t *tid)
 {
 	int	i;
+	int	ret;
 
 	i = 0;
 	gettimeofday(&info->start_time, NULL);
@@ -74,10 +75,12 @@ void	enjoy_meal(t_info *info, t_table *table, t_philo *philos,
 		i++;
 	}
 	while (!check_end(info))
-		monitoring(table, info);
+		ret = monitoring(table, info);
 	i = -1;
 	while (++i < info->number_of_philos)
 		pthread_join(tid[i], NULL);
+	if (ret == info->number_of_philos)
+		printf("All of philosophers are full\n");
 	i = -1;
 	while (++i < info->number_of_philos)
 		pthread_mutex_destroy(&table->forks[i]);
