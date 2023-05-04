@@ -6,7 +6,7 @@
 /*   By: heson <heson@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 15:20:42 by heson             #+#    #+#             */
-/*   Updated: 2023/05/01 16:14:00 by heson            ###   ########.fr       */
+/*   Updated: 2023/05/04 14:21:02 by heson            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,12 @@ void	print_state(int id, t_info *info, char *str)
 	long long	ms;
 	t_timestamp	cur;
 
-	if (check_end(info))
-		return ;
 	pthread_mutex_lock(&info->print_lock);
-	gettimeofday(&cur, NULL);
-	ms = get_timestamp(cur, info->start_time);
-	printf("%lld %d %s\n", ms, id + 1, str);
+	if (!check_end(info))
+	{
+		gettimeofday(&cur, NULL);
+		ms = get_timestamp(cur, info->start_time);
+		printf("%lld %d %s\n", ms, id + 1, str);
+	}
 	pthread_mutex_unlock(&info->print_lock);
 }
