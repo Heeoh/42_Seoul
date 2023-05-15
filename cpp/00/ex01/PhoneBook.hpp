@@ -4,14 +4,16 @@
 # include "Contact.hpp"
 
 class PhoneBook {
-public:
+private:
+	int nContacts;
 	Contact contacts[8];
 
-private:
-    PhoneBook() {
+public:
+	PhoneBook(): nContacts(0) {}
 
-    }
-
+	void addNewContact();
+	void searchContact();
+	void printContactList();
 };
 
 #endif

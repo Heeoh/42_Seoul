@@ -19,7 +19,7 @@ OBJS_DIR	= objects/
 # ---------------------------------- FILES ----------------------------------- #
 
 # INCLUDE = -I $(HDRS_DIR)
-SRCS = PhoneBook.cpp
+SRCS = Contact.cpp PhoneBook.cpp main.cpp
 OBJS = $(addprefix $(OBJS_DIR), $(SRCS:.cpp=.o))
 
 # -------------------------------- COMPILATE --------------------------------- #
