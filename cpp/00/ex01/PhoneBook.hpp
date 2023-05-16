@@ -5,8 +5,8 @@
 
 class PhoneBook {
 private:
-	int nContacts;
-	Contact contacts[8];
+	int		nContacts;
+	Contact	contacts[8];
 
 public:
 	PhoneBook(): nContacts(0) {}
@@ -14,6 +14,9 @@ public:
 	void addNewContact();
 	void searchContact();
 	void printContactList();
+
+private:
+	void printStringByFormat(std::string str, std::string sep);
 };
 
 #endif

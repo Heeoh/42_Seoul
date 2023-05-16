@@ -1,6 +1,6 @@
 # ---------------------------------- NAME ------------------------------------ #
 
-NAME = phonebook
+NAME = account
 
 # ---------------------------------- COLOR ----------------------------------- #
 
@@ -19,7 +19,7 @@ OBJS_DIR	= objects/
 # ---------------------------------- FILES ----------------------------------- #
 
 # INCLUDE = -I $(HDRS_DIR)
-SRCS = Contact.cpp PhoneBook.cpp main.cpp
+SRCS = Account.cpp tests.cpp
 OBJS = $(addprefix $(OBJS_DIR), $(SRCS:.cpp=.o))
 
 # -------------------------------- COMPILATE --------------------------------- #

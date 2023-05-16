@@ -36,7 +36,7 @@ $(OBJS_DIR)%.o : %.cpp
 	$(CC) $(CFLAGS) -g -c $< -o $@
 
 all: 
-	@echo "$(C_YELLOW)======= make megaphone ========$(C_END)"
+	@echo "$(C_YELLOW)======= make $(NAME) ========$(C_END)"
 	@make $(NAME)
 
 $(NAME): $(OBJS)
@@ -50,7 +50,7 @@ clean:
 	$(RM) $(OBJS_DIR)
 
 fclean: clean
-	@echo "$(C_YELLOW)===== cleaning megaphone ======$(C_END)"
+	@echo "$(C_YELLOW)===== cleaning $(NAME) ======$(C_END)"
 	$(RM) $(NAME)
 
 re:

@@ -1,7 +1,8 @@
 #include <iostream>
 #include "Contact.hpp"
 
-void Contact::setContact() {
+void Contact::setContact()
+{
     std::cout << "First Name: ";
     std::cin >> firstName;
     
@@ -18,24 +19,19 @@ void Contact::setContact() {
     std::cin >> darkestSecret;
 }
 
-std::string Contact::getFirstName() {
-    return firstName;
-}
+std::string Contact::getFirstName() { return firstName; }
 
-std::string Contact::getLastName() {
-    return lastName;
-}
+std::string Contact::getLastName() { return lastName; }
 
-std::string Contact::getNickname() {
-    return nickname;
-}
+std::string Contact::getNickname() { return nickname; }
 
-void printContact() {
+void Contact::printContact()
+{
     std::cout << "======== contact info ========" << std::endl;
-    std::cout << "First Name: " << firstName << std::endl;
-    std::cout << "Last Name: " << lastName << std::endl;
-    std::cout << "Nickname: " << nickname << std::endl;
-    std::cout << "PhoneNumber: " << phoneNumber << std::endl;
-    std::cout << "Darkest Secret: " << darkestSecret << std::endl;
+    std::cout << "- First Name: " << firstName << std::endl;
+    std::cout << "- Last Name: " << lastName << std::endl;
+    std::cout << "- Nickname: " << nickname << std::endl;
+    std::cout << "- PhoneNumber: " << phoneNumber << std::endl;
+    std::cout << "- Darkest Secret: " << darkestSecret << std::endl;
     std::cout << "==============================" << std::endl;
 }
