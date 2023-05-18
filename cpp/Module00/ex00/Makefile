@@ -1,6 +1,6 @@
 # ---------------------------------- NAME ------------------------------------ #
 
-NAME = account
+NAME = megaphone
 
 # ---------------------------------- COLOR ----------------------------------- #
 
@@ -19,12 +19,12 @@ OBJS_DIR	= objects/
 # ---------------------------------- FILES ----------------------------------- #
 
 # INCLUDE = -I $(HDRS_DIR)
-SRCS = Account.cpp tests.cpp
+SRCS = megaphone.cpp
 OBJS = $(addprefix $(OBJS_DIR), $(SRCS:.cpp=.o))
 
 # -------------------------------- COMPILATE --------------------------------- #
 
-CC		= clang++
+CC		= c++
 CFLAGS	= -Wall -Werror -Wextra -std=c++98
 RM		= rm -rf
 MD		= mkdir -p 
