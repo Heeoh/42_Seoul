@@ -7,11 +7,11 @@ private:
 	static const int fractional_bits = 8;
 
 public:
-	Fixed();							// constructors 
-	Fixed(const Fixed& x);				// copy constructor
-	Fixed& operator=(const Fixed& x);	// copy assignment operator overload
-	~Fixed();							// destructor
-	
+	Fixed();							
+	Fixed(const Fixed& x);				
+	Fixed& operator=(const Fixed& x);	
+	~Fixed();							
+
 	int getRawBits(void) const;
 	void setRawBits(int const raw);
 };

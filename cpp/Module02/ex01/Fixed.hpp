@@ -16,13 +16,13 @@ public:
 	
 	// copy constructor
 	Fixed(const Fixed& x);
-	
-	// operator overloadings
-	Fixed&					operator=(const Fixed& x);
-	friend std::ostream&	operator<<(std::ostream& os, const Fixed& x);
 
 	// destructor
 	~Fixed();
+
+	// operator overloadings
+	Fixed&					operator=(const Fixed& x);
+	friend std::ostream&	operator<<(std::ostream& os, const Fixed& x);
 	
 	// member functions
 	int getRawBits(void) const;
