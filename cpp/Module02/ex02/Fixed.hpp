@@ -40,17 +40,15 @@ public:
 
 	// increment/decrement operators overloading
 	Fixed&	operator++(void);
-	const Fixed	operator++(int);
+	Fixed	operator++(int);
 	Fixed&	operator--(void);
-	const Fixed	operator--(int);
+	Fixed	operator--(int);
 
 	// min & max overloaded member functions
 	static Fixed&	min(Fixed& a, Fixed& b);
-	static const Fixed&	min(const Fixed& a, const Fixed& b);
 	static Fixed&	max(Fixed& a, Fixed& b);
+	static const Fixed&	min(const Fixed& a, const Fixed& b);
 	static const Fixed&	max(const Fixed& a, const Fixed& b);
-
-	
 	
 	// member functions
 	int getRawBits(void) const;

@@ -15,14 +15,14 @@ int main( void )
 
 	/*/ set example
 	a.setRawBits(10);
-	b.setRawBits(20);	
+	b.setRawBits(-20);	
 	c.setRawBits(30);
 
 	std::cout << "after set raw bits" << std::endl;
 	std::cout << a.getRawBits() << std::endl;
 	std::cout << b.getRawBits() << std::endl;
 	std::cout << c.getRawBits() << std::endl;	
-	*/
+	//*/
 
 	return 0;
 }

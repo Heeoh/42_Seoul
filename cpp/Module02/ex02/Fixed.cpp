@@ -3,34 +3,24 @@
 #include <cmath>
 
 /* constructors */
- Fixed::Fixed() : fixed_point_num(0) {
-	std::cout << "Default constructor called" << std::endl;
-}
+Fixed::Fixed() : fixed_point_num(0) {}
 
- Fixed::Fixed(const int num) 
-	: fixed_point_num(num << Fixed::fractional_bits) {
-	std::cout << "Int constructor called" << std::endl; 
-}
+Fixed::Fixed(const int num) 
+	: fixed_point_num(num << Fixed::fractional_bits) {}
 
- Fixed::Fixed(const float num) 
-	: fixed_point_num(roundf(num * (1 << Fixed::fractional_bits))) {
-	std::cout << "Float constructor called" << std::endl;
-}
+Fixed::Fixed(const float num) 
+	: fixed_point_num( (int)(roundf(num * (1 << Fixed::fractional_bits))) ) {}
 
 /* copy constructor */
- Fixed::Fixed(const Fixed& x) {
-	std::cout << "Copy constructor called" << std::endl;
+Fixed::Fixed(const Fixed& x) {
 	*this = x;
 }
 
 /* destructor */
- Fixed::~Fixed() {
-    std::cout << "Destructor called" << std::endl;
-}
+Fixed::~Fixed() {}
 
 /* operator overloadings */
 Fixed& Fixed::operator=(const Fixed& x) {
-	std::cout << "Copy assignment operator called" << std::endl;
 	if (this != &x)
 		this->fixed_point_num = x.getRawBits();
 	return (*this);
@@ -89,18 +79,18 @@ Fixed& Fixed::operator++(void) {
 	return (*this);
 }
 
-Fixed& Fixed::operator--(void) {
-	this->fixed_point_num--;
-	return (*this);
-}
-
-const Fixed Fixed::operator++(int) {
+Fixed Fixed::operator++(int) {
 	const Fixed temp(*this);
 	this->fixed_point_num++;
 	return (temp);
 }
 
-const Fixed Fixed::operator--(int) {
+Fixed& Fixed::operator--(void) {
+	this->fixed_point_num--;
+	return (*this);
+}
+
+Fixed Fixed::operator--(int) {
 	const Fixed temp(*this);
 	this->fixed_point_num--;
 	return (temp);
