@@ -29,12 +29,6 @@ Fixed& Fixed::operator=(const Fixed& x)
 	return (*this);
 }
 
-std::ostream&	operator<<(std::ostream& os, const Fixed& x)
-{
-    os << x.toFloat();
-    return os; 
-}
-
 /* comparison operators overloading */
 bool	Fixed::operator>(const Fixed& x) const
 {
@@ -135,7 +129,6 @@ const Fixed&	Fixed::max(const Fixed& a, const Fixed& b)
 	return ( (a.getRawBits() >= b.getRawBits()) ? a : b );
 }
 
-
 /* destructor */
 Fixed::~Fixed() {}
 
@@ -158,4 +151,10 @@ float Fixed::toFloat(void) const
 int Fixed::toInt(void) const
 {
     return (this->fixed_point_num >> this->fractional_bits);
+}
+
+std::ostream&	operator<<(std::ostream& os, const Fixed& x)
+{
+    os << x.toFloat();
+    return os; 
 }

@@ -36,11 +36,6 @@ Fixed& Fixed::operator=(const Fixed& x) {
 	return (*this);
 }
 
-std::ostream&	operator<<(std::ostream& os, const Fixed& x) {
-    os << x.toFloat();
-    return os; 
-}
-
 /* member functions */
 int Fixed::getRawBits(void) const {
     return (this->fixed_point_num);
@@ -56,4 +51,9 @@ float Fixed::toFloat(void) const {
 
 int Fixed::toInt(void) const {
     return (this->fixed_point_num >> Fixed::fractional_bits);
+}
+
+std::ostream&	operator<<(std::ostream& os, const Fixed& x) {
+    os << x.toFloat();
+    return os; 
 }

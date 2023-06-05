@@ -21,8 +21,7 @@ public:
 	~Fixed();
 
 	// operator overloadings
-	Fixed&					operator=(const Fixed& x);
-	friend std::ostream&	operator<<(std::ostream& os, const Fixed& x);
+	Fixed&	operator=(const Fixed& x);
 	
 	// member functions
 	int getRawBits(void) const;
@@ -31,5 +30,7 @@ public:
 	float toFloat(void) const;
 	int toInt(void) const;
 };
+
+std::ostream&	operator<<(std::ostream& os, const Fixed& x);
 
 #endif

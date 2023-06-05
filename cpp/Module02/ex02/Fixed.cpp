@@ -26,11 +26,6 @@ Fixed& Fixed::operator=(const Fixed& x) {
 	return (*this);
 }
 
-std::ostream&	operator<<(std::ostream& os, const Fixed& x) {
-    os << x.toFloat();
-    return os; 
-}
-
 /* comparison operators overloading */
 bool Fixed::operator>(const Fixed& x) const {
 	return (this->fixed_point_num > x.fixed_point_num);
@@ -128,4 +123,9 @@ float Fixed::toFloat(void) const {
 
 int Fixed::toInt(void) const {
     return (this->fixed_point_num >> Fixed::fractional_bits);
+}
+
+std::ostream&	operator<<(std::ostream& os, const Fixed& x) {
+    os << x.toFloat();
+    return os; 
 }
