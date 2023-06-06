@@ -24,7 +24,6 @@ public:
 	bool			isDead();
 	bool			hasEnergy();
 	unsigned int	getAttackDamageAmount();
-
 };
 
 #endif

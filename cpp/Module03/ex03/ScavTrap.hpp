@@ -3,7 +3,11 @@
 
 # include "ClapTrap.hpp"
 
-class ScavTrap: public ClapTrap {
+# define SCAV_INITVALUE_HP 100
+# define SCAV_INITVALUE_EP 50
+# define SCAV_INITVALUE_ATTACK_DMG 20
+
+class ScavTrap: virtual public ClapTrap {
 public:
 	ScavTrap();
 	ScavTrap(std::string _name);

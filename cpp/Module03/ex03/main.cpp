@@ -1,30 +1,30 @@
-#include "ClapTrap.hpp"
+#include "DiamondTrap.hpp"
+#include <iostream>
 
 int main() {
 	
-	ClapTrap a("aaa");
-	ClapTrap b("bbb");
+	DiamondTrap a("aaa");
+	std::cout << std::endl;
+
+	a.printState();
+	std::cout << std::endl;
 
 	a.attack("bbb");
-	b.takeDamage(3);
+	std::cout << std::endl;
 
-	b.attack("aaa");
-	a.takeDamage(5);
+	a.takeDamage(10);
+	std::cout << std::endl;
 
-	a.attack("bbb");
-	b.takeDamage(3);
+	a.beRepaired(10);
+	std::cout << std::endl;
 
-	b.beRepaired(5);
+	a.guardGate();
+	std::cout << std::endl;
 
-	a.attack("bbb");
-	b.takeDamage(3);
+	a.highFivesGuys();
+	std::cout << std::endl;
 
-	a.attack("bbb");
-	b.takeDamage(3);
+	a.whoAmI();
+	std::cout << std::endl;
 
-	a.attack("bbb");
-	b.takeDamage(3);
-
-	a.attack("bbb");
-	b.takeDamage(3);
 }
