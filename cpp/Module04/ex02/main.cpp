@@ -1,15 +1,15 @@
-#include "Animal.hpp"
+#include "AAnimal.hpp"
 #include "Dog.hpp"
 #include "Cat.hpp"
 
 int main()
 {
 	// ex02 main
-	// Animal *meta = new Animal();
+	// AAnimal *meta = new AAnimal();
 	// std::cout << std::endl;
-	Animal *dog = new Dog();
+	AAnimal *dog = new Dog();
 	std::cout << std::endl;
-	Animal *cat = new Cat();
+	AAnimal *cat = new Cat();
 	std::cout << std::endl;
 
 	Dog dog2 = Dog();
@@ -28,8 +28,8 @@ int main()
 	/*/ ex01 main
 	// subject test
 	std::cout << "\033[0;35m" << "[ subject test ]" << "\033[0m" << std::endl; 
-	const Animal* j = new Dog();
-	const Animal* i = new Cat();
+	const AAnimal* j = new Dog();
+	const AAnimal* i = new Cat();
 	delete j;
 	delete i;
 	std::cout << std::endl;
@@ -38,7 +38,7 @@ int main()
 
 	// construct animals
 	std::cout << "\033[0;35m" << "[ constructing ]" << "\033[0m" << std::endl; 
-	Animal *animals[arraySize];
+	AAnimal *animals[arraySize];
 	for (int i=0; i<arraySize; i++) {
 		std::cout << "[" << i << "] " << std::endl;
 		if (i % 2 == 0)
