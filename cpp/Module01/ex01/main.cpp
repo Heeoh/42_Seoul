@@ -1,8 +1,6 @@
 #include "Zombie.hpp"
 #include <iostream>
 
-extern Zombie* zombieHorde(int, std::string);
-
 int main()
 {
 	int	nZombie = 5;

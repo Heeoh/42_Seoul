@@ -16,4 +16,7 @@ public:
 	void setName(std::string name);
 };
 
+Zombie*	zombieHorde(int, std::string);
+
+
 # endif

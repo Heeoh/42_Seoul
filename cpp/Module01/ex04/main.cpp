@@ -16,12 +16,12 @@ int main(int ac, char *av[])
 	std::string filename = av[1], s1 = av[2], s2 = av[3];
 
 	std::ifstream org_file(filename);
-	std::ofstream replace_file(filename + ".replace");
-	
-	if (!org_file.is_open())
+	if (org_file.fail())
 		return print_err_n_return("Error: invlalid filename");
-	if (!replace_file.is_open())
-		return print_err_n_return("Error: replace file is not open");
+
+	std::ofstream replace_file(filename + ".replace");
+	if (replace_file.fail())
+		return print_err_n_return("Error: wrong replace file");
 
 	std::string buf = "";
 	while (std::getline(org_file, buf)) {
