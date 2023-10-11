@@ -1,31 +1,31 @@
 #include "Cure.hpp"
 
-Cure::Cure() : AMateria(), name("") {
-	std::cout << "Cure default constructor is called" << std::endl;
+Cure::Cure() : AMateria() {
+	std::cout << "Cure defalut constructor is called" << std::endl;
+	this->type = "cure";
 }
 
 Cure::Cure(const Cure& obj) : AMateria() {
-	std::cout << "Cure copy constructor is called" << std::endl;	
+	std::cout << "Cure copy constructor is called" << std::endl;
 	*this = obj;
 }
 
-Cure& Cure::operator= (const Cure& obj) {
-	std::cout << "Cure operator= is called" << std::endl;
+Cure& Cure::operator=(const Cure& obj) {
+	std::cout << "Cure assignment operator is called" << std::endl;
+	if (this != &obj) {
+		this->type = obj.getType();
+	}
+	return *this;
 }
 
 Cure::~Cure() {
 	std::cout << "Cure destructor is called" << std::endl;
 }
 
-Cure::Cure(std::string const & type, std::string _name) : AMateria(type), name(_name) {
-	std::cout << "Cure constructor with type and name parameters is called" << std::endl;
+AMateria* Cure::clone() const {
+    AMateria *newMateria = new Cure(*this);
 }
 
-Cure*	Cure::clone() const {
-	Cure* clone = new Cure(*this);
-	return clone;
-}
-
-void	Cure::use(ICharacter& target) {
-	std::cout << "* shoots an ice bolt at " << name << "*" << std::endl;
+void Cure::use(ICharacter& target) {
+    std::cout << "* heals " << target.getName() << "'s wounds  *" << std::endl;
 }

@@ -2,24 +2,17 @@
 # define CURE_HPP
 
 # include "AMateria.hpp"
+# include "ICharacter.hpp"
 
-class Cure : public AMateria {
-private:
-	std::string name;
-
+class Cure: public AMateria {
 public:
-	Cure();
-	Cure(const Cure& obj);
-	Cure& operator= (const Cure& obj);
-	~Cure();
+    Cure();
+    Cure(const Cure& obj);
+	Cure& operator=(const Cure& obj);
+	virtual ~Cure();
 
-	Cure(std::string const & type, std::string _name);
-
-	Cure* 	clone() const;
-	void	use(ICharacter& target);
-
-	// std::string getName();
-	// void		setName();
+    virtual AMateria* clone() const;
+    virtual void use(ICharacter& target);
 };
 
 #endif

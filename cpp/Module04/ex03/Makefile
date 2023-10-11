@@ -1,6 +1,6 @@
 # ---------------------------------- NAME ------------------------------------ #
 
-NAME = clapTrap 
+NAME = animal
 
 # ---------------------------------- COLOR ----------------------------------- #
 
@@ -19,7 +19,7 @@ OBJS_DIR        = objects/
 # ---------------------------------- FILES ----------------------------------- #
 
 # INCLUDE = -I $(HDRS_DIR)
-SRCS = main.cpp ClapTrap.cpp
+SRCS = main.cpp
 OBJS = $(addprefix $(OBJS_DIR), $(SRCS:.cpp=.o))
 
 # -------------------------------- COMPILATE --------------------------------- #
@@ -36,7 +36,7 @@ $(OBJS_DIR)%.o : %.cpp
 	$(CC) $(CFLAGS) -g -c $< -o $@
 
 all:
-	@echo "$(C_YELLOW)======= make clapTrap =======$(C_END)"
+	@echo "$(C_YELLOW)======= make animal =======$(C_END)"
 	@make $(NAME)
 
 $(NAME): $(OBJS)
@@ -46,15 +46,15 @@ $(NAME): $(OBJS)
 	@echo "$(C_GREEN)+-------------------------+$(C_END)"
 
 clean:
-	@echo "$(C_YELLOW)========== cleaning =========$(C_END)"
+	@echo "$(C_YELLOW)========= cleaning ========$(C_END)"
 	$(RM) $(OBJS_DIR)
 
 fclean: clean
-	@echo "$(C_YELLOW)===== cleaning clapTrap =====$(C_END)"
+	@echo "$(C_YELLOW)===== cleaning animal =====$(C_END)"
 	$(RM) $(NAME)
 
 re:
-	@echo "$(C_YELLOW)======== recompiling ========$(C_END)"
+	@echo "$(C_YELLOW)======= recompiling =======$(C_END)"
 	@make fclean
 	@make all
 

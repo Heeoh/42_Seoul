@@ -12,7 +12,7 @@ Cat::Cat(const Cat& obj) : Animal() {
 }
 
 Cat& Cat::operator=(const Cat& obj) {
-	std::cout << "Dog assignment operator is called" << std::endl;
+	std::cout << "Cat assignment operator is called" << std::endl;
 	if (this != &obj) {
 		this->type = obj.getType();
 		this->brain = new Brain(*(obj.getBrain()));

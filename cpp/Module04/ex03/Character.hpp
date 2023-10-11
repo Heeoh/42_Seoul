@@ -2,24 +2,23 @@
 # define CHARACTER_HPP
 
 # include "ICharacter.hpp"
-# include "AMateria.hpp"
 
-class Character : public ICharacter {
+class Character: public ICharacter {
 private:
-	AMateria* slot[4];
+    std::string name;
+    AMateria* inventory[4];
 
 public:
-	Character();
-	Character(const Character& obj);
-	Character& operator= (const Character& obj);
-	~Character();
+    Character();
+    Character(const Character& obj);
+    Character& operator=(const Character& obj);
+    ~Character();
 
-	std::string const & getName() const;
-	void equip(AMateria* m);
-	void unequip(int idx);
-	void use(int idx, ICharacter& target);
-
-	AMateria*	getMateriaInSlot(int idx);
+    Character(std::string name);
+    virtual std::string const & getName() const;
+    virtual void equip(AMateria* m);
+    virtual void unequip(int idx);
+    virtual void use(int idx, ICharacter& target);
 };
 
 #endif
