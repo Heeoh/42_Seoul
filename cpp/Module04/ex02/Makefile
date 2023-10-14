@@ -19,6 +19,7 @@ OBJS_DIR        = objects/
 # ---------------------------------- FILES ----------------------------------- #
 
 # INCLUDE = -I $(HDRS_DIR)
+HDRS = AAnimal.hpp Dog.hpp Cat.hpp Brain.hpp 
 SRCS = main.cpp AAnimal.cpp Dog.cpp Cat.cpp Brain.cpp
 OBJS = $(addprefix $(OBJS_DIR), $(SRCS:.cpp=.o))
 
@@ -31,7 +32,7 @@ MD		= mkdir -p
 
 # --------------------------------- RULES ------------------------------------ #
 
-$(OBJS_DIR)%.o : %.cpp
+$(OBJS_DIR)%.o : %.cpp $(HDRS)
 	@$(MD) $(dir $@)
 	$(CC) $(CFLAGS) -g -c $< -o $@
 

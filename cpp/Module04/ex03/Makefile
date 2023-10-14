@@ -1,6 +1,6 @@
 # ---------------------------------- NAME ------------------------------------ #
 
-NAME = animal
+NAME = heson
 
 # ---------------------------------- COLOR ----------------------------------- #
 
@@ -19,7 +19,8 @@ OBJS_DIR        = objects/
 # ---------------------------------- FILES ----------------------------------- #
 
 # INCLUDE = -I $(HDRS_DIR)
-SRCS = main.cpp
+HDRS = AMateria.hpp Character.hpp Cure.hpp Ice.hpp MateriaSource.hpp ICharacter.hpp IMateriaSource.hpp
+SRCS = main.cpp AMateria.cpp Character.cpp Cure.cpp Ice.cpp MateriaSource.cpp
 OBJS = $(addprefix $(OBJS_DIR), $(SRCS:.cpp=.o))
 
 # -------------------------------- COMPILATE --------------------------------- #
@@ -31,12 +32,12 @@ MD		= mkdir -p
 
 # --------------------------------- RULES ------------------------------------ #
 
-$(OBJS_DIR)%.o : %.cpp
+$(OBJS_DIR)%.o : %.cpp $(HDRS)
 	@$(MD) $(dir $@)
 	$(CC) $(CFLAGS) -g -c $< -o $@
 
 all:
-	@echo "$(C_YELLOW)======= make animal =======$(C_END)"
+	@echo "$(C_YELLOW)======== make heson =======$(C_END)"
 	@make $(NAME)
 
 $(NAME): $(OBJS)
@@ -50,7 +51,7 @@ clean:
 	$(RM) $(OBJS_DIR)
 
 fclean: clean
-	@echo "$(C_YELLOW)===== cleaning animal =====$(C_END)"
+	@echo "$(C_YELLOW)====== cleaning heson =====$(C_END)"
 	$(RM) $(NAME)
 
 re:
