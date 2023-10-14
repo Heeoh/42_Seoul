@@ -12,9 +12,8 @@ Ice::Ice(const Ice& obj) : AMateria() {
 
 Ice& Ice::operator=(const Ice& obj) {
 	// std::cout << "Ice assignment operator is called" << std::endl;
-	if (this != &obj) {
+	if (this != &obj)
 		this->type = obj.getType();
-	}
 	return *this;
 }
 

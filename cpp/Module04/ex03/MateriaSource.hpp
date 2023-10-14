@@ -15,6 +15,7 @@ public:
     
     virtual void learnMateria(AMateria*);
     virtual AMateria* createMateria(std::string const & type);
+	AMateria* getMemory(int idx) const;
 };
 
 #endif

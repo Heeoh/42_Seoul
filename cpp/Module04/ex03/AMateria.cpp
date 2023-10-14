@@ -12,9 +12,8 @@ AMateria::AMateria(const AMateria& obj) {
 
 AMateria& AMateria::operator=(const AMateria& obj) {
 	// std::cout << "AMateria assignment operator is called" << std::endl;
-	if (this != &obj) {
+	if (this != &obj)
 		this->type = obj.getType();
-	}
 	return *this;
 }
 

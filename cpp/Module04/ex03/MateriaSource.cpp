@@ -15,9 +15,13 @@ MateriaSource::MateriaSource(const MateriaSource& obj) : IMateriaSource() {
 MateriaSource& MateriaSource::operator=(const MateriaSource& obj) {
 	// std::cout << "MateriaSource assignment operator is called" << std::endl;
 	if (this != &obj) {
-        for (int i=0; i<4; i++) {
-            this->memory[i] = obj.memory[i]->clone();
-        }
+		for (int i=0; i<4; i++) {
+            if (this->memory[i])
+                delete this->memory[i];
+			this->memory[i] = NULL;
+			if (obj.getMemory(i))
+    	        this->memory[i] = (obj.getMemory(i))->clone();
+        } 
     }
 	return *this;
 }
@@ -62,4 +66,8 @@ AMateria* MateriaSource::createMateria(std::string const & type) {
 	// std::cout << "Created a new materia " << newMateria->getType() << "." << std::endl;
 	return newMateria;
 	
+}
+
+AMateria* MateriaSource::getMemory(int idx) const {
+    return this->memory[idx];
 }
