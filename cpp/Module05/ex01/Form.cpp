@@ -1,26 +1,16 @@
 #include "Form.hpp"
 #include "Bureaucrat.hpp"
 
-Form::Form()
-		: name(""), isSigned(false), 
-		  requiredGradeToSign(Grade()), requiredGradeToExecute(Grade()) {}
+Form::Form() : name("unknown"), isSigned(false) {}
 
 Form::Form(const Form& obj) 
-		: name(obj.getName()), isSigned(obj.getSignStatus()), 
+		: name(obj.getName() + "_copy"), isSigned(obj.getSignStatus()), 
 		  requiredGradeToSign(obj.getRequiredGradeToSign()), 
-		  requiredGradeToExecute(obj.getRequiredGradeToExecute()) {
-	if (this->requiredGradeToSign.isTooHigh() 
-		|| this->requiredGradeToExecute.isTooHigh())
-		throw Form::GradeTooHighException();
-	if  (this->requiredGradeToSign.isTooLow() 
-		|| this->requiredGradeToExecute.isTooLow())
-		throw Form::GradeTooLowException();
-}
+		  requiredGradeToExecute(obj.getRequiredGradeToExecute()) {}
 
 Form& Form::operator= (const Form& obj) {
-	if (this != &obj) {
+	if (this != &obj)
 		this->isSigned = obj.getSignStatus();
-	}
 	return *this;
 }
 

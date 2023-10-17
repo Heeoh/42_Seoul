@@ -1,15 +1,10 @@
 #include "Bureaucrat.hpp"
 #include "Form.hpp"
 
-Bureaucrat::Bureaucrat() 
-			: name(""), grade(Grade()) {}
+Bureaucrat::Bureaucrat() : name("unknown") {}
 
-Bureaucrat::Bureaucrat(const Bureaucrat &obj) 
-			: name(obj.getName()), grade(obj.getGrade()) {
-	if (this->grade.isTooHigh())
-		throw Bureaucrat::GradeTooHighException();
-	if (this->grade.isTooLow())
-		throw Bureaucrat::GradeTooLowException();
+Bureaucrat::Bureaucrat(const Bureaucrat &obj) : name(obj.getName() + "_copy") {
+	*this = obj;
 }
 
 Bureaucrat& Bureaucrat::operator=(const Bureaucrat& obj) {
@@ -20,11 +15,11 @@ Bureaucrat& Bureaucrat::operator=(const Bureaucrat& obj) {
 
 Bureaucrat::~Bureaucrat() {}
 
-Bureaucrat::Bureaucrat(const std::string name, int grade) 
-			: name(name), grade(grade) {
-	if (this->grade.isTooHigh())
+Bureaucrat::Bureaucrat(const std::string name, int grade) : name(name) {
+	this->grade = grade;
+	if (this->grade.isTooHigh()) 
 		throw Bureaucrat::GradeTooHighException();
-	if (this->grade.isTooLow())
+	if (this->grade.isTooLow()) 
 		throw Bureaucrat::GradeTooLowException();
 }
 
@@ -37,14 +32,14 @@ int Bureaucrat::getGrade() const {
 }
 
 void Bureaucrat::incrementGrade() {
-	this->grade--;	
-	if (this->grade.isTooHigh())
+	this->grade--;
+	if (this->grade.isTooHigh()) 
 		throw Bureaucrat::GradeTooHighException();
 }
 
 void Bureaucrat::decrementGrade() {
 	this->grade++;
-	if (this->grade.isTooLow())
+	if (this->grade.isTooLow()) 
 		throw Bureaucrat::GradeTooLowException();
 }
 

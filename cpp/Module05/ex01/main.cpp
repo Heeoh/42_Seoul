@@ -5,18 +5,18 @@
 int main() {
 	try { // 1
         std::cout << "\033[0;35m" << "[ Form constructor exception test ]" << "\033[0m" << std::endl; 
-        try { // 2
+        try {
 			Form a("AAA", 0, 0);
 		} 
 		catch  (std::exception & e) {
-			std::cout << "try2: " << e.what() << std::endl;
+			std::cout << "Too High Error: " << e.what() << std::endl;
 		}
 
-		try { // 3
+		try {
 			Form a("AAA", 151, 151);
 		} 
 		catch  (std::exception & e) {
-			std::cout << "try3: " << e.what() << std::endl;
+			std::cout << "Too Low Error: " << e.what() << std::endl;
 		}
        
         std::cout << std::endl;

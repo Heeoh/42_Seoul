@@ -11,20 +11,6 @@ class Bureaucrat {
 private:
 	const std::string	name;
 	Grade 				grade;
- 
-	class GradeTooHighException : public std::exception {
-    public:
-        const char* what() const throw() {
-            return "grade is too high!";
-        }
-    };
-
-	class GradeTooLowException : public std::exception {
-    public:
-        const char* what() const throw() {
-            return "grade is too low!";
-        }
-    };	
 
 public:
 	Bureaucrat();
@@ -38,6 +24,17 @@ public:
 	void incrementGrade();
 	void decrementGrade();
 	void signForm(Form& form);
+
+public:
+	class GradeTooHighException : public std::exception {
+    public:
+        const char* what() const throw();
+    };
+
+	class GradeTooLowException : public std::exception {
+    public:
+        const char* what() const throw();
+    };	
 };
 
 std::ostream& operator<<(std::ostream& os, const Bureaucrat& obj);
