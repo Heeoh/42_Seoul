@@ -1,5 +1,5 @@
 #include "Bureaucrat.hpp"
-#include "Form.hpp"
+#include "AForm.hpp"
 
 Bureaucrat::Bureaucrat() 
 			: name(""), grade(Grade()) {}
@@ -48,7 +48,7 @@ void Bureaucrat::decrementGrade() {
 		throw Bureaucrat::GradeTooLowException();
 }
 
-void Bureaucrat::signForm(Form& form) {
+void Bureaucrat::signForm(AForm& form) {
 	form.beSigned(*this);
 
 	if (form.getSignStatus())
@@ -56,6 +56,14 @@ void Bureaucrat::signForm(Form& form) {
 	else 
 		std::cout << this->name << " couldn’t  signed " << form.getName() 
 		<< " because the document is incomplete." << std::endl;
+}
+
+void Bureaucrat::executeForm(AForm const & form) {
+	if (form.execute(*this))
+		std::cout << this->name << " executed " << form.getName() << std::endl;
+	else 
+		std::cout << this->name << " couldn’t execute " << form.getName() 
+		<< " due to an unexpected event." << std::endl;
 }
 
 std::ostream& operator<<(std::ostream& os, const Bureaucrat& obj) {
