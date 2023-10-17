@@ -1,25 +1,23 @@
 #include "Bureaucrat.hpp"
 
-Bureaucrat::Bureaucrat() 
-			: name(""), grade(150) {}
+Bureaucrat::Bureaucrat() : name("Unknown") {
+	this->setGrade(150);
+}
 
-Bureaucrat::Bureaucrat(const Bureaucrat &obj) 
-			: name(obj.getName()), grade(obj.getGrade()) {}
+Bureaucrat::Bureaucrat(const Bureaucrat &obj) : name(obj.getName()) {
+	*this = obj;
+}
 
 Bureaucrat& Bureaucrat::operator=(const Bureaucrat& obj) {
 	if (this != &obj)
-		this->grade = obj.getGrade();
+		this->setGrade(obj.getGrade());
 	return *this;
 }
 
 Bureaucrat::~Bureaucrat() {}
 
-Bureaucrat::Bureaucrat(const std::string name, int grade) 
-			: name(name), grade(grade) {
-	if (isTooHigh())
-		throw Bureaucrat::GradeTooHighException();
-	if (isTooLow())
-		throw Bureaucrat::GradeTooLowException();
+Bureaucrat::Bureaucrat(const std::string name, int grade) : name(name) {
+	this->setGrade(grade);
 }
 
 const std::string Bureaucrat::getName() const {
@@ -31,23 +29,27 @@ int Bureaucrat::getGrade() const {
 }
 
 void Bureaucrat::incrementGrade() {
-	this->grade--; 	
-	if (isTooHigh())
-		throw Bureaucrat::GradeTooHighException();
+	this->setGrade(this->grade - 1);
 }
 
 void Bureaucrat::decrementGrade() {
-	this->grade ++;
-	if (isTooLow())
+	this->setGrade(this->grade + 1);
+}
+
+void Bureaucrat::setGrade(int newGrade) {
+	if (isTooHigh(newGrade))
+		throw Bureaucrat::GradeTooHighException();
+	if (isTooLow(newGrade))
 		throw Bureaucrat::GradeTooLowException();
+	this->grade = newGrade;
 }
 
-bool Bureaucrat::isTooHigh() const {
-	return this->grade < 1;
+bool Bureaucrat::isTooHigh(int grade) const {
+	return grade < 1;
 }
 
-bool Bureaucrat::isTooLow() const {
-	return this->grade > 150;
+bool Bureaucrat::isTooLow(int grade) const {
+	return grade > 150;
 }
 
 std::ostream& operator<<(std::ostream& os, const Bureaucrat& obj) {
