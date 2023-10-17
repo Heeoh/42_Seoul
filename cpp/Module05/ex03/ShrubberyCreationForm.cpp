@@ -3,32 +3,29 @@
 #include <fstream>
 
 ShrubberyCreationForm::ShrubberyCreationForm()
-    : AForm(getNameByType(ShrubberryCreation), 145, 137), target("unknown")  {}
+    : AForm(FormTypeString[ShrubberyCreation], 145, 137), target("unknown")  {}
 
 ShrubberyCreationForm::ShrubberyCreationForm(const ShrubberyCreationForm& obj)
-    : AForm(obj.getName(), obj.getRequiredGradeToSign(), obj.getRequiredGradeToExecute()), target(obj.getTarget()) {}
+    : AForm(obj.getName() + "_copy", obj.getRequiredGradeToSign(), obj.getRequiredGradeToExecute()), target(obj.getTarget()) {}
 
 ShrubberyCreationForm& ShrubberyCreationForm::operator= (const ShrubberyCreationForm& obj) {
-    if (this != &obj) {
-        *this = ShrubberyCreationForm(obj);
-    }
+    if (this != &obj) 
+		return *this;
     return *this;
 }
 
 ShrubberyCreationForm::~ShrubberyCreationForm() {}
 
 ShrubberyCreationForm::ShrubberyCreationForm(std::string target) 
-    : AForm("Shrubbery Creation Form", 145, 137), target(target) {}
+    : AForm(FormTypeString[ShrubberyCreation], 145, 137), target(target) {}
 
 std::string ShrubberyCreationForm::getTarget() const {
     return this->target;
 }
 
 bool ShrubberyCreationForm::execute(Bureaucrat const & executor) const {
-    if (!this->getSignStatus())
-		throw AForm::UnsignedFormException();
-    if (executor.getGrade() > this->getRequiredGradeToExecute())
-		throw AForm::GradeTooLowException();
+    if (!this->isExecutableBy(executor)) 
+		return false;
     
     std::string shrubbery = "               ,@@@@@@@,                 \n"
                             "       ,,,.   ,@@@@@@/@@,  .oo8888o.     \n"
@@ -51,4 +48,3 @@ bool ShrubberyCreationForm::execute(Bureaucrat const & executor) const {
 
     return true;
 }
-

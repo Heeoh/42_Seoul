@@ -9,10 +9,13 @@
 class Bureaucrat;
 
 typedef enum FormType {
-	ShrubberryCreation = 0,
+	ShrubberyCreation = 0,
 	RobotomyRequest,
-	PresidentialPardon
+	PresidentialPardon,
+	Unknown
 } FormType;
+
+static const std::string FormTypeString[3] = {"shrubbery creation", "robotomy request", "presidential pardon"};
 
 class AForm {
 private:
@@ -21,37 +24,13 @@ private:
 	const Grade 		requiredGradeToSign;
 	const Grade 		requiredGradeToExecute;
 
-protected:
-	class GradeTooHighException : public std::exception {
-    public:
-        const char* what() const throw() {
-            return "grade is too high";
-        }
-    };
-
-	class GradeTooLowException : public std::exception {
-    public:
-        const char* what() const throw() {
-            return "grade is too low";
-        }
-    };
-
-	class UnsignedFormException : public std::exception {
-	public:
-        const char* what() const throw() {
-            return "the form has not been signed";
-        }
-	};
-
-private:
-	AForm();
-
 public:
+	AForm();
 	AForm(const AForm& obj);
 	AForm& operator= (const AForm& obj);
 	virtual ~AForm();
 
-	AForm(std::string name, const int signGrade, const int executeGrade);
+	AForm(const std::string name, const int signGrade, const int executeGrade);
 	std::string getName() const;
 	bool getSignStatus() const;
 	int getRequiredGradeToSign() const;
@@ -59,9 +38,26 @@ public:
 	void beSigned(Bureaucrat const & bureaucrat);
 	virtual bool execute(Bureaucrat const & executor) const = 0;
 
+protected:
+	bool isExecutableBy(Bureaucrat const & executor) const;
+
+public:
+	class GradeTooHighException : public std::exception {
+    public:
+        const char* what() const throw();
+    };
+
+	class GradeTooLowException : public std::exception {
+    public:
+        const char* what() const throw();
+    };
+
+	class UnsignedFormException : public std::exception {
+	public:
+        const char* what() const throw();
+	};
 };
 
-const std::string getNameByType(FormType type);
 std::ostream& operator<<(std::ostream& os, const AForm& obj);
 
 

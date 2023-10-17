@@ -5,7 +5,7 @@
 
 class Grade {
 private:
-	int 		grade;
+	int grade;
 	
 public: 
 	static int	highestGrade;
@@ -24,7 +24,7 @@ public:
 	Grade operator--(int);
 
 	int getGrade() const;
-
+	
 	bool isTooHigh() const;
 	bool isTooLow() const;
 };

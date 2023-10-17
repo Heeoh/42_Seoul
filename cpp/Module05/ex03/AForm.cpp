@@ -1,32 +1,22 @@
 #include "AForm.hpp"
 #include "Bureaucrat.hpp"
 
-AForm::AForm()
-		: name(""), isSigned(false), 
-		  requiredGradeToSign(Grade()), requiredGradeToExecute(Grade()) {}
+AForm::AForm() : name("unknown"), isSigned(false) {}
 
 AForm::AForm(const AForm& obj) 
-		: name(obj.getName()), isSigned(obj.getSignStatus()), 
+		: name(obj.getName() + "_copy"), isSigned(obj.getSignStatus()), 
 		  requiredGradeToSign(obj.getRequiredGradeToSign()), 
-		  requiredGradeToExecute(obj.getRequiredGradeToExecute()) {
-	if (this->requiredGradeToSign.isTooHigh() 
-		|| this->requiredGradeToExecute.isTooHigh())
-		throw AForm::GradeTooHighException();
-	if  (this->requiredGradeToSign.isTooLow() 
-		|| this->requiredGradeToExecute.isTooLow())
-		throw AForm::GradeTooLowException();
-}
+		  requiredGradeToExecute(obj.getRequiredGradeToExecute()) {}
 
 AForm& AForm::operator= (const AForm& obj) {
-	if (this != &obj) {
+	if (this != &obj)
 		this->isSigned = obj.getSignStatus();
-	}
 	return *this;
 }
 
 AForm::~AForm() {}
 
-AForm::AForm(std::string name, const int signGrade, const int executeGrade)
+AForm::AForm(const std::string name, const int signGrade, const int executeGrade)
 		: name(name), isSigned(false), 
 		  requiredGradeToSign(signGrade), 
 		  requiredGradeToExecute(executeGrade)
@@ -62,22 +52,17 @@ void AForm::beSigned(Bureaucrat const & bureaucrat) {
 	this->isSigned = true;
 }
 
+bool AForm::isExecutableBy(Bureaucrat const & executor) const {
+	if (!this->isSigned)
+		throw AForm::UnsignedFormException();
+    if (executor.getGrade() > this->getRequiredGradeToExecute())
+		throw AForm::GradeTooLowException();
+	return true;
+}
+
 std::ostream& operator<<(std::ostream& os, const AForm& obj) {
 	os << obj.getName() << ", " << (obj.getSignStatus() ? "signed, " : "not signed, ")
 		<< "required grade to sign: " << obj.getRequiredGradeToSign() 
 		<< ", required grade to execute: " << obj.getRequiredGradeToExecute();
 	return os;
-}
-
-const std::string getNameByType(FormType type) {
-	switch (type){
-	case ShrubberryCreation:
-		return "Shrubbery Creation Form";
-	case RobotomyRequest:
-		return "Robotomy Request Form";
-	case PresidentialPardon:
-		return "Presidential Pardon Form";
-	default:
-		return "Unknown";
-	}
 }

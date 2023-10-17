@@ -3,7 +3,7 @@
 int Grade::highestGrade = 1;
 int Grade::lowestGrade = 150;
 
-Grade::Grade() : grade(150) {}
+Grade::Grade() : grade(Grade::lowestGrade) {}
 
 Grade::Grade(const Grade& obj) {
     *this = obj;
@@ -17,7 +17,9 @@ Grade& Grade::operator= (const Grade& obj) {
 
 Grade::~Grade() {}
 
-Grade::Grade(int grade) : grade(grade) {}
+Grade::Grade(int grade) {
+	this->grade = grade;
+}
 
 Grade& Grade::operator++(void) {
 	this->grade++;
@@ -40,7 +42,6 @@ Grade Grade::operator--(int) {
 	this->grade--;
 	return (temp);
 }
-
 
 int Grade::getGrade() const {
     return this->grade;
