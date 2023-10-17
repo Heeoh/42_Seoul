@@ -19,21 +19,21 @@ protected:
 	class GradeTooHighException : public std::exception {
     public:
         const char* what() const throw() {
-            return "AForm: Grade is too high!";
+            return "grade is too high";
         }
     };
 
 	class GradeTooLowException : public std::exception {
     public:
         const char* what() const throw() {
-            return "AForm: Grade is too low!";
+            return "grade is too low";
         }
     };
 
 	class UnsignedFormException : public std::exception {
 	public:
         const char* what() const throw() {
-            return "AForm: The form has not been signed!";
+            return "the form has not been signed";
         }
 	};
 

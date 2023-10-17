@@ -49,13 +49,19 @@ void Bureaucrat::decrementGrade() {
 }
 
 void Bureaucrat::signForm(Form& form) {
-	form.beSigned(*this);
+	try {
+		form.beSigned(*this);
 
-	if (form.getSignStatus())
-		std::cout << this->name << " signed " << form.getName() << std::endl;
-	else 
-		std::cout << this->name << " couldn’t  signed " << form.getName() 
-		<< " because the document is incomplete." << std::endl;
+		if (form.getSignStatus())
+			std::cout << this->name << " signed " << form.getName() << "." << std::endl;
+		else 
+			std::cout << this->name << " couldn’t sign " << form.getName() 
+			<< " because the document is incomplete." << std::endl;
+		}
+	catch (std::exception & e) {
+		std::cout << this->name << " couldn’t sign " << form.getName() 
+			<< " because " << e.what() << "." << std::endl;
+	}
 }
 
 std::ostream& operator<<(std::ostream& os, const Bureaucrat& obj) {

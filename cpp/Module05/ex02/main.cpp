@@ -7,6 +7,7 @@ int main() {
     std::srand(static_cast<unsigned>(std::time(0)));
 
 	try {
+        std::cout << "\033[0;35m" << "[ constructing ]" << "\033[0m" << std::endl; 
         ShrubberyCreationForm form_s = ShrubberyCreationForm("home");
         RobotomyRequestForm form_r = RobotomyRequestForm("toto");
         PresidentialPardonForm form_p = PresidentialPardonForm("BBB");
@@ -16,36 +17,30 @@ int main() {
         std::cout << form_p << std::endl;
         std::cout << std::endl;
 
-        try { // unsigned form
+        std::cout << "\033[0;35m" << "[ unsigned form ]" << "\033[0m" << std::endl;
+        {
             Bureaucrat a = Bureaucrat("AAA", 100);
-
             a.executeForm(form_s);
         } 
-        catch (std::exception & e) {
-            std::cout << e.what() << std::endl;
-        }
         std::cout << std::endl;
 
-        try { // signed but not enough grade
+        std::cout << "\033[0;35m" << "[ signed but not enough grade ]" << "\033[0m" << std::endl; 
+        {
             Bureaucrat a = Bureaucrat("AAA", 20);
 
             a.signForm(form_p);
             a.executeForm(form_p);
         } 
-        catch (std::exception & e) {
-            std::cout << e.what() << std::endl;
-        } 
         std::cout << std::endl;
 
-        try { // random execute
+        std::cout << "\033[0;35m" << "[ random execute of RobotomyRequestForm ]" << "\033[0m" << std::endl; 
+        {
             Bureaucrat a = Bureaucrat("AAA", 30);
 
             a.signForm(form_r);
             a.executeForm(form_r);
         } 
-        catch (std::exception & e) {
-            std::cout << e.what() << std::endl;
-        }
+
     }
     catch (std::exception &e) {
         std::cout << e.what() << std::endl;

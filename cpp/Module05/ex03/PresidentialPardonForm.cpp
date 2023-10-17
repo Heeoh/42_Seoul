@@ -2,7 +2,7 @@
 #include "Bureaucrat.hpp"
 
 PresidentialPardonForm::PresidentialPardonForm()
-    : AForm("Presidential Pardon Form", 25, 5), target("unknown") {}
+    : AForm(getNameByType(PresidentialPardon), 25, 5), target("unknown") {}
 
 PresidentialPardonForm::PresidentialPardonForm(const PresidentialPardonForm& obj)
     : AForm(obj.getName(), obj.getRequiredGradeToSign(), obj.getRequiredGradeToExecute()), target(obj.getTarget()) {}

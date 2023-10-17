@@ -17,14 +17,14 @@ private:
 	class GradeTooHighException : public std::exception {
     public:
         const char* what() const throw() {
-            return "Form: Grade is too high!";
+            return "grade is too high";
         }
     };
 
 	class GradeTooLowException : public std::exception {
     public:
         const char* what() const throw() {
-            return "Form: Grade is too low!";
+            return "grade is too low";
         }
     };
 

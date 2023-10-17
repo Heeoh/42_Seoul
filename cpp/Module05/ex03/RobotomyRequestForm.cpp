@@ -4,7 +4,7 @@
 #include <ctime>
 
 RobotomyRequestForm::RobotomyRequestForm()
-    : AForm("Robotomy Request Form", 72, 45), target("unknown") {}
+    : AForm(getNameByType(RobotomyRequest), 72, 45), target("unknown") {}
 
 RobotomyRequestForm::RobotomyRequestForm(const RobotomyRequestForm& obj)
     : AForm(obj.getName(), obj.getRequiredGradeToSign(), obj.getRequiredGradeToExecute()), target(obj.getTarget()) {}

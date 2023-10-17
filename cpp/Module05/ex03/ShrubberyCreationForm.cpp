@@ -3,7 +3,7 @@
 #include <fstream>
 
 ShrubberyCreationForm::ShrubberyCreationForm()
-    : AForm("Shrubbery Creation Form", 145, 137), target("unknown")  {}
+    : AForm(getNameByType(ShrubberryCreation), 145, 137), target("unknown")  {}
 
 ShrubberyCreationForm::ShrubberyCreationForm(const ShrubberyCreationForm& obj)
     : AForm(obj.getName(), obj.getRequiredGradeToSign(), obj.getRequiredGradeToExecute()), target(obj.getTarget()) {}
@@ -30,20 +30,20 @@ bool ShrubberyCreationForm::execute(Bureaucrat const & executor) const {
     if (executor.getGrade() > this->getRequiredGradeToExecute())
 		throw AForm::GradeTooLowException();
     
-    std::string shrubbery = "               ,@@@@@@@,                 "
-                            "       ,,,.   ,@@@@@@/@@,  .oo8888o.     "
-                            "   ,&%%&%&&%,@@@@@/@@@@@@,8888\\88/8o     "
-                            "  ,%&\\%&&%&&%,@@@\\@@@/@@@88\\88888/88'    "
-                            "  %&&%&%&/%&&%@@\\@@/ /@@@88888\\88888'    "
-                            "  %&&%/ %&%%&&@@\\ V /@@' `88\\8 `/88'     "
-                            "  `&%\\ ` /%&'    |.|        \\ '|8'       "
-                            "      |o|        | |         | |         "
-                            "      |.|        | |         | |         "
-                            " __\\/ ._\\//_/__/  ,\\_//__\\/.  \\_//__/_ ";
+    std::string shrubbery = "               ,@@@@@@@,                 \n"
+                            "       ,,,.   ,@@@@@@/@@,  .oo8888o.     \n"
+                            "   ,&%%&%&&%,@@@@@/@@@@@@,8888\\88/8o     \n"
+                            "  ,%&\\%&&%&&%,@@@\\@@@/@@@88\\88888/88'    \n"
+                            "  %&&%&%&/%&&%@@\\@@/ /@@@88888\\88888'    \n"
+                            "  %&&%/ %&%%&&@@\\ V /@@' `88\\8 `/88'     \n"
+                            "  `&%\\ ` /%&'    |.|        \\ '|8'       \n"
+                            "      |o|        | |         | |         \n"
+                            "      |.|        | |         | |         \n"
+                            " __\\/ ._\\//_/__/  ,\\_//__\\/.  \\_//__/_ \n";
 
     std::ofstream file(target + "_shrubbery");
 	
-    if (file.is_open())
+    if (!file.is_open())
 		throw std::ios_base::failure("Failed to open " + target + "_shrubbery");
 
     file << shrubbery;

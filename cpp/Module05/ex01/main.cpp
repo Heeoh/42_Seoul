@@ -3,7 +3,8 @@
 #include <iostream>
 
 int main() {
-	try {
+	try { // 1
+        std::cout << "\033[0;35m" << "[ Form constructor exception test ]" << "\033[0m" << std::endl; 
         try { // 2
 			Form a("AAA", 0, 0);
 		} 
@@ -17,25 +18,24 @@ int main() {
 		catch  (std::exception & e) {
 			std::cout << "try3: " << e.what() << std::endl;
 		}
+       
+        std::cout << std::endl;
+        std::cout << "\033[0;35m" << "[ signForm() test ]" << "\033[0m" << std::endl; 
 
         Bureaucrat a = Bureaucrat("AAA", 30);
-        Form form1 = Form("Form1", 50, 50);
-        Form form2 = Form("Form2", 29, 29);
+        Form form = Form("Form", 29, 29);
 
         std::cout << a << std::endl;
-        std::cout << form1 << std::endl;
-        std::cout << form2 << std::endl;
+        std::cout << form << std::endl;
+        std::cout << std::endl;
 
-        a.signForm(form1);
-        std::cout << form1 << std::endl;
+        a.signForm(form);  // error, due to low grade
+        std::cout << form << std::endl;
+        std::cout << std::endl;
         
-        // a.signForm(form2);
-
         a.incrementGrade();
-        std::cout << a << std::endl;
-        
-        a.signForm(form2);
-        std::cout << form2 << std::endl;
+        a.signForm(form);
+        std::cout << form << std::endl;
     }
     catch (std::exception &e) {
         std::cout << e.what() << std::endl;

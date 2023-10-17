@@ -26,7 +26,7 @@ AForm& AForm::operator= (const AForm& obj) {
 
 AForm::~AForm() {}
 
-AForm::AForm(const std::string name, const int signGrade, const int executeGrade)
+AForm::AForm(std::string name, const int signGrade, const int executeGrade)
 		: name(name), isSigned(false), 
 		  requiredGradeToSign(signGrade), 
 		  requiredGradeToExecute(executeGrade)
@@ -67,4 +67,17 @@ std::ostream& operator<<(std::ostream& os, const AForm& obj) {
 		<< "required grade to sign: " << obj.getRequiredGradeToSign() 
 		<< ", required grade to execute: " << obj.getRequiredGradeToExecute();
 	return os;
+}
+
+const std::string getNameByType(FormType type) {
+	switch (type){
+	case ShrubberryCreation:
+		return "Shrubbery Creation Form";
+	case RobotomyRequest:
+		return "Robotomy Request Form";
+	case PresidentialPardon:
+		return "Presidential Pardon Form";
+	default:
+		return "Unknown";
+	}
 }

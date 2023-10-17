@@ -8,6 +8,12 @@
 
 class Bureaucrat;
 
+typedef enum FormType {
+	ShrubberryCreation = 0,
+	RobotomyRequest,
+	PresidentialPardon
+} FormType;
+
 class AForm {
 private:
 	const std::string	name;
@@ -19,31 +25,33 @@ protected:
 	class GradeTooHighException : public std::exception {
     public:
         const char* what() const throw() {
-            return "AForm: Grade is too high!";
+            return "grade is too high";
         }
     };
 
 	class GradeTooLowException : public std::exception {
     public:
         const char* what() const throw() {
-            return "AForm: Grade is too low!";
+            return "grade is too low";
         }
     };
 
 	class UnsignedFormException : public std::exception {
 	public:
         const char* what() const throw() {
-            return "AForm: The form has not been signed!";
+            return "the form has not been signed";
         }
 	};
 
-public:
+private:
 	AForm();
+
+public:
 	AForm(const AForm& obj);
 	AForm& operator= (const AForm& obj);
 	virtual ~AForm();
 
-	AForm(const std::string name, const int signGrade, const int executeGrade);
+	AForm(std::string name, const int signGrade, const int executeGrade);
 	std::string getName() const;
 	bool getSignStatus() const;
 	int getRequiredGradeToSign() const;
@@ -53,6 +61,8 @@ public:
 
 };
 
+const std::string getNameByType(FormType type);
 std::ostream& operator<<(std::ostream& os, const AForm& obj);
+
 
 #endif
