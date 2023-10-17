@@ -19,17 +19,25 @@ int main() {
 
         std::cout << "\033[0;35m" << "[ unsigned form ]" << "\033[0m" << std::endl;
         {
-            Bureaucrat a = Bureaucrat("AAA", 100);
-            a.executeForm(form_s);
+			Bureaucrat a = Bureaucrat("AAA", 20);
+			Bureaucrat b = Bureaucrat("BBB", 5);
+
+            a.executeForm(form_p); // error
+
+			a.signForm(form_p);
+            b.executeForm(form_p);
         } 
         std::cout << std::endl;
 
         std::cout << "\033[0;35m" << "[ signed but not enough grade ]" << "\033[0m" << std::endl; 
         {
-            Bureaucrat a = Bureaucrat("AAA", 20);
+            Bureaucrat a = Bureaucrat("AAA", 140);
+			Bureaucrat b = Bureaucrat("BBB", 100);
 
-            a.signForm(form_p);
-            a.executeForm(form_p);
+			a.signForm(form_s);
+            a.executeForm(form_s); // error
+
+			b.executeForm(form_s);
         } 
         std::cout << std::endl;
 

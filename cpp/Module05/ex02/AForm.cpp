@@ -1,26 +1,16 @@
 #include "AForm.hpp"
 #include "Bureaucrat.hpp"
 
-AForm::AForm()
-		: name(""), isSigned(false), 
-		  requiredGradeToSign(Grade()), requiredGradeToExecute(Grade()) {}
+AForm::AForm() : name("unknown"), isSigned(false) {}
 
 AForm::AForm(const AForm& obj) 
-		: name(obj.getName()), isSigned(obj.getSignStatus()), 
+		: name(obj.getName() + "_copy"), isSigned(obj.getSignStatus()), 
 		  requiredGradeToSign(obj.getRequiredGradeToSign()), 
-		  requiredGradeToExecute(obj.getRequiredGradeToExecute()) {
-	if (this->requiredGradeToSign.isTooHigh() 
-		|| this->requiredGradeToExecute.isTooHigh())
-		throw AForm::GradeTooHighException();
-	if  (this->requiredGradeToSign.isTooLow() 
-		|| this->requiredGradeToExecute.isTooLow())
-		throw AForm::GradeTooLowException();
-}
+		  requiredGradeToExecute(obj.getRequiredGradeToExecute()) {}
 
 AForm& AForm::operator= (const AForm& obj) {
-	if (this != &obj) {
+	if (this != &obj)
 		this->isSigned = obj.getSignStatus();
-	}
 	return *this;
 }
 
@@ -60,6 +50,14 @@ void AForm::beSigned(Bureaucrat const & bureaucrat) {
 	if (bureaucrat.getGrade() > this->getRequiredGradeToSign())
 		throw AForm::GradeTooLowException();
 	this->isSigned = true;
+}
+
+bool AForm::isExecutableBy(Bureaucrat const & executor) const {
+	if (!this->isSigned)
+		throw AForm::UnsignedFormException();
+    if (executor.getGrade() > this->getRequiredGradeToExecute())
+		throw AForm::GradeTooLowException();
+	return true;
 }
 
 std::ostream& operator<<(std::ostream& os, const AForm& obj) {

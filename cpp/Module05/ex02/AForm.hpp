@@ -15,28 +15,6 @@ private:
 	const Grade 		requiredGradeToSign;
 	const Grade 		requiredGradeToExecute;
 
-protected:
-	class GradeTooHighException : public std::exception {
-    public:
-        const char* what() const throw() {
-            return "grade is too high";
-        }
-    };
-
-	class GradeTooLowException : public std::exception {
-    public:
-        const char* what() const throw() {
-            return "grade is too low";
-        }
-    };
-
-	class UnsignedFormException : public std::exception {
-	public:
-        const char* what() const throw() {
-            return "the form has not been signed";
-        }
-	};
-
 public:
 	AForm();
 	AForm(const AForm& obj);
@@ -51,6 +29,24 @@ public:
 	void beSigned(Bureaucrat const & bureaucrat);
 	virtual bool execute(Bureaucrat const & executor) const = 0;
 
+protected:
+	bool isExecutableBy(Bureaucrat const & executor) const;
+
+public:
+	class GradeTooHighException : public std::exception {
+    public:
+        const char* what() const throw();
+    };
+
+	class GradeTooLowException : public std::exception {
+    public:
+        const char* what() const throw();
+    };
+
+	class UnsignedFormException : public std::exception {
+	public:
+        const char* what() const throw();
+	};
 };
 
 std::ostream& operator<<(std::ostream& os, const AForm& obj);

@@ -7,12 +7,11 @@ RobotomyRequestForm::RobotomyRequestForm()
     : AForm("Robotomy Request Form", 72, 45), target("unknown") {}
 
 RobotomyRequestForm::RobotomyRequestForm(const RobotomyRequestForm& obj)
-    : AForm(obj.getName(), obj.getRequiredGradeToSign(), obj.getRequiredGradeToExecute()), target(obj.getTarget()) {}
+    : AForm(obj.getName() + "_copy", obj.getRequiredGradeToSign(), obj.getRequiredGradeToExecute()), target(obj.getTarget()) {}
 
 RobotomyRequestForm& RobotomyRequestForm::operator= (const RobotomyRequestForm& obj) {
-    if (this != &obj) {
-        *this = RobotomyRequestForm(obj);
-    }
+    if (this != &obj)
+		return *this;
     return *this;
 }
 
@@ -26,10 +25,8 @@ std::string RobotomyRequestForm::getTarget() const {
 }
 
 bool RobotomyRequestForm::execute(Bureaucrat const & executor) const {
-    if (!this->getSignStatus())
-		throw AForm::UnsignedFormException();
-    if (executor.getGrade() > this->getRequiredGradeToExecute())
-		throw AForm::GradeTooLowException();
+    if (!this->isExecutableBy(executor)) 
+		return false;
 
     int isSuccess = std::rand() % 2;
 
