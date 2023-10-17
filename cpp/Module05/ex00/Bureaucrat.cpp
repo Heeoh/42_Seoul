@@ -1,10 +1,10 @@
 #include "Bureaucrat.hpp"
 
-Bureaucrat::Bureaucrat() : name("Unknown") {
+Bureaucrat::Bureaucrat() : name("unknown") {
 	this->setGrade(150);
 }
 
-Bureaucrat::Bureaucrat(const Bureaucrat &obj) : name(obj.getName()) {
+Bureaucrat::Bureaucrat(const Bureaucrat &obj) : name(obj.getName() + "_copy") {
 	*this = obj;
 }
 
