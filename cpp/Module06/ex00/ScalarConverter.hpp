@@ -4,7 +4,7 @@
 # include <iostream>
 
 typedef enum InputType {
-	CHAR,
+	CHAR = 0,
 	INT,
 	FLOAT,
 	DOUBLE
@@ -27,7 +27,7 @@ public:
 	ScalarConverter& operator=(const ScalarConverter & obj); 
 	~ScalarConverter();
 
-	void execute(std::string _input);
+	void execute();
 
 	std::string getInput() const;
 	t_input_type getType() const;
@@ -41,9 +41,9 @@ private:
 
 	void convert();
 	void fromChar();
-	void fromInt();
-	void fromFloat();
-	void fromDouble();
+	// void fromInt();
+	// void fromFloat();
+	// void fromDouble();
 
 	void printOutput();
 
