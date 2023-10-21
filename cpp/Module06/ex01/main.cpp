@@ -12,10 +12,9 @@ int main() {
 
 	std::cout << rawData << std::endl;
 	std::cout << deserializedData << std::endl;
-	std::cout << std::hex << p << std::endl;
+	std::cout << std::endl;
 
 	std::cout << &rawData << std::endl;
 	std::cout << &deserializedData << std::endl;
-
 };
 

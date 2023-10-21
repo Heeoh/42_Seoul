@@ -1,8 +1,7 @@
 #include "ScalarConverter.hpp"
-// #include <string>
 #include <cstdlib> // strtod()
-#include <iomanip> // setprecision()
-// #include <limits> 
+#include <iomanip> // setprecision(), showpos()
+#include <limits> // numeric_limits<T>::digits10
 #include <cmath> // isnana(), isinf()
 
 ScalarConverter::ScalarConverter() {}
