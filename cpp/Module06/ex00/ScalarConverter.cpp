@@ -1,7 +1,9 @@
 #include "ScalarConverter.hpp"
-#include <string>
-#include <iomanip>
-#include <limits>
+// #include <string>
+#include <cstdlib> // strtod()
+#include <iomanip> // setprecision()
+// #include <limits> 
+#include <cmath> // isnana(), isinf()
 
 ScalarConverter::ScalarConverter() {}
 
@@ -32,7 +34,7 @@ void ScalarConverter::convert(std::string input) {
 		throw std::invalid_argument("Invalid Input");
 	else if (*endPtr != '\0' && *endPtr != 'f' && *endPtr != 'F')
 		throw std::invalid_argument("Invalid character found during conversion.");
-	else if ((*endPtr == 'F' || *endPtr == 'F')
+	else if ((*endPtr == 'f' || *endPtr == 'F')
 			&& endPtr - input.c_str() != (long)(input.length() - 1))
 		throw std::invalid_argument("Invalid character found during conversion.");
 
@@ -46,7 +48,7 @@ void ScalarConverter::fromChar(char input) {
 	std::cout << "char: " << "'" << input << "'" << std::endl;
 	std::cout << "int: " << static_cast<int>(input) << std::endl;
 	std::cout << "float: " << static_cast<float>(input) << ".0f" << std::endl;
-	std::cout << "double: " << static_cast<double>(input) << ".0f" << std::endl;
+	std::cout << "double: " << static_cast<double>(input) << ".0" << std::endl;
 }
 
 void ScalarConverter::toChar(double val) {
