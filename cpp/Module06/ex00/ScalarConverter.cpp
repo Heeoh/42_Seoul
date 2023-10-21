@@ -1,118 +1,97 @@
 #include "ScalarConverter.hpp"
 #include <string>
-#include <sstream>
+#include <iomanip>
+#include <limits>
 
-ScalarConverter::ScalarConverter() : input(0) {}
-
-ScalarConverter::ScalarConverter(std::string _input) : input(_input) {
-	this->execute();
-}
+ScalarConverter::ScalarConverter() {}
 
 ScalarConverter::ScalarConverter(const ScalarConverter & obj) {
 	*this = obj;
 }
 
 ScalarConverter& ScalarConverter::operator=(const ScalarConverter & obj) {
-	if (this != &obj) {
-		this->input = obj.getInput();
-		this->type = obj.getType();
-		this->char_value = obj.getChar();
-		this->int_value = obj.getInt();
-		this->float_value = obj.getFloat();
-		this->double_value = obj.getDouble();
-	}
+	if (this != &obj)
+		return *this;
 	return *this;
 }
 
 ScalarConverter::~ScalarConverter() {}
 
-
-void ScalarConverter::execute() {
-	checkInput();
-	convert();
-	printOutput();
-}
-
-void ScalarConverter::checkInput() {
-	this->char_value = this->input.at(0);
-}
-
-void ScalarConverter::printOutput() {
-	std::stringstream ss;
-	ss.setf(std::ios::fixed);
-	ss.precision(1);
-
-	std::cout << "char: " << this->char_value << std::endl;
-	std::cout << "int: " << this->int_value << std::endl;
-
-	ss << this->float_value;
-	std::cout << "float: " << ss.str() << "f" << std::endl;
-	ss.str("");
-
-	ss << this->double_value;
-	std::cout << "double: " <<  ss.str()  << std::endl;
-	ss.str("");
-}
-
-// --------------------------- converter ----------------------------- //
-
-void ScalarConverter::convert() {
-	switch (this->type) {
-		case CHAR:
-			this->fromChar(); break;
-		// case INT:
-		// 	this->fromInt(); break;
-		// case FLOAT:
-		// 	this->fromFloat(); break;
-		// case DOUBLE:
-		// 	this->fromDouble();
-		default:
-			return;
-			// exception
+void ScalarConverter::convert(std::string input) {
+	if (input.length() == 1 && !std::isdigit(input[0])) {
+		fromChar(input[0]);
+		return ;
 	}
+
+	double val = 0.0;
+	char *endPtr = NULL;
+
+	val = std::strtod(input.c_str(), &endPtr);
+
+	if (endPtr == NULL)
+		throw std::invalid_argument("Invalid Input");
+	else if (*endPtr != '\0' && *endPtr != 'f' && *endPtr != 'F')
+		throw std::invalid_argument("Invalid character found during conversion.");
+	else if ((*endPtr == 'F' || *endPtr == 'F')
+			&& endPtr - input.c_str() != (long)(input.length() - 1))
+		throw std::invalid_argument("Invalid character found during conversion.");
+
+	toChar(val);
+	toInt(val);
+	toFloat(val);
+	toDouble(val);
 }
 
-void ScalarConverter::fromChar() {
-	this->int_value = static_cast<int>(this->char_value);
-	this->float_value = static_cast<float>(this->char_value);
-	this->double_value = static_cast<double>(this->char_value);
+void ScalarConverter::fromChar(char input) {
+	std::cout << "char: " << "'" << input << "'" << std::endl;
+	std::cout << "int: " << static_cast<int>(input) << std::endl;
+	std::cout << "float: " << static_cast<float>(input) << ".0f" << std::endl;
+	std::cout << "double: " << static_cast<double>(input) << ".0f" << std::endl;
 }
 
-// void ScalarConverter::fromInt() {
-
-// }
-
-// void ScalarConverter::fromFloat() {
-
-// }
-
-// void ScalarConverter::fromDouble() {
-
-// }
-
-// ----------------------------- getter ------------------------------ //
-
-std::string ScalarConverter::getInput() const {
-	return this->input;
+void ScalarConverter::toChar(double val) {
+	std::cout << "char: ";
+  	if (std::isnan(val) || std::isinf(val))
+    	std::cout << "impossible" << std::endl;
+	else if (val < 0 || val > 127)
+		std::cout << "impossible" << std::endl;
+	else if (std::isprint(static_cast<char>(val)))
+    	std::cout << "'" << static_cast<char>(val) << "'" << std::endl;
+	else
+		std::cout << "Non displayable" << std::endl;
 }
 
-t_input_type ScalarConverter::getType() const {
-	return this->type;
+void ScalarConverter::toInt(double val) {
+	std::cout << "int: ";
+	if (std::isnan(val) || std::isinf(val))
+		std::cout << "impossible" << std::endl;
+	else if (val < -2147483648 || val > 2147483647)
+		std::cout << "impossible" << std::endl;
+	else
+		std::cout << static_cast<int>(val) << std::endl;
 }
 
-char ScalarConverter::getChar() const {
-	return this->char_value;
+void ScalarConverter::toFloat(double val) {
+	std::cout << "float: ";
+	float floatValue = static_cast<float>(val);
+
+	if (std::isnan(val))
+		std::cout << std::showpos << floatValue << "f" << std::endl;
+	else if (std::isinf(val))
+		std::cout << std::showpos << floatValue << "f" << std::endl;
+	else if (floatValue == static_cast<int64_t>(static_cast<float>(val)))
+		std::cout << floatValue << ".0f" << std::endl;
+	else
+		std::cout << std::setprecision(std::numeric_limits<float>::digits10) << floatValue << "f" << std::endl;
 }
 
-int	ScalarConverter::getInt() const {
-	return this->int_value;
-}
+void ScalarConverter::toDouble(double val) {
+	std::cout << "double: ";
 
-float ScalarConverter::getFloat() const {
-	return this->float_value;
+	if (std::isnan(val) || std::isinf(val))
+		std::cout << val << std::endl;
+	else if (val == static_cast<int64_t>(val))
+		std::cout << val << ".0" << std::endl;
+	else
+		std::cout << std::setprecision(std::numeric_limits<double>::digits10) << val << std::endl;
 }
-
-double ScalarConverter::getDouble() const {
-	return this->double_value;
-}
-
