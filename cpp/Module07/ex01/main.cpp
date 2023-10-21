@@ -13,8 +13,7 @@ void find42(std::string str) {
         std::cout << str << std::endl;
 }
 
-template<typename T>
-void doubleValue(T &value) {
+void doubleValue(int &value) {
     value *= 2;
 }
 
@@ -30,17 +29,20 @@ void iter(T* array, int length, F func) {
 }
 
 int main() {
+	std::cout << "\033[0;35m" << "[ iter int array ]" << "\033[0m" << std::endl;
     int intArr[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    iter(intArr, 10, doubleValue<int>);
-    iter(intArr, 10, print<int>);
+    ::iter(intArr, 10, doubleValue);
+    ::iter(intArr, 10, print<int>);
     std::cout << std::endl;
 
+	std::cout << "\033[0;35m" << "[ iter char array ]" << "\033[0m" << std::endl;
     std::string str = "heLlO 42SeouL!";
-    char* charArr = &str[0];
-    iter(charArr, str.length(), toLower);
-    iter(charArr, str.length(), print<char>);
+    char* charArr = &str[0]; // string to char array
+    ::iter(charArr, str.length(), toLower);
+    ::iter(charArr, str.length(), print<char>);
     std::cout << std::endl;
 
+	std::cout << "\033[0;35m" << "[ iter string array ]" << "\033[0m" << std::endl;
     std::string strs[10] = {"hellooooooooo",
                            "42",
                            "seoul",
@@ -52,5 +54,5 @@ int main() {
                            "wowowowowowowow",
                            "class template 4242"};
 
-    iter(strs, 10, find42);
+    ::iter(strs, 10, find42);
 }

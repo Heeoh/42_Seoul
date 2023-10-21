@@ -1,46 +1,49 @@
-#include "Array.hpp"
+#include <iostream>
 
-template<typename T>
-Array<T>::Array() : arr(new T[]) {}
+template <typename T>
+Array<T>::Array() : _arr(new T[0]), _size(0) {}
 
-template<typename T>
-Array<T>::Array(unsigned int n): arr(new T[n]) {
-    for (int i=0; i<n; i++)
-        arr[i] = T();
+template <typename T>
+Array<T>::Array(unsigned int n) : _arr(new T[n]), _size(n) {
+    for (unsigned int i=0; i<n; i++)
+        this->_arr[i] = T();
 }
 
-template<typename T>
+template <typename T>
 Array<T>::Array(const Array & obj) {
+	this->_arr = NULL;
     *this = obj;
 }
 
-template<typename T>
+template <typename T>
 Array<T>& Array<T>::operator=(const Array & obj) {
     if (this != &obj) {
-        if (this->arr) 
-            delete[] this->arr;
+        if (this->_arr != NULL)
+			delete [] this->_arr;
 
-        arr = new T[obj.size()];
-        for (unsigned int i=0; i<obj.size(); i++)
-            this->arr[i] = obj.arr[i];
+		this->_size = obj.size();
+		this->_arr = new T[this->_size];
+        for (unsigned int i=0; i<this->_size; i++)
+            this->_arr[i] = obj._arr[i];
     }
     return *this;
 }
 
-template<typename T>
+template <typename T>
 Array<T>::~Array() {
-    if (this->arr)
-        delete[] this->arr;
+    if (this->_arr)
+        delete[] this->_arr;
 }
 
-template<typename T>
-T& Array<T>::operator[](int idx) {
-    if (idx < 0 || idx >= this->size())
+template <typename T>
+T& Array<T>::operator[](int idx) const {
+	unsigned int uidx = static_cast<unsigned int>(idx);
+    if (uidx < 0 || uidx >= this->_size)
         throw std::out_of_range("Index out of range");
-    return this->arr[idx];
+    return this->_arr[idx];
 }
 
-template<typename T>
+template <typename T>
 unsigned int Array<T>::size() const {
-    return (this->arr) ? sizeof(this->arr) / sizeof(this->arr[0]) : 0;
+	return this->_size;
 }

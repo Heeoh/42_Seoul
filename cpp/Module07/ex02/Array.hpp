@@ -1,9 +1,13 @@
 #ifndef ARRAY_HPP 
 # define ARRAY_HPP
 
-template<typename T>
+# include <iostream>
+
+template <typename T>
 class Array {
-    T *arr;
+private:
+    T * _arr;
+	unsigned int _size;
 
 public:
     Array();
@@ -12,8 +16,10 @@ public:
     Array& operator=(const Array & obj);
     ~Array();
 
-    T& operator[](int idx);
+    T& operator[](int idx) const ;
     unsigned int size() const ;
 };
+
+# include "Array.tpp"
 
 #endif
