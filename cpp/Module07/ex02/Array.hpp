@@ -16,7 +16,8 @@ public:
     Array& operator=(const Array & obj);
     ~Array();
 
-    T& operator[](int idx) const ;
+    T& operator[](int idx) ;
+    const T& operator[](int idx) const ;
     unsigned int size() const ;
 };
 

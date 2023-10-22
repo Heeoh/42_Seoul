@@ -54,12 +54,22 @@ template <typename T>
 Array<T>::~Array() {
     if (this->_arr)
         delete[] this->_arr;
+    this->_arr = NULL;
+    this->_size = 0;
 
     std::cout << "\033[0;32m" << "An array of size " << this->_size << " has been deleted." << "\033[0m" << std::endl; 
 }
 
 template <typename T>
-T& Array<T>::operator[](int idx) const {
+T& Array<T>::operator[](int idx) {
+	unsigned int uidx = static_cast<unsigned int>(idx);
+    if (uidx < 0 || uidx >= this->_size)
+        throw std::out_of_range("Index out of range");
+    return this->_arr[idx];
+}
+
+template <typename T>
+const T& Array<T>::operator[](int idx) const {
 	unsigned int uidx = static_cast<unsigned int>(idx);
     if (uidx < 0 || uidx >= this->_size)
         throw std::out_of_range("Index out of range");
