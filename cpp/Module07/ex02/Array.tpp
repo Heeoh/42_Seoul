@@ -1,12 +1,25 @@
 #include <iostream>
 
 template <typename T>
-Array<T>::Array() : _arr(new T[0]), _size(0) {}
+Array<T>::Array() : _size(0) {
+    this->_arr = new T[this->_size];
+    std::cout << "\033[0;32m" << "An empty array has been created." << "\033[0m" << std::endl;
+    std::cout << "{ }" << std::endl;
+}
 
 template <typename T>
-Array<T>::Array(unsigned int n) : _arr(new T[n]), _size(n) {
-    for (unsigned int i=0; i<n; i++)
+Array<T>::Array(unsigned int n) : _size(n) {
+    this->_arr = new T[this->_size];
+    for (unsigned int i = 0; i < this->_size; i++)
         this->_arr[i] = T();
+
+    std::cout << "\033[0;32m" <<  "An array of size " << this->_size << " has been created." << "\033[0m" << std::endl; 
+    std::cout << "{ ";
+    if (this->_size > 0)
+        std::cout << this->_arr[0];
+    for (unsigned int i = 1; i < this->_size; i++)
+        std::cout << ", " << this->_arr[i];
+    std::cout << " }" << std::endl;
 }
 
 template <typename T>
@@ -23,9 +36,17 @@ Array<T>& Array<T>::operator=(const Array & obj) {
 
 		this->_size = obj.size();
 		this->_arr = new T[this->_size];
-        for (unsigned int i=0; i<this->_size; i++)
+        for (unsigned int i = 0; i < this->_size; i++)
             this->_arr[i] = obj._arr[i];
-    }
+
+        std::cout << "\033[0;32m" << "An array of size " << this->_size << " has been copied." << "\033[0m" << std::endl; 
+        std::cout << "{ ";
+        if (this->_size > 0)
+            std::cout << this->_arr[0];
+        for (unsigned int i = 1; i < this->_size; i++)
+            std::cout << ", " << this->_arr[i];
+        std::cout << " }" << std::endl;
+        }
     return *this;
 }
 
@@ -33,6 +54,8 @@ template <typename T>
 Array<T>::~Array() {
     if (this->_arr)
         delete[] this->_arr;
+
+    std::cout << "\033[0;32m" << "An array of size " << this->_size << " has been deleted." << "\033[0m" << std::endl; 
 }
 
 template <typename T>

@@ -17,17 +17,6 @@ void doubleValue(int &value) {
     value *= 2;
 }
 
-template<typename T>
-void print(T &value) {
-    std::cout << value << " ";
-}
-
-template<typename T, typename F>
-void iter(T* array, int length, F func) {
-    for (int idx = 0; idx < length; idx++)
-        func(array[idx]);
-}
-
 int main() {
 	std::cout << "\033[0;35m" << "[ iter int array ]" << "\033[0m" << std::endl;
     int intArr[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};

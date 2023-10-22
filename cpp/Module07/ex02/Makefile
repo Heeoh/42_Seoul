@@ -18,6 +18,7 @@ OBJS_DIR        = objects/
 
 # INCLUDE = -I $(HDRS_DIR)
 HDRS = $(wildcard *.hpp)
+TPLS = $(wildcard *.tpp)
 SRCS = $(wildcard *.cpp)
 OBJS = $(addprefix $(OBJS_DIR), $(SRCS:.cpp=.o))
 
@@ -30,7 +31,7 @@ MD		= mkdir -p
 
 # --------------------------------- RULES ------------------------------------ #
 
-$(OBJS_DIR)%.o : %.cpp $(HDRS)
+$(OBJS_DIR)%.o : %.cpp $(TPLS) $(HDRS)
 	@$(MD) $(dir $@)
 	$(CC) $(CFLAGS) -g -c $< -o $@
 
