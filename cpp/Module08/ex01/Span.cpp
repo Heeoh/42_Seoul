@@ -1,64 +1,76 @@
 #include "Span.hpp"
 #include <iostream>
 #include <limits>
-// #include <stdexcept>
 
-Span::Span(): size(0), count(0) {
-	
-	this->nums = new int[this->size];
-};
+Span::Span() {};
 
-Span::Span(unsigned int n): size(n), count(0) {
-	this->nums = new int[this->size];
+Span::Span(unsigned int n) {
+	this->nums.reserve(n);
+	std::cout << "An array has been created. ";
+	std::cout << "(capacity: " << this->getSize();
+	std::cout << ", count of elements: " << this->count() << ")" << std::endl;
 }
 
 Span::Span(const Span & obj) {
-	this->nums = NULL;
 	*this = obj;
 }
 
 Span& Span::operator=(const Span & obj) {
 	if (this == &obj)
 		return *this;
-	
-	if (this->nums)
-		delete[] this->nums;
 
-	this->size = obj.size;
-	this->count = obj.count;
-	this->nums = new int[this->size];
-	for (unsigned int i=0; i<this->count; i++)
-		this->nums[i] = obj.nums[i];
-	
+	this->nums = obj.nums;
 	return *this;
 }
 
-Span::~Span() {
-	if (this->nums)
-		delete[] this->nums;
-	this->nums = NULL;
-	this->size = 0;
-	this->count = 0;
-}
+Span::~Span() {}
 
 void Span::addNumber(int num) {
-	if (this->count >= this->size)
-		throw std::bad_alloc();
-	this->nums[this->count] = num;
-	this->count++;
+	if (this->count() >= this->getSize())
+		throw std::length_error("The storage is already full.");
+	this->nums.push_back(num);
+}
+
+void Span::addRange(int from, int to) {
+	for (int i = from; i <= to; i++) {
+		this->addNumber(i);
+	}
 }
 
 unsigned int Span::shortestSpan() {
-	std::sort(this->nums, this->nums + this->count);
+	if (this->count() <= 1)
+		throw CannotFindSpanException();
+	
+	std::sort(this->nums.begin(), this->nums.end());
 
 	int minDiff = std::numeric_limits<int>::max();
-	for (unsigned i = 1; i < this->count; i++) {
-		minDiff = std::min(minDiff, this->nums[i] - this->nums[i-1]);
+	std::vector<int>::const_iterator it = this->nums.begin() + 1;
+	for ( ; it != this->nums.end(); it++) {
+		minDiff = std::min(minDiff, *it - *(it - 1));
 	}
 	return minDiff;
 }
 
 unsigned int Span::longestSpan() {
-	std::sort(this->nums, this->nums + this->count);
-	return this->nums[this->count - 1] - this->nums[0];
+	if (this->count() <= 1)
+		throw CannotFindSpanException();
+
+	std::sort(this->nums.begin(), this->nums.end());
+	return this->nums.back() - this->nums.front();
+}
+
+std::vector<int>::iterator  Span::begin() {
+	return nums.begin();
+}
+
+std::vector<int>::iterator Span::end() {
+	return nums.end();
+}
+
+unsigned int Span::getSize() {
+	return this->nums.capacity();
+}
+
+unsigned int Span::count() {
+	return this->nums.size();
 }

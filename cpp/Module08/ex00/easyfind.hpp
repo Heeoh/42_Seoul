@@ -3,8 +3,6 @@
 
 # include <algorithm>
 
-# define ERROR NULL
-
 class NotFoundException: public std::exception {
 public:
     const char* what() const throw() {
@@ -14,7 +12,9 @@ public:
 
 template <typename T>
 void easyfind(const T& container, int target) {
-    typename T::const_iterator it = std::find(container.begin(), container.end(), target);
+    typename T::const_iterator it;
+    
+    it = std::find(container.begin(), container.end(), target);
     std::cout << target << " is ";
     if (it == container.end())
         throw NotFoundException();
