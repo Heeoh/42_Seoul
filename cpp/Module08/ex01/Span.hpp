@@ -1,10 +1,12 @@
 #ifndef SPAN_HPP
 # define SPAN_HPP
 
+#include <vector>
+
 class Span {
     unsigned int size;
     unsigned int count;
-    int* nums;
+    std::vector<int> nums;
 
     Span();
 

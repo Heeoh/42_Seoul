@@ -4,6 +4,7 @@
 // #include <stdexcept>
 
 Span::Span(): size(0), count(0) {
+	
 	this->nums = new int[this->size];
 };
 
