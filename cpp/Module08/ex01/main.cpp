@@ -45,6 +45,9 @@ int main()
         sp.addNumber(9);
         sp.addNumber(11);
         sp.addNumber(12);
+
+        ::iter(sp.begin(),sp.end(), print<int>);
+        std::cout << std::endl;
     }
     catch (std::exception & e) {
         std::cout << e.what() << std::endl;
@@ -67,14 +70,14 @@ int main()
 
     std::cout << "\033[0;35m" << "[ addNumbers ]" << "\033[0m" << std::endl;
     try {
-        Span sp = Span(5);
-        sp.addRange(1, 5);
+        Span sp = Span(100000);
+        sp.addRange(1, 100000);
         
-        ::iter(sp.begin(),sp.end(), print<int>);
-        std::cout << std::endl;
+        // ::iter(sp.begin(),sp.end(), print<int>);
+        // std::cout << std::endl;
         
-        Span sp2 = Span(10);
-        sp2.addRange(sp.begin(), sp.end() - 2);
+        Span sp2 = Span(100000);
+        sp2.addRange(sp.begin(), sp.end() - 90000);
         ::iter(sp2.begin(),sp2.end(), print<int>);
         std::cout << std::endl;
     }

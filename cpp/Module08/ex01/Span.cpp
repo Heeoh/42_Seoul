@@ -1,6 +1,7 @@
 #include "Span.hpp"
 #include <iostream>
-#include <limits>
+#include <limits> // int limit
+#include <algorithm> // sort
 
 Span::Span() {};
 

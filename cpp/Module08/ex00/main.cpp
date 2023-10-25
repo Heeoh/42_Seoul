@@ -4,8 +4,14 @@
 #include <set>
 #include "easyfind.hpp"
 
+#include <cstdlib>
+#include <ctime>
+
 #define MAX_VAL 100000
+
 int main() {
+    std::srand(time(NULL));
+
     std::vector<int> vec;
     std::list<int> myList;
     std::set<int> mySet;
@@ -18,27 +24,27 @@ int main() {
 
     std::cout << "\033[0;35m" << "[ vector ]" << "\033[0m" << std::endl;
     try {
-        ::easyfind(vec, 0);
-        ::easyfind(vec, MAX_VAL - 1);
-        ::easyfind(vec, rand() % (MAX_VAL * 5));
+        std::cout << *(::easyfind(vec, 0)) << std::endl; 
+        std::cout << *(::easyfind(vec, MAX_VAL - 1)) << std::endl; 
+        std::cout << *(::easyfind(vec, rand() % (MAX_VAL * 3))) << std::endl; 
     } catch (std::exception & e){
         std::cout << e.what() << std::endl;
     }
 
     std::cout << "\033[0;35m" << "[ list ]" << "\033[0m" << std::endl;
     try {
-        ::easyfind(myList, 0);
-        ::easyfind(myList, MAX_VAL - 1);
-        ::easyfind(myList, rand() % (MAX_VAL * 5));
+        std::cout << *(::easyfind(myList, 0)) << std::endl; 
+        std::cout << *(::easyfind(myList, MAX_VAL - 1)) << std::endl; 
+        std::cout << *(::easyfind(myList, rand() % (MAX_VAL * 3))) << std::endl; 
     } catch (std::exception & e){
         std::cout << e.what() << std::endl;
     }
 
     std::cout << "\033[0;35m" << "[ set ]" << "\033[0m" << std::endl;
     try {
-        ::easyfind(mySet, 0);
-        ::easyfind(mySet, MAX_VAL - 1);
-        ::easyfind(mySet, rand() % (MAX_VAL * 5));
+        std::cout << *(::easyfind(mySet, 0)) << std::endl; 
+        std::cout << *(::easyfind(mySet, MAX_VAL - 1)) << std::endl; 
+        std::cout << *(::easyfind(mySet, rand() % (MAX_VAL * 3))) << std::endl; 
     } catch (std::exception & e){
         std::cout << e.what() << std::endl;
     }

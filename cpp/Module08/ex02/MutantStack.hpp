@@ -2,13 +2,15 @@
 # define MUTANTSTACK_HPP
 
 # include <stack>
+# include <list>
+# include <deque>
 
-template <typename T>
+template< typename T >
 class MutantStack: public std::stack<T> {
 public:
     typedef std::stack<T>   stack;
     typedef typename std::stack<T>::container_type container;
-    
+
     // custom iterator type
     typedef typename container::iterator iterator;
     typedef typename container::reverse_iterator reverse_iterator;
