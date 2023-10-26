@@ -171,7 +171,7 @@ int PmergeMe::toInt(char *input) {
 
 	val = std::strtod(input, &endPtr);
 
-	if (*endPtr != '\0')
+	if (!endPtr || *endPtr != '\0')
 		throw std::invalid_argument("Invalid Input");
 	else if (std::isnan(val) || std::isinf(val)
 			|| val < -2147483648 || val > 2147483647

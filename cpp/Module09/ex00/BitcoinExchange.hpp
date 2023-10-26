@@ -18,11 +18,13 @@ public:
 
 private:
     void parseData();
-    bool isValidDataLine(std::string &line);
-    std::string& getDate(std::string &input);
-    double getExchangeRate(std::string &input);
-    bool isValidDate(const std::string &dateStr)
+    std::string getDate(std::string input);
+    double getExchangeRate(std::string input);
+	double getValue(std::string input);
 
+
+    bool isValidDate(const std::string dateStr);
+	
 };
 
 #endif
