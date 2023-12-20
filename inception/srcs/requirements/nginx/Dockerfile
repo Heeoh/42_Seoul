@@ -7,11 +7,10 @@ FROM alpine:3.18
 # --no-cache 플래그로 설치 후 캐시 삭제 
 RUN	apk update && apk add --no-cache nginx openssl
 
-
 COPY conf/default.conf /etc/nginx/http.d
 
 # NGINX가 백그라운드에서 실행되지 않도록 하기 위해 daemon off;를 NGINX 설정 파일에 추가
-RUN echo "daemon off;" >> /etc/nginx/nginx.conf
+# RUN echo "daemon off;" >> /etc/nginx/nginx.conf
 
 RUN openssl req \
 		-x509 \
@@ -26,6 +25,5 @@ RUN openssl req \
 EXPOSE 443
 
 # 컨테이너가 시작될 때 실행되는 명령을 지정
-ENTRYPOINT [ "nginx" ]
-
-# CMD ["nginx", "-g", "daemon off;"]
+# NGINX가 백그라운드에서 실행되지 않도록 하기 위해 daemon off;
+CMD ["nginx", "-g", "daemon off;"]
