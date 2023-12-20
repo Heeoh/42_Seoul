@@ -8,7 +8,7 @@ if [ ! -f "/var/www/html/index.php" ]; then
 		--dbpass=$MYSQL_USER_PASSWORD \
 		--dbhost=mariadb:3306
 	wp core install \
-		--url=http://jinoh.42.fr \
+		--url=http://heson.42.fr \
 		--title="heson's blog" \
 		--admin_user=$WP_ADMIN \
 		--admin_password=$WP_ADMIN_PASSWORD \
