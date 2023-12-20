@@ -8,7 +8,7 @@ services:
     ports:
       - 443:443
     networks:
-      - heson
+      - heson_net
     volumes:
       - wordpress:/var/www/html 
     depends_on :
@@ -21,10 +21,8 @@ services:
     build: ./requirements/wordpress
     env_file:
       - .env
-    ports: 
-      - 9000:9000
     networks:
-      - heson 
+      - heson_net 
     volumes:
       - wordpress:/var/www/html
     depends_on:
@@ -38,13 +36,13 @@ services:
     env_file:
       - .env
     networks:
-      - heson 
+      - heson_net 
     volumes:
       - mariadb:/var/lib/mysql
     restart: always
   
 networks:
-  heson:
+  heson_net:
     driver: bridge
 
 volumes:

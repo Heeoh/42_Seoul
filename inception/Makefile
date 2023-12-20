@@ -5,7 +5,7 @@ DOMAIN					= "127.0.0.1 heson.42.fr"
 
 all : run
 
-run : $(DOCKER_DATA_DIR)
+run : $(DOCKER_DATA_DIR) $(DOMAIN)
 	docker-compose -f $(DOCKER_COMPOSE_YML) up -d --build
 up :
 	docker-compose -f $(DOCKER_COMPOSE_YML) up -d
