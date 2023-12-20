@@ -6,7 +6,7 @@ services:
     container_name: nginx
     build: ./requirements/nginx
     ports:
-      - “443:443”
+      - 443:443
     networks:
       - heson
     volumes:
@@ -34,11 +34,11 @@ services:
   mariadb:
     image: mariadb:v_final
     container_name: mariadb
-    build: ./requirements/mariadba
+    build: ./requirements/mariadb
     env_file:
       - .env
-    ports:
-      - 3306:3306
+    # ports:
+    #   - 3306:3306
     networks:
       - heson 
     volumes:
@@ -54,11 +54,11 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: ${HOME}/data/mysql
+      device: ${HOME}/data/DB
       o: bind
   wordpress:
     driver: local
     driver_opts:
       type: none
-      device: ${HOME}/data/wordpress
+      device: ${HOME}/data/WP
       o: bind
